@@ -128,11 +128,14 @@ class SecureIngestionPipeline:
         files = list(self.config.input_dir.rglob("*"))
         files = [f for f in files if f.is_file()]
         
-        # Start report generation
-        self.report_gen.start_job(metadata={
-            "input_dir": str(self.config.input_dir),
-            "file_count": len(files)
-        })
+        # Start report generation with pipeline's job_id
+        self.report_gen.start_job(
+            metadata={
+                "input_dir": str(self.config.input_dir),
+                "file_count": len(files)
+            },
+            job_id=result.job_id
+        )
         
         logger.info("ingestion.started", input_dir=str(self.config.input_dir), file_count=len(files))
         

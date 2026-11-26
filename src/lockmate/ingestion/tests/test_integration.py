@@ -256,17 +256,18 @@ class TestSecureIngestionPipeline:
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
-        # Check report file exists
-        report_files = list(self.output_dir.glob("ingestion_report_*.json"))
-        assert len(report_files) == 1
+        # Check report file exists (default filename is report.json)
+        report_path = self.output_dir / "report.json"
+        assert report_path.exists()
         
         # Verify report content
-        with open(report_files[0]) as f:
+        with open(report_path) as f:
             report = json.load(f)
             assert report["job_id"] == str(result.job_id)
-            assert report["total_records"] == 1
-            assert report["processed_files"] == 1
-            assert report["success"] is True
+            assert report["ingestion"]["total_records"] == 1
+            assert report["ingestion"]["processed_files"] == 1
+            assert report["ingestion"]["total_files"] == 1
+            assert report["ingestion"]["failed_files"] == 0
 
     def test_empty_directory(self):
         """Test ingestion with empty input directory."""
