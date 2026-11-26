@@ -56,32 +56,32 @@ class TestContractsAdapter:
 
     def test_format_type_enum(self):
         """Test FormatType enum values."""
-        assert FormatType.CSV == "csv"
-        assert FormatType.TSV == "tsv"
-        assert FormatType.JSON == "json"
-        assert FormatType.TEXT == "text"
-        assert FormatType.FHIR == "fhir"
-        assert FormatType.UNKNOWN == "unknown"
+        assert FormatType.CSV.value == "csv"
+        assert FormatType.TSV.value == "tsv"
+        assert FormatType.JSON.value == "json"
+        assert FormatType.TEXT.value == "text"
+        assert FormatType.FHIR.value == "fhir"
+        assert FormatType.UNKNOWN.value == "unknown"
 
     def test_record_location(self):
         """Test RecordLocation factory methods."""
-        # Row location
+        # Row location - canonical format is "row:row:N"
         row_loc = RecordLocation.from_row(5)
-        assert row_loc.type.value == "row"
-        assert row_loc.value == "5"
-        assert str(row_loc) == "row:5"
+        assert row_loc.location_type.value == "row"
+        assert row_loc.value == "row:5"
+        assert str(row_loc) == "row:row:5"
         
-        # JSON pointer location
+        # JSON pointer location - canonical format is "json_pointer:path"
         json_loc = RecordLocation.from_json_pointer("/entry/0/resource")
-        assert json_loc.type.value == "json_pointer"
+        assert json_loc.location_type.value == "json_pointer"
         assert json_loc.value == "/entry/0/resource"
-        assert str(json_loc) == "json:/entry/0/resource"
+        assert str(json_loc) == "json_pointer:/entry/0/resource"
         
-        # Document location
+        # Document location - canonical format is "doc:doc"
         doc_loc = RecordLocation.from_doc()
-        assert doc_loc.type.value == "doc"
-        assert doc_loc.value == ""
-        assert str(doc_loc) == "doc"
+        assert doc_loc.location_type.value == "doc"
+        assert doc_loc.value == "doc"
+        assert str(doc_loc) == "doc:doc"
 
     def test_field_type_inference(self):
         """Test field type inference."""
@@ -116,9 +116,9 @@ class TestContractsAdapter:
         
         # Check first record
         ur1 = unified_records[0]
-        assert ur1.record_id.startswith(validation_result.mime_type) or len(ur1.record_id) > 10
-        assert ur1.location.type.value == "row"
-        assert ur1.location.value == "0"  # 0-indexed
+        assert len(ur1.record_id) > 10
+        assert ur1.location.location_type.value == "row"
+        assert ur1.location.value == "row:0"  # canonical format
         assert ur1.status == RecordStatus.PENDING
         assert "id" in ur1.fields
         assert "name" in ur1.fields
@@ -150,7 +150,7 @@ class TestContractsAdapter:
         unified_records = parse_to_unified_records(json_file, validation_result, iter(records))
         
         assert len(unified_records) == 2
-        assert unified_records[0].location.type.value == "json_pointer"
+        assert unified_records[0].location.location_type.value == "json_pointer"
         assert unified_records[0].fields["id"].field_type == FieldType.NUMBER
 
     def test_parse_text_to_unified_records(self):
@@ -167,8 +167,8 @@ class TestContractsAdapter:
         unified_records = parse_to_unified_records(text_file, validation_result, iter(records))
         
         assert len(unified_records) == 3
-        # Text parser uses line_number by default
-        assert unified_records[0].location.value == "0"
+        # Text parser uses line_number by default, which maps to row location
+        assert unified_records[0].location.value == "row:0"
 
     def test_build_parsed_document(self):
         """Test building ParsedDocument from parser output."""
@@ -264,7 +264,8 @@ class TestContractsAdapter:
         
         assert len(entries) == 3
         assert entries[0].file == "sanitized/patient_0.jsonl"
-        assert entries[0].loc == "row:0"
+        # Canonical location format is "row:row:0"
+        assert entries[0].loc == "row:row:0"
         assert entries[0].patient == "PATIENT_0000"
         assert entries[1].patient == "PATIENT_0001"
         assert entries[2].patient is None
@@ -456,7 +457,7 @@ class TestContractsAdapter:
         # FHIR parser handles FHIR content regardless of detected format
         assert parsed_doc.source_file.format == FormatType.JSON
         assert "_fhir_id" in parsed_doc.records[0].metadata.get("parser_metadata", {}) or \
-               parsed_doc.records[0].location.type.value == "json_pointer"
+               parsed_doc.records[0].location.location_type.value == "json_pointer"
 
 
 class TestSecretWardsFormatCompatibility:
@@ -551,9 +552,10 @@ class TestSecretWardsFormatCompatibility:
             assert "patient" in record
             # patient can be null/None
             assert record["patient"] is None or isinstance(record["patient"], str)
-            # loc should be a string like "row:0" or "json:/0"
+            # loc should be a string in canonical format like "row:row:0" or "json_pointer:/0"
             assert isinstance(record["loc"], str)
             assert len(record["loc"]) > 0
+            assert ":" in record["loc"]  # format: type:value
 
     def test_output_directory_structure(self):
         """Test output directory matches expected structure: sanitized/, report.json, records.jsonl"""

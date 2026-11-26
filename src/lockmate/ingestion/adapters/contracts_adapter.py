@@ -12,252 +12,37 @@ import json
 import base64
 from pathlib import Path
 from datetime import datetime
-from typing import Any, Iterator, Optional, TYPE_CHECKING
+from typing import Any, Iterator, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 
-# Import secret_wards contracts
-try:
-    from secret_wards.contracts import (
-        FormatType,
-        RecordStatus,
-        FieldType,
-        PIIType,
-        MedicalType,
-        QuarantineReason,
-        RecordLocationType,
-        InputFile,
-        ParsedDocument,
-        RecordLocation,
-        FieldValue,
-        UnifiedRecord,
-        PIISpan,
-        MedicalSpan,
-        PrivacyTransformation,
-        FileReportEntry,
-        ReportTotals,
-        ReportTiming,
-        ReportResources,
-        FullReport,
-        RecordsEntry,
-        compute_sha256,
-    )
-    CONTRACTS_AVAILABLE = True
-except ImportError:
-    CONTRACTS_AVAILABLE = False
+# Import secret_wards contracts (canonical types)
+from secret_wards.contracts import (
+    FormatType,
+    RecordStatus,
+    FieldType,
+    PIIType,
+    MedicalType,
+    QuarantineReason,
+    RecordLocationType,
+    InputFile,
+    ParsedDocument,
+    RecordLocation,
+    FieldValue,
+    UnifiedRecord,
+    PIISpan,
+    MedicalSpan,
+    PrivacyTransformation,
+    FileReportEntry,
+    ReportTotals,
+    ReportTiming,
+    ReportResources,
+    FullReport,
+    RecordsEntry,
+    compute_sha256,
+)
 
 from lockmate.ingestion.validation.file_validator import ValidationResult
-
-
-# =============================================================================
-# FALLBACK ENUMS/TYPES (when contracts not available)
-# =============================================================================
-
-if not CONTRACTS_AVAILABLE:
-    # Define fallback enums matching secret_wards.contracts
-    class FormatType(str, Enum):
-        CSV = "csv"
-        TSV = "tsv"
-        JSON = "json"
-        TEXT = "text"
-        FHIR = "fhir"
-        UNKNOWN = "unknown"
-    
-    class RecordStatus(str, Enum):
-        PENDING = "pending"
-        PROCESSED = "processed"
-        QUARANTINED = "quarantined"
-        FAILED = "failed"
-    
-    class FieldType(str, Enum):
-        STRING = "string"
-        NUMBER = "number"
-        BOOLEAN = "boolean"
-        DATE = "date"
-        ARRAY = "array"
-        OBJECT = "object"
-    
-    class PIIType(str, Enum):
-        NAME = "name"
-        EMAIL = "email"
-        PHONE = "phone"
-        ADDRESS = "address"
-        SSN = "ssn"
-        DOB = "dob"
-        MRN = "mrn"
-        ACCOUNT = "account"
-        OTHER = "other"
-    
-    class MedicalType(str, Enum):
-        DIAGNOSIS = "diagnosis"
-        MEDICATION = "medication"
-        PROCEDURE = "procedure"
-        LAB_RESULT = "lab_result"
-        VITAL_SIGN = "vital_sign"
-        OTHER = "other"
-    
-    class QuarantineReason(str, Enum):
-        INVALID_FORMAT = "invalid_format"
-        ENCODING_ERROR = "encoding_error"
-        SIZE_EXCEEDED = "size_exceeded"
-        SYMLINK_DETECTED = "symlink_detected"
-        PATH_TRAVERSAL = "path_traversal"
-        PARSING_FAILED = "parsing_failed"
-        PRIVACY_VIOLATION = "privacy_violation"
-        OTHER = "other"
-    
-    class RecordLocationType(str, Enum):
-        ROW = "row"
-        JSON_POINTER = "json_pointer"
-        DOC = "doc"
-    
-    # Minimal fallback dataclasses
-    @dataclass
-    class RecordLocation:
-        type: RecordLocationType
-        value: str
-        
-        @classmethod
-        def from_row(cls, row: int) -> "RecordLocation":
-            return cls(type=RecordLocationType.ROW, value=str(row))
-        
-        @classmethod
-        def from_json_pointer(cls, pointer: str) -> "RecordLocation":
-            return cls(type=RecordLocationType.JSON_POINTER, value=pointer)
-        
-        @classmethod
-        def from_doc(cls) -> "RecordLocation":
-            return cls(type=RecordLocationType.DOC, value="")
-        
-        def __str__(self) -> str:
-            if self.type == RecordLocationType.ROW:
-                return f"row:{self.value}"
-            elif self.type == RecordLocationType.JSON_POINTER:
-                return f"json:{self.value}"
-            return "doc"
-    
-    @dataclass
-    class FieldValue:
-        value: Any
-        field_type: FieldType
-        path: str
-        is_identifier_field: bool = False
-        original_text: Optional[str] = None
-    
-    @dataclass
-    class UnifiedRecord:
-        record_id: str
-        location: RecordLocation
-        fields: dict[str, FieldValue]
-        raw_text: str
-        normalized_text: str
-        offset_map: list[tuple[int, int]]
-        status: RecordStatus = RecordStatus.PENDING
-        pii_spans: list = field(default_factory=list)
-        medical_spans: list = field(default_factory=list)
-        privacy_transformations: Optional[Any] = None
-        pseudonym: Optional[str] = None
-        metadata: dict[str, Any] = field(default_factory=dict)
-    
-    @dataclass
-    class InputFile:
-        path: Path
-        sha256: str
-        size_bytes: int
-        format: FormatType
-        encoding: str
-        discovered_at: datetime
-    
-    @dataclass
-    class ParsedDocument:
-        source_file: InputFile
-        records: list[UnifiedRecord]
-        format_specific: dict[str, Any] = field(default_factory=dict)
-    
-    @dataclass
-    class FileReportEntry:
-        input_sha256: str
-        output_path: Optional[str] = None
-        status: str = "sanitized"
-        processing_duration_ms: int = 0
-        peak_memory_mb: int = 0
-        records_processed: int = 0
-        identifiers_detected: int = 0
-        records_linked: int = 0
-        records_generalized: int = 0
-        records_suppressed: int = 0
-        records_quarantined: int = 0
-        quarantine_reason: Optional[str] = None
-    
-    @dataclass
-    class ReportTotals:
-        files_total: int = 0
-        files_sanitized: int = 0
-        files_quarantined: int = 0
-        records_processed: int = 0
-        identifiers_detected: int = 0
-        records_linked: int = 0
-        records_generalized: int = 0
-        records_suppressed: int = 0
-        records_quarantined: int = 0
-        total_processing_duration_ms: int = 0
-        peak_memory_mb: int = 0
-    
-    @dataclass
-    class ReportTiming:
-        seconds: float
-    
-    @dataclass
-    class ReportResources:
-        peak_rss_mb: int
-    
-    @dataclass
-    class FullReport:
-        files: dict[str, FileReportEntry]
-        counts: ReportTotals
-        timing: ReportTiming
-        resources: ReportResources
-        
-        def to_json(self) -> str:
-            import orjson
-            return orjson.dumps({
-                "files": {k: v.__dict__ for k, v in self.files.items()},
-                "counts": self.counts.__dict__,
-                "timing": {"seconds": self.timing.seconds},
-                "resources": {"peak_rss_mb": self.resources.peak_rss_mb},
-            }).decode()
-    
-    @dataclass
-    class RecordsEntry:
-        file: str
-        loc: str
-        patient: Optional[str] = None
-        
-        def to_jsonl(self) -> str:
-            import orjson
-            return orjson.dumps({
-                "file": self.file,
-                "loc": self.loc,
-                "patient": self.patient,
-            }).decode()
-    
-    def compute_sha256(file_path: Path) -> str:
-        sha256 = hashlib.sha256()
-        with file_path.open("rb") as f:
-            for chunk in iter(lambda: f.read(8192), b""):
-                sha256.update(chunk)
-        return sha256.hexdigest()
-
-
-# For type hints when contracts are available
-if TYPE_CHECKING and CONTRACTS_AVAILABLE:
-    from secret_wards.contracts import (
-        FormatType, RecordStatus, FieldType, PIIType, MedicalType,
-        QuarantineReason, RecordLocationType, InputFile, ParsedDocument,
-        RecordLocation, FieldValue, UnifiedRecord, PIISpan, MedicalSpan,
-        PrivacyTransformation, FileReportEntry, ReportTotals, ReportTiming,
-        ReportResources, FullReport, RecordsEntry
-    )
 
 
 # =============================================================================
