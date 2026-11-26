@@ -1,0 +1,118 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lockmate"
+version = "0.1.0"
+description = "Secure data ingestion and processing pipeline for healthcare data"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Samridh", email = "samridh@example.com"},
+    {name = "Satwilk", email = "satwilk@example.com"},
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+    "pydantic>=2.5",
+    "pydantic-settings>=2.1",
+    "fhir.resources>=7.0",
+    "pandas>=2.1",
+    "python-magic>=0.4.27",
+    "charset-normalizer>=3.3",
+    "xxhash>=3.4",
+    "orjson>=3.9",
+    "pyyaml>=6.0",
+    "structlog>=24.1",
+    "tenacity>=8.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "pytest-mock>=3.12",
+    "pytest-asyncio>=0.23",
+    "hypothesis>=6.92",
+    "ruff>=0.1.0",
+    "mypy>=1.7",
+    "pre-commit>=3.6",
+    "types-python-magic>=0.4.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/samm7dx/lockmate"
+Repository = "https://github.com/samm7dx/lockmate"
+Issues = "https://github.com/samm7dx/lockmate/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["lockmate*"]
+
+[tool.pytest.ini_options]
+testpaths = ["src/ingestion/tests", "tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration tests",
+    "security: marks tests as security-related",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = [
+    "E", "F", "I", "W", "UP", "B", "C4", "DTZ", "T20", "PTH", "PL", "TRY", "NPY", "RSE", "SIM", "TID",
+]
+ignore = []
+per-file-ignores = {
+    "tests/*": ["S101", "S106"],
+    "src/ingestion/tests/*": ["S101", "S106"],
+}
+fixable = ["F", "I", "W", "UP", "B", "C4", "DTZ", "T20", "PTH", "PL", "TRY", "NPY", "RSE", "SIM", "TID"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
+enable_error_code = ["unused-ignore", "attr-defined"]
+
+[[tool.mypy.overrides]]
+module = ["fhir.resources.*"]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["src/lockmate"]
+omit = ["*/tests/*", "*/test_*.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
