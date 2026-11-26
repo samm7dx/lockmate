@@ -11,9 +11,9 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 
 from ..contracts import UnifiedRecord, PIISpan, SanitizedRecord, PIIType
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("transform.replacer")
+logger = get_logger_adapter("transform.replacer")
 
 
 # Default replacement tokens by PII type

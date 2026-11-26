@@ -11,9 +11,9 @@ from typing import Union
 from dataclasses import dataclass
 
 from ..exceptions import ResourceLimitError as ResourceLimitExceeded
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("validation.size_limits")
+logger = get_logger_adapter("validation.size_limits")
 
 
 @dataclass

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Optional, Dict, List, Tuple
+import logging
 
 from ..contracts import (
     InputFile, ParsedDocument, UnifiedRecord, ProcessingMetrics,
@@ -15,14 +16,16 @@ from ..contracts import (
     ReportTotals, ReportTiming, ReportResources, RecordsEntry,
     FormatType, SanitizedRecord
 )
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.metrics import ProcessingMetricsCollector, FileMetrics, StageMetrics
 from ..utils.temp import TempFileManager
 from ..exceptions import LockmateError, QuarantineAllError, PathTraversalError, ResourceLimitError
 from ..intake.pipeline import IntakePipeline
 from ..output.pipeline import OutputPipeline
 
-logger = get_logger("pipeline")
+import logging
+
+logger = get_logger_adapter("pipeline")
 
 
 def run_pipeline(
@@ -63,8 +66,8 @@ def run_pipeline(
             parsed_documents, quarantine_results = intake_pipeline.process_directory(input_dir)
             stage.records_processed = sum(len(doc.records) for doc in parsed_documents)
             logger.info("intake_complete", 
-                       parsed=len(parsed_documents), 
-                       quarantined=len(quarantine_results))
+                        parsed=len(parsed_documents), 
+                        quarantined=len(quarantine_results))
         
         if not parsed_documents and not quarantine_results:
             logger.warning("no_files_processed", input_dir=str(input_dir))
@@ -95,7 +98,8 @@ def run_pipeline(
                 sanitized_records_by_doc=sanitized_records_by_doc,
                 quarantine_results=[],
                 output_dir=output_dir,
-                stage=stage
+                stage=stage,
+                metrics_collector=metrics_collector
             )
         
         return _finalize_report(report, metrics_collector)
@@ -163,54 +167,57 @@ def _write_output(
     sanitized_records_by_doc: Dict[str, List],
     quarantine_results: List,
     output_dir: Path,
-    stage
+    stage,
+    metrics_collector
 ) -> None:
     """
     Write all output: sanitized files, report.json, records.jsonl
     """
     from ..output.pipeline import OutputPipeline
     from ..contracts import FullReport
-    import time
     
-    output_pipeline = OutputPipeline(Path("."))
-    
-    # Create a mock report for now
-    report = FullReport()
+    output_pipeline = OutputPipeline(output_dir)
     
     # Write sanitized files
-    output_pipeline.write_sanitized_output(
-        parsed_documents=parsed_documents,
+    output_paths = output_pipeline.write_sanitized_output(
+        parsed_docs=parsed_documents,
         sanitized_records_by_doc=sanitized_records_by_doc,
         pseudonym_map={}
     )
     
-    # Generate report.json
-    from ..contracts import FullReport, FileReportEntry, ReportTotals
-    report = FullReport()
-    
-    # TODO: Generate proper report with actual metrics
-    # For now, write minimal report
+    # Generate report.json and records.jsonl using the output pipeline's finalize method
+    output_pipeline.finalize_output(
+        parsed_docs=parsed_documents,
+        sanitized_records_by_doc=sanitized_records_by_doc,
+        quarantine_results=[],
+        output_paths=output_paths,
+        pseudonym_map={},
+        metrics_collector=metrics_collector,
+        total_duration_ms=0,
+        peak_memory_mb=0
+    )
+
+
+def _finalize_report(report: "FullReport", metrics_collector) -> "FullReport":
+    """Finalize the report with metrics."""
     from ..contracts import ReportTotals, ReportTiming, ReportResources
+    metrics = metrics_collector.get_totals()
     report.counts = ReportTotals(
-        files_total=len(parsed_documents),
-        files_sanitized=len(parsed_documents),
+        files_total=0,
+        files_sanitized=0,
         files_quarantined=0,
-        records_processed=sum(len(doc.records) for doc in parsed_documents),
+        records_processed=0,
         identifiers_detected=0,
         records_linked=0,
         records_generalized=0,
         records_suppressed=0,
-        records_quarantined=0
+        records_quarantined=0,
+        total_processing_duration_ms=0,
+        peak_memory_mb=0
     )
     report.timing = ReportTiming(seconds=0)
     report.resources = ReportResources(peak_rss_mb=0)
-    
-    # Write report.json
-    from ..output.writer import write_atomic
-    write_atomic(Path(".") / "report.json", report.to_json(), mode="w")
-    
-    # Write records.jsonl (minimal for now)
-    write_atomic(Path(".") / "records.jsonl", "", mode="w")
+    return report
 
 
 # Re-export the main function for main.py

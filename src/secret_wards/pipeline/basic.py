@@ -16,12 +16,12 @@ from ..contracts import (
     QuarantineReason, FormatType, RecordLocation, RecordLocationType,
     FieldValue, FieldType, RecordStatus
 )
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
 from ..utils.temp import TempFileManager
 from ..exceptions import QuarantineAllError
 
-logger = get_logger("pipeline.basic")
+logger = get_logger_adapter("pipeline.basic")
 
 
 def run_basic_pipeline(

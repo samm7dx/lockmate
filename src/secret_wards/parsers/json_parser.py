@@ -17,10 +17,10 @@ from ..contracts import (
     FieldValue, FieldType, RecordLocationType, RecordStatus
 )
 from .base import BaseParser, build_record_location, create_parsed_document
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
 
-logger = get_logger("parsers.json")
+logger = get_logger_adapter("parsers.json")
 
 
 def parse_json(input_file: InputFile, encoding: str = "utf-8") -> ParsedDocument:

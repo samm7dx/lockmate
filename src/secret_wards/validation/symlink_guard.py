@@ -10,9 +10,9 @@ from pathlib import Path
 from typing import Union, Optional, List
 
 from ..exceptions import PathTraversalError
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("validation.symlink_guard")
+logger = get_logger_adapter("validation.symlink_guard")
 
 
 class SymlinkError(Exception):

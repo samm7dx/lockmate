@@ -12,10 +12,10 @@ from pathlib import Path
 from typing import List, Generator, Optional
 
 from ..contracts import InputFile, FormatType
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..exceptions import PathTraversalError, ResourceLimitError
 
-logger = get_logger("intake.discovery")
+logger = get_logger_adapter("intake.discovery")
 
 
 # Resource limits from policy

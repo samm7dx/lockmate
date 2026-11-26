@@ -15,9 +15,9 @@ from ..contracts import (
     PIISpan, PIIType
 )
 from ..transform.replacer import DEFAULT_REPLACEMENTS, sanitize_record_text
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("transform.structured")
+logger = get_logger_adapter("transform.structured")
 
 
 def sanitize_parsed_document(

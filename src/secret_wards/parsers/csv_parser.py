@@ -18,10 +18,10 @@ from ..contracts import (
     RecordLocation
 )
 from .base import BaseParser, build_record_location, create_parsed_document
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
 
-logger = get_logger("parsers.csv")
+logger = get_logger_adapter("parsers.csv")
 
 
 def parse_csv(input_file: InputFile, encoding: str = "utf-8") -> ParsedDocument:

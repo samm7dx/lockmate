@@ -9,9 +9,9 @@ from __future__ import annotations
 from typing import List, Optional
 
 from ..contracts import PIISpan, MedicalSpan, PIIType, MedicalType
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("detection.merger")
+logger = get_logger_adapter("detection.merger")
 
 
 def merge_spans_with_veto(

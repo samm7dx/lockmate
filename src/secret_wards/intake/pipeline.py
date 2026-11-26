@@ -12,7 +12,7 @@ from typing import List, Tuple, Optional
 from ..contracts import (
     InputFile, ParsedDocument, QuarantineResult, FormatType, QuarantineReason
 )
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
 from ..exceptions import LockmateError, ParseError, UnsupportedFormatError
 from .discovery import discover_files
@@ -24,7 +24,7 @@ from ..parsers.json_parser import parse_json
 from ..parsers.text_parser import parse_text
 from ..parsers.fhir_parser import parse_fhir
 
-logger = get_logger("intake.pipeline")
+logger = get_logger_adapter("intake.pipeline")
 
 
 class IntakePipeline:
@@ -102,11 +102,10 @@ class IntakePipeline:
                 
                 if parsed_doc:
                     parsed_documents.append(parsed_doc)
-                    logger.debug("file_parsed", extra={
-                        "file_sha256": updated_input_file.sha256[:16],
-                        "format": format_type.value,
-                        "records": len(parsed_doc.records)
-                    })
+                    logger.debug("file_parsed",
+                        file_sha256=updated_input_file.sha256[:16],
+                        format=format_type.value,
+                        records=len(parsed_doc.records))
                 else:
                     raise ParseError(
                         "Parser returned no document",
@@ -114,10 +113,9 @@ class IntakePipeline:
                     )
                     
             except UnsupportedFormatError as e:
-                logger.warning("unsupported_format", extra={
-                    "file_sha256": updated_input_file.sha256[:16],
-                    "reason": str(e)
-                })
+                logger.warning("unsupported_format",
+                    file_sha256=updated_input_file.sha256[:16],
+                    reason=str(e))
                 quarantine_results.append(quarantine_file(
                     updated_input_file, self.output_dir,
                     QuarantineReason.UNSUPPORTED_FORMAT,
@@ -125,10 +123,9 @@ class IntakePipeline:
                 ))
                 
             except ParseError as e:
-                logger.warning("parse_error", extra={
-                    "file_sha256": updated_input_file.sha256[:16],
-                    "error": str(e)
-                })
+                logger.warning("parse_error",
+                    file_sha256=updated_input_file.sha256[:16],
+                    error=str(e))
                 quarantine_results.append(quarantine_file(
                     updated_input_file, self.output_dir,
                     QuarantineReason.PARSE_ERROR,
@@ -136,11 +133,10 @@ class IntakePipeline:
                 ))
                 
             except Exception as e:
-                logger.error("unexpected_error", extra={
-                    "file_sha256": updated_input_file.sha256[:16],
-                    "error_type": type(e).__name__,
-                    "error": str(e)[:200]
-                })
+                logger.error("unexpected_error",
+                    file_sha256=updated_input_file.sha256[:16],
+                    error_type=type(e).__name__,
+                    error=str(e)[:200])
                 quarantine_results.append(quarantine_file(
                     updated_input_file, self.output_dir,
                     QuarantineReason.PARSE_ERROR,

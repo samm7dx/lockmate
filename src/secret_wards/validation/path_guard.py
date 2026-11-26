@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import Union, List
 
 from ..exceptions import PathTraversalError
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("validation.path_guard")
+logger = get_logger_adapter("validation.path_guard")
 
 
 class PathGuard:

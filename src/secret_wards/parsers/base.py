@@ -14,10 +14,10 @@ from ..contracts import (
     InputFile, ParsedDocument, UnifiedRecord, RecordLocation,
     FieldValue, FieldType, RecordLocationType, RecordStatus
 )
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
 
-logger = get_logger("parsers.base")
+logger = get_logger_adapter("parsers.base")
 
 
 class BaseParser(ABC):

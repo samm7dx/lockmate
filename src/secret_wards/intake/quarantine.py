@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import Optional
 
 from ..contracts import InputFile, QuarantineResult, QuarantineReason
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("intake.quarantine")
+logger = get_logger_adapter("intake.quarantine")
 
 
 def quarantine_file(

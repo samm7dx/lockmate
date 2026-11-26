@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 from charset_normalizer import from_path
 
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
 # Try to import libmagic (python-magic). May not be available on all platforms
 # (especially Windows without libmagic installed). We fall back to extension-based
@@ -24,7 +24,7 @@ except ImportError:
     _magic = None
     _MAGIC_AVAILABLE = False
 
-logger = get_logger("validation.file_validator")
+logger = get_logger_adapter("validation.file_validator")
 
 # Fallback MIME types based on file extension (best-effort)
 _EXTENSION_MIME_TYPES: dict[str, str] = {
@@ -158,11 +158,9 @@ class FileValidator:
         if mime_type not in self.config.allowed_mime_types:
             logger.warning(
                 "validation.mime_rejected",
-                extra={
-                    "path": str(path),
-                    "mime_type": mime_type,
-                    "allowed": list(self.config.allowed_mime_types)
-                }
+                path=str(path),
+                mime_type=mime_type,
+                allowed=list(self.config.allowed_mime_types)
             )
             return ValidationResult(
                 is_valid=False,
@@ -187,7 +185,7 @@ class FileValidator:
                 confidence = getattr(best, 'coherence', 0.0) or 0.0
                 
         except Exception as e:
-            logger.error("validation.encoding_failed", extra={"path": str(path), "error": str(e)})
+            logger.error("validation.encoding_failed", path=str(path), error=str(e))
             encoding = "unknown"
             confidence = 0.0
         
@@ -195,8 +193,7 @@ class FileValidator:
         if self.config.require_utf8 and encoding.lower() not in ("utf-8", "ascii", "utf-8-sig"):
             logger.warning(
                 "validation.encoding_not_utf8",
-                extra={"path": str(path), "encoding": encoding, "confidence": confidence}
-            )
+                path=str(path), encoding=encoding, confidence=confidence)
             if confidence > self.config.max_encoding_confidence:
                 return ValidationResult(
                     is_valid=False,

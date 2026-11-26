@@ -13,10 +13,10 @@ from pathlib import Path
 from typing import Any, Dict, Generator, List, Optional, Tuple
 
 from ..contracts import QuarantineResult, QuarantineReason
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 from ..utils.temp import TempFileManager
 
-logger = get_logger("parsers.fhir_attachments")
+logger = get_logger_adapter("parsers.fhir_attachments")
 
 
 # MIME types that are safe to process as text

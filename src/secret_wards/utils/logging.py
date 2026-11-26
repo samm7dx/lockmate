@@ -90,8 +90,8 @@ class PIIScrubbingFormatter(logging.Formatter):
             "logger": record.name,
             "message": self._scrub_message(record.getMessage()),
         }
-
-
+    
+    
 def setup_logging(
     level: str = "INFO",
     log_file: Optional[Path] = None,
@@ -131,3 +131,68 @@ def setup_logging(
 def get_logger(name: str) -> logging.Logger:
     """Get a child logger for a specific module."""
     return logging.getLogger(f"lockmate.{name}")
+
+
+class LoggerAdapter:
+    """
+    Logger adapter that supports keyword arguments for structured logging.
+    
+    Usage:
+        logger = LoggerAdapter(get_logger("module"))
+        logger.info("message", key=value)  # Automatically uses extra=...
+    """
+    
+    def __init__(self, logger: logging.Logger):
+        self._logger = logger
+    
+    def _log(self, level: int, msg: str, **kwargs) -> None:
+        if kwargs:
+            self._logger.log(level, msg, extra=kwargs)
+        else:
+            self._logger.log(level, msg)
+    
+    def debug(self, msg: str, **kwargs) -> None:
+        self._log(logging.DEBUG, msg, **kwargs)
+    
+    def info(self, msg: str, **kwargs) -> None:
+        self._log(logging.INFO, msg, **kwargs)
+    
+    def warning(self, msg: str, **kwargs) -> None:
+        self._log(logging.WARNING, msg, **kwargs)
+    
+    def error(self, msg: str, **kwargs) -> None:
+        self._log(logging.ERROR, msg, **kwargs)
+    
+    def critical(self, msg: str, **kwargs) -> None:
+        self._log(logging.CRITICAL, msg, **kwargs)
+    
+    def warning(self, msg: str, **kwargs) -> None:
+        self._log(logging.WARNING, msg, **kwargs)
+    
+    def exception(self, msg: str, **kwargs) -> None:
+        self._logger.exception(msg, **kwargs)
+    
+    def log(self, level: int, msg: str, **kwargs) -> None:
+        self._log(level, msg, **kwargs)
+    
+    # Delegate other attributes to the underlying logger
+    def __getattr__(self, name: str):
+        return getattr(self._logger, name)
+
+
+def get_logger_adapter(name: str) -> LoggerAdapter:
+    """Get a logger adapter that supports keyword arguments."""
+    return LoggerAdapter(get_logger(name))
+
+
+def log_with_extra(logger: logging.Logger, level: int, msg: str, **kwargs) -> None:
+    """
+    Log a message with extra fields using the 'extra' parameter.
+    
+    Usage:
+        log_with_extra(logger, logging.INFO, "pipeline_started", input_dir="/path", output_dir="/out")
+    """
+    if kwargs:
+        logger.log(level, msg, extra=kwargs)
+    else:
+        logger.log(level, msg)

@@ -11,9 +11,9 @@ import re
 from typing import List, Optional
 
 from ..contracts import UnifiedRecord, PIISpan, PIIType
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("detection.placeholder")
+logger = get_logger_adapter("detection.placeholder")
 
 
 # Pre-compiled regex patterns for performance

@@ -9,9 +9,9 @@ from __future__ import annotations
 from typing import Any, Dict, Generator, List
 
 from ..contracts import PIISpan, PIIType
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("parsers.fhir_meta")
+logger = get_logger_adapter("parsers.fhir_meta")
 
 
 def scan_fhir_metadata(resource: Dict) -> List[PIISpan]:

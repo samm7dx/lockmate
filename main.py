@@ -10,13 +10,14 @@ import argparse
 import os
 import sys
 import traceback
+import logging
 from pathlib import Path
 
 # Ensure we can import secret_wards
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from secret_wards.pipeline.full import run_pipeline
-from secret_wards.utils.logging import setup_logging
+from secret_wards.utils.logging import setup_logging, get_logger, log_with_extra
 from secret_wards.utils.metrics import ProcessingMetricsCollector
 from secret_wards.exceptions import LockmateError, QuarantineAllError
 
@@ -64,7 +65,7 @@ def validate_environment() -> bytes:
     Validate and return RAKSHA_SECRET from environment.
     
     Returns:
-        Secret as bytes (validated ≥32 bytes)
+        Secret as bytes (validated >=32 bytes)
         
     Raises:
         LockmateError: If secret not set or invalid
@@ -140,7 +141,7 @@ def main() -> int:
         # Validate paths
         input_dir, output_dir = validate_paths(args.input, args.output)
         
-        logger.info("pipeline_start", extra={"input_dir": str(input_dir), "output_dir": str(output_dir), "config_path": str(args.config)})
+        log_with_extra(logger, logging.INFO, "pipeline_start", input_dir=str(input_dir), output_dir=str(output_dir), config_path=str(args.config))
         
         # Run the pipeline
         metrics_collector = ProcessingMetricsCollector()
@@ -152,26 +153,25 @@ def main() -> int:
             metrics_collector=metrics_collector
         )
         
-        logger.info("pipeline_complete", extra=metrics_collector.get_totals())
+        log_with_extra(logger, logging.INFO, "pipeline_complete", **metrics_collector.get_totals())
         return 0
         
     except QuarantineAllError as e:
         # Top-level quarantine - write partial report and exit
-        logger.error("pipeline_quarantined_all", extra={"error": str(e)})
+        log_with_extra(logger, logging.ERROR, "pipeline_quarantined_all", error=str(e))
         return 1
         
     except LockmateError as e:
-        logger.error("pipeline_error", extra={"error": str(e)})
+        log_with_extra(logger, logging.ERROR, "pipeline_error", error=str(e))
         return 1
         
     except KeyboardInterrupt:
-        logger.error("pipeline_interrupted")
+        log_with_extra(logger, logging.ERROR, "pipeline_interrupted")
         return 130
         
     except Exception as e:
         # Log error with hash only (no raw data)
-        logger.critical(
-            "pipeline_crash",
+        log_with_extra(logger, logging.CRITICAL, "pipeline_crash",
             error_type=type(e).__name__,
             error_message=str(e)[:200],  # Truncate
             traceback=traceback.format_exc()

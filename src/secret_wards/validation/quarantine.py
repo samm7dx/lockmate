@@ -14,9 +14,9 @@ import uuid
 import json
 import shutil
 
-from ..utils.logging import get_logger
+from ..utils.logging import get_logger_adapter
 
-logger = get_logger("validation.quarantine")
+logger = get_logger_adapter("validation.quarantine")
 
 
 @dataclass
@@ -119,7 +119,7 @@ class QuarantineManager:
         # Check total quarantine size
         current_size = self._get_total_size()
         if current_size + file_size > self.config.max_quarantine_size:
-            logger.error("quarantine.size_limit_exceeded", extra={"size": current_size + file_size})
+            logger.error("quarantine.size_limit_exceeded", size=current_size + file_size)
             raise RuntimeError("Quarantine size limit exceeded")
         
         shutil.move(str(file_path), str(quarantine_path))
@@ -139,7 +139,7 @@ class QuarantineManager:
         # Write metadata
         self._write_metadata(entry)
         
-        logger.info("quarantine.quarantined", extra=entry.to_dict())
+        logger.info("quarantine.quarantined", **entry.to_dict())
         
         return entry
     
@@ -187,12 +187,12 @@ class QuarantineManager:
         """
         entry = self.get_entry(entry_id)
         if not entry:
-            logger.error("quarantine.entry_not_found", extra={"entry_id": str(entry_id)})
+            logger.error("quarantine.entry_not_found", entry_id=str(entry_id))
             return False
         
         src = Path(entry.quarantine_path)
         if not src.exists():
-            logger.error("quarantine.file_missing", extra={"path": str(src)})
+            logger.error("quarantine.file_missing", path=str(src))
             return False
         
         destination = Path(destination)
@@ -202,7 +202,7 @@ class QuarantineManager:
         # Remove from metadata (rewrite file)
         self._remove_metadata(entry.id)
         
-        logger.info("quarantine.restored", extra={"entry_id": str(entry_id), "destination": str(destination)})
+        logger.info("quarantine.restored", entry_id=str(entry_id), destination=str(destination))
         return True
     
     def _remove_metadata(self, entry_id: uuid.UUID) -> None:
@@ -226,5 +226,5 @@ class QuarantineManager:
         
         self._remove_metadata(entry_id)
         
-        logger.info("quarantine.deleted", extra={"entry_id": str(entry_id)})
+        logger.info("quarantine.deleted", entry_id=str(entry_id))
         return True
