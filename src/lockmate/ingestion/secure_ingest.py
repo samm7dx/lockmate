@@ -11,6 +11,7 @@ from lockmate.ingestion.validation import (
     SizeLimiter, 
     FileValidator, 
     QuarantineManager,
+    QuarantineConfig,
     ValidationConfig
 )
 from lockmate.ingestion.parsers import (
@@ -21,7 +22,9 @@ from lockmate.ingestion.parsers import (
 )
 from lockmate.ingestion.output import (
     ReportGenerator, 
+    ReportConfig,
     RecordsGenerator, 
+    RecordsConfig,
     AtomicWriter
 )
 
@@ -64,11 +67,15 @@ class SecureIngestionPipeline:
         self.symlink_guard = SymlinkGuard(enabled=not config.follow_symlinks)
         self.size_limiter = SizeLimiter(max_file_size=config.max_file_size)
         self.validator = FileValidator(config=config.validation)
-        self.quarantine = QuarantineManager(path=config.quarantine_dir)
+        quarantine_config = QuarantineConfig(quarantine_path=config.quarantine_dir)
+        self.quarantine = QuarantineManager(config=quarantine_config)
         
         # Initialize generators
-        self.report_gen = ReportGenerator(output_dir=config.output_dir)
-        self.records_gen = RecordsGenerator(output_dir=config.output_dir)
+        report_config = ReportConfig(output_dir=config.output_dir)
+        self.report_gen = ReportGenerator(config=report_config)
+        
+        records_config = RecordsConfig(output_dir=config.output_dir)
+        self.records_gen = RecordsGenerator(config=records_config)
 
     def ingest_file(self, file_path: Path) -> Iterator[dict[str, Any]]:
         """Ingest a single file securely."""
@@ -111,5 +118,102 @@ class SecureIngestionPipeline:
 
     def run(self) -> IngestionResult:
         """Run the ingestion pipeline on the input directory."""
-        # Implementation will follow after interface agreement
-        raise NotImplementedError()
+        result = IngestionResult()
+        
+        # Ensure input directory exists
+        if not self.config.input_dir.exists():
+            raise ValueError(f"Input directory does not exist: {self.config.input_dir}")
+        
+        # Find all files in input directory
+        files = list(self.config.input_dir.rglob("*"))
+        files = [f for f in files if f.is_file()]
+        
+        # Start report generation
+        self.report_gen.start_job(metadata={
+            "input_dir": str(self.config.input_dir),
+            "file_count": len(files)
+        })
+        
+        logger.info("ingestion.started", input_dir=str(self.config.input_dir), file_count=len(files))
+        
+        for file_path in files:
+            try:
+                self._process_file(file_path, result)
+            except Exception as e:
+                logger.error("ingestion.file_error", path=str(file_path), error=str(e))
+                result.failed_files.append(str(file_path))
+                result.errors.append({"file": str(file_path), "error": str(e)})
+        
+        result.finished_at = datetime.utcnow()
+        result.success = len(result.failed_files) == 0
+        
+        # Write final report
+        self.report_gen.write()
+        
+        logger.info("ingestion.completed", 
+                   job_id=str(result.job_id),
+                   total_records=result.total_records,
+                   processed=len(result.processed_files),
+                   failed=len(result.failed_files),
+                   quarantined=len(result.quarantined_files))
+        
+        return result
+    
+    def _process_file(self, file_path: Path, result: IngestionResult) -> None:
+        """Process a single file and update result."""
+        try:
+            # 1. Path Security
+            safe_path = self.path_guard.validate(file_path)
+            
+            # 2. Symlink Security
+            self.symlink_guard.check(safe_path)
+            
+            # 3. Size Limits
+            self.size_limiter.check(safe_path)
+            
+            # 4. File Validation
+            validation_result = self.validator.validate(safe_path)
+            if not validation_result.is_valid:
+                logger.warn("ingestion.file_invalid", path=str(file_path), reason=validation_result.reason)
+                self.quarantine.quarantine(safe_path, reason=validation_result.reason)
+                result.quarantined_files.append(str(file_path))
+                self.report_gen.add_file_quarantined(file_path)
+                return
+            
+            # 5. Parsing
+            parser = self._get_parser(validation_result.mime_type)
+            records = list(parser.parse(safe_path, encoding=validation_result.encoding))
+            
+            # Write records to output
+            if records:
+                self.records_gen.write_records(iter(records), filename=f"{file_path.stem}.jsonl")
+            
+            # Update result
+            result.total_records += len(records)
+            result.processed_files.append(str(file_path))
+            
+            # Update report generator stats
+            file_size = safe_path.stat().st_size
+            self.report_gen.add_file_processed(
+                file_path=file_path,
+                format=validation_result.mime_type,
+                record_count=len(records),
+                size_bytes=file_size
+            )
+            
+            logger.info("ingestion.file_processed", 
+                       path=str(file_path),
+                       records=len(records),
+                       mime_type=validation_result.mime_type)
+            
+        except Exception as e:
+            logger.error("ingestion.file_failed", path=str(file_path), error=str(e))
+            # Try to quarantine
+            try:
+                self.quarantine.quarantine(file_path, reason=f"Exception: {str(e)}")
+            except Exception:
+                pass
+            result.failed_files.append(str(file_path))
+            result.errors.append({"file": str(file_path), "error": str(e)})
+            self.report_gen.add_file_failed(file_path, str(e))
+            raise
