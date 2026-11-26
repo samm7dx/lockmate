@@ -3,7 +3,8 @@ LOCKMATE — Custom Exception Hierarchy
 """
 
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Union
+from pathlib import Path
 
 
 class LockmateError(Exception):
@@ -45,7 +46,16 @@ class EncodingError(IntakeError):
 
 class ResourceLimitError(IntakeError):
     """Resource limit exceeded (file size, nesting, etc.)."""
-    pass
+    
+    def __init__(self, path: Path, size: int, limit: int, limit_type: str):
+        self.path = path
+        self.size = size
+        self.limit = limit
+        self.limit_type = limit_type
+        super().__init__(
+            f"{limit_type} size limit exceeded for {path}: "
+            f"{size} bytes > {limit} bytes"
+        )
 
 
 class QuarantineError(LockmateError):
@@ -110,7 +120,11 @@ class UnsupportedFormatError(ParseError):
 
 class PathTraversalError(IntakeError):
     """Path traversal attempt detected."""
-    pass
+    
+    def __init__(self, path: Union[str, Path], reason: str):
+        self.path = Path(path)
+        self.reason = reason
+        super().__init__(f"{reason}: {path}")
 
 
 class DecompressionBombError(IntakeError):
