@@ -27,19 +27,29 @@ class TestSecureIngestionPipeline:
         """Clean up test environment."""
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
+    def _make_config(self):
+        """Create a standard ingestion config."""
+        return IngestionConfig(
+            input_dir=self.input_dir,
+            output_dir=self.output_dir,
+            quarantine_dir=self.quarantine_dir,
+            allowed_roots=[self.input_dir]
+        )
+
+    def _get_data_jsonl_files(self):
+        """Get data output files (excluding contracts adapter records.jsonl)."""
+        all_jsonl = list(self.output_dir.rglob("*.jsonl"))
+        # Filter out contracts adapter records.jsonl
+        data_files = [f for f in all_jsonl if f.name != "records.jsonl"]
+        return data_files
+
     def test_basic_csv_ingestion(self):
         """Test basic CSV file ingestion."""
         # Create test CSV file
         csv_file = self.input_dir / "data.csv"
         csv_file.write_text("id,name,value\n1,Alice,100\n2,Bob,200\n3,Charlie,300\n")
         
-        # Configure and run pipeline
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -50,8 +60,8 @@ class TestSecureIngestionPipeline:
         assert len(result.quarantined_files) == 0
         assert result.total_records == 3
         
-        # Check output file exists
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        # Check output file exists (data file, not contracts records.jsonl)
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) == 1
         
         # Verify output content
@@ -69,19 +79,14 @@ class TestSecureIngestionPipeline:
         json_file = self.input_dir / "data.json"
         json_file.write_text('[{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]')
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
         assert result.success is True
         assert result.total_records == 2
         
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) == 1
         
         with open(output_files[0]) as f:
@@ -94,19 +99,14 @@ class TestSecureIngestionPipeline:
         txt_file = self.input_dir / "data.txt"
         txt_file.write_text("Line 1\nLine 2\nLine 3\n")
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
         assert result.success is True
         assert result.total_records == 3  # Each line becomes a record
         
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) == 1
         
         with open(output_files[0]) as f:
@@ -120,12 +120,7 @@ class TestSecureIngestionPipeline:
         (self.input_dir / "data2.json").write_text('[{"id": 3}, {"id": 4}]')
         (self.input_dir / "data3.txt").write_text("line1\nline2\n")
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -133,7 +128,7 @@ class TestSecureIngestionPipeline:
         assert len(result.processed_files) == 3
         assert result.total_records == 6  # 2 + 2 + 2
         
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) == 3
 
     def test_quarantine_invalid_file(self):
@@ -145,12 +140,7 @@ class TestSecureIngestionPipeline:
         invalid_file = self.input_dir / "invalid.bin"
         invalid_file.write_bytes(b"\x00\x01\x02\x03\x04\x05")
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -177,13 +167,8 @@ class TestSecureIngestionPipeline:
             link_file = self.input_dir / "link.txt"
             link_file.symlink_to(secret_file)
             
-            config = IngestionConfig(
-                input_dir=self.input_dir,
-                output_dir=self.output_dir,
-                quarantine_dir=self.quarantine_dir,
-                allowed_roots=[self.input_dir],
-                follow_symlinks=False
-            )
+            config = self._make_config()
+            config.follow_symlinks = False
             pipeline = SecureIngestionPipeline(config)
             result = pipeline.run()
             
@@ -198,13 +183,8 @@ class TestSecureIngestionPipeline:
         large_content = "id,value\n" + "\n".join([f"{i},{i*100}" for i in range(100000)])
         large_file.write_text(large_content)
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir],
-            max_file_size=1024  # 1KB limit for testing
-        )
+        config = self._make_config()
+        config.max_file_size = 1024  # 1KB limit for testing
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -228,31 +208,21 @@ class TestSecureIngestionPipeline:
         fhir_file = self.input_dir / "patient.json"
         fhir_file.write_text(json.dumps(fhir_patient))
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
         assert result.success is True
         assert result.total_records >= 1
         
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) >= 1
 
     def test_report_generation(self):
         """Test that ingestion report is generated."""
         (self.input_dir / "data.csv").write_text("id,value\n1,100\n")
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -260,23 +230,21 @@ class TestSecureIngestionPipeline:
         report_path = self.output_dir / "report.json"
         assert report_path.exists()
         
-        # Verify report content
+        # Verify report content (contracts adapter format)
         with open(report_path) as f:
             report = json.load(f)
-            assert report["job_id"] == str(result.job_id)
-            assert report["ingestion"]["total_records"] == 1
-            assert report["ingestion"]["processed_files"] == 1
-            assert report["ingestion"]["total_files"] == 1
-            assert report["ingestion"]["failed_files"] == 0
+            # Contracts adapter format has different structure
+            assert "files" in report
+            assert "counts" in report
+            assert "timing" in report
+            assert "resources" in report
+            assert report["counts"]["files_total"] == 1
+            assert report["counts"]["files_sanitized"] == 1
+            assert report["counts"]["records_processed"] == 1
 
     def test_empty_directory(self):
         """Test ingestion with empty input directory."""
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -291,12 +259,7 @@ class TestSecureIngestionPipeline:
         (subdir / "data.csv").write_text("id,value\n1,100\n")
         (subdir / "data2.json").write_text('[{"id": 2}]')
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
@@ -304,7 +267,7 @@ class TestSecureIngestionPipeline:
         assert len(result.processed_files) == 2
         assert result.total_records == 2
         
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) == 2
 
     def test_ingest_file_method(self):
@@ -312,12 +275,7 @@ class TestSecureIngestionPipeline:
         csv_file = self.input_dir / "data.csv"
         csv_file.write_text("id,name\n1,Alice\n2,Bob\n")
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         
         records = list(pipeline.ingest_file(csv_file))
@@ -333,19 +291,14 @@ class TestSecureIngestionPipeline:
         tsv_file = self.input_dir / "data.tsv"
         tsv_file.write_text("id\tname\tvalue\n1\tAlice\t100\n2\tBob\t200\n")
         
-        config = IngestionConfig(
-            input_dir=self.input_dir,
-            output_dir=self.output_dir,
-            quarantine_dir=self.quarantine_dir,
-            allowed_roots=[self.input_dir]
-        )
+        config = self._make_config()
         pipeline = SecureIngestionPipeline(config)
         result = pipeline.run()
         
         assert result.success is True
         assert result.total_records == 2
         
-        output_files = list(self.output_dir.rglob("*.jsonl"))
+        output_files = self._get_data_jsonl_files()
         assert len(output_files) == 1
 
 
