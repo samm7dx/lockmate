@@ -1,0 +1,106 @@
+# LOCKMATE Policy Configuration
+# All values can be overridden by environment variables (LOCKMATE_<SECTION>_<KEY>)
+# Track 3: Secret Wards — Yugaantar DevForge
+
+# Resource limits
+resources:
+  max_file_size_mb: 100
+  max_nesting_depth: 50
+  max_total_input_gb: 2
+  max_workers: 2
+
+# Detection thresholds
+detection:
+  name_confidence_threshold: 0.85
+  identifier_confidence_threshold: 0.9
+  enable_crf: false  # Only if >5% F1 gain proven on practice data
+  crf_model_path: "models/crf_ner.pkl"  # Relative to project root
+
+# Gazetteer configuration
+gazetteer:
+  names_latin_path: "data/gazetteers/indian_first_names_latin.txt"
+  names_devanagari_path: "data/gazetteers/indian_first_names_devanagari.txt"
+  surnames_latin_path: "data/gazetteers/indian_surnames_latin.txt"
+  surnames_devanagari_path: "data/gazetteers/indian_surnames_devanagari.txt"
+  medical_drugs_path: "data/gazetteers/medical/drugs_inn.txt"
+  medical_india_brands_path: "data/gazetteers/medical/drugs_india_brands.txt"
+  medical_labs_path: "data/gazetteers/medical/loinc_labs.txt"
+  medical_diagnoses_path: "data/gazetteers/medical/icd10_diagnoses.txt"
+  medical_units_path: "data/gazetteers/medical/clinical_units.txt"
+  location_census_path: "data/gazetteers/locations/census2011_village_district_state.csv"
+
+# Linkage thresholds
+linkage:
+  pairwise_threshold: 0.85
+  blocking_keys:
+    - normalized_name
+    - transliterated_name
+    - double_metaphone
+    - phone
+    - aadhaar
+    - abha
+    - pan
+    - dob_year_gender
+    - district_pin_prefix
+  weights:
+    exact_aadhaar_abha_pan: 10.0
+    exact_phone: 8.0
+    name_jaro_winkler: 5.0
+    name_token_jaccard: 3.0
+    transliterated_similarity: 4.0
+    double_metaphone_match: 2.0
+    relative_name_agreement: 2.0
+    dob_year_exact: 6.0
+    age_diff_le_2: 3.0
+    gender_match: 1.0
+    district_match: 1.5
+    pin_prefix_match: 1.0
+
+# Privacy transformation
+privacy:
+  date_shift_range_days: 365
+  age_bands:
+    - [0, 4]
+    - [5, 9]
+    - [10, 14]
+    - [15, 19]
+    - [20, 24]
+    - [25, 29]
+    - [30, 34]
+    - [35, 39]
+    - [40, 44]
+    - [45, 49]
+    - [50, 54]
+    - [55, 59]
+    - [60, 64]
+    - [65, 69]
+    - [70, 74]
+    - [75, 79]
+    - [80, 84]
+    - [85, 89]
+    - [90, null]  # 90+
+  k_anonymity_min: 5
+  rare_suppression_order:
+    - diagnosis_category
+    - age_band
+    - location
+
+# Security
+security:
+  temp_encryption: true
+  canary_prefix: "LOCKMATE_CANARY_"
+  log_level: "INFO"
+  log_format: "json"
+
+# Output
+output:
+  filename_scheme: "sha256_prefix"  # or "uuid"
+  pseudonym_format: "PSN-{base32_8}"
+  quarantine_dir: "quarantined"
+  preserve_directory_structure: true
+
+# Determinism
+determinism:
+  random_seed: 0
+  numpy_seed: 0
+  sort_files_by_sha256: true
