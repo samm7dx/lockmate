@@ -1,0 +1,4 @@
+aadhaar,age,diagnosis,patient_name,phone
+[UID],35,Diabetes,Rahul Sharma,[PHONE]
+[UID],28,Hypertension,Priya Patel,[PHONE]
+[UID],42,Cardiology,Amit Kumar,[PHONE]

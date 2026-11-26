@@ -1,0 +1,1167 @@
+# LOCKMATE (Track 3: Secret Wards)
+## Updated Engineering Strategy and Multi-Agent Execution Plan
+
+**Product:** LOCKMATE  
+**Competition:** Yugaantar DevForge — Track 3: Secret Wards  
+**Document status:** Revised strategy  
+**Primary reference:** `context.md`  
+**Implementation target:** Offline, CPU-only, multilingual healthcare privacy firewall
+
+---
+
+# 1. Executive Strategy
+
+LOCKMATE is a healthcare data privacy firewall designed to remove patient identities from fragmented hospital records while preserving clinically meaningful information.
+
+The system must solve three connected problems:
+
+1. **Identity detection:** Find direct and indirect identifiers across structured and unstructured healthcare data.
+2. **Identity resolution:** Recognize the same patient across hospitals, scripts, spelling variations, and different record formats without incorrectly merging different patients.
+3. **Privacy preservation:** Protect against re-identification attacks while retaining clinical utility.
+
+The central strategy is:
+
+> Remove identities. Preserve medicine. Defeat linkage attacks.
+
+The competition must be approached as an engineering and evaluation problem, not merely an NLP or anonymization problem.
+
+A large system that produces invalid output, loses clinical data, or leaks identifiers will perform worse than a smaller system that reliably satisfies the organizer's contract.
+
+## Three flagship differentiators
+
+| Differentiator | Engineering objective |
+|---|---|
+| Cross-Script Identity Intelligence | Link patient records across English, Hindi, Hinglish, and transliterated names |
+| Clinical Integrity Protection | Preserve medicines, dosages, diagnoses, laboratory values, and clinically important measurements |
+| Attacker-Aware Privacy Shield | Measure and reduce re-identification risk using realistic quasi-identifier attacks |
+
+These capabilities must be demonstrated through actual pipeline execution and reproducible evaluation.
+
+---
+
+# 2. Organizer Compatibility: Mandatory Corrections
+
+The following changes are required to make the original strategy compatible with the hackathon.
+
+| Original proposal | Revised implementation decision |
+|---|---|
+| HIPAA Safe Harbor as the main privacy framework | Use the organizer's exact Indian healthcare and synthetic-data requirements as the implementation authority. HIPAA can be background reference only. |
+| Quarantine all files as an initial implementation | Use quarantine only for unsafe or unsupported files. Build a working sanitization path. Quarantine-all is not a viable submission strategy. |
+| Medical whitelist | Use contextual medical protection, not an unconditional exemption from PII detection. |
+| Document-level name replacement | Use role-aware mention resolution to distinguish patients, relatives, doctors, and other people. |
+| Transitive graph-based linkage | Use conservative pairwise matching, cannot-link constraints, and cluster consistency checks. |
+| Latin-1 as a general fallback | Do not treat arbitrary Latin-1 decoding as evidence that a file is valid text. |
+| Plain-text treatment for every decodable unknown format | Unknown or unsupported formats must be quarantined unless a validated parser exists. |
+| k-anonymity as proof of anonymity | Use it as one diagnostic measure alongside attacker simulation and utility measurements. |
+| Byte-identical reports on repeated runs | Make sanitized content and deterministic fields stable. Keep runtime and memory telemetry truthful. |
+| AES-GCM for every intermediate | Minimize raw disk intermediates first. Encrypt required intermediates only with correct key and nonce management. |
+| CRF as an automatic requirement | Establish a strong rule-based baseline first. Add a CRF only if data, time, and measured improvement justify it. |
+| Assume official validator and practice data are present | Inspect the actual workspace and obtain official assets before claiming availability. |
+
+**Important:** The official contract overrides every implementation preference in this document.
+
+---
+
+# 3. Exact Organizer Contract
+
+This section is non-negotiable.
+
+## 3.1 Execution environment
+
+The solution must run:
+
+- Offline.
+- On CPU only.
+- With a maximum of 2 CPUs.
+- Within 4 GB RAM.
+- Within 15 minutes.
+- Without network access during execution.
+
+## 3.2 AI/ML restrictions
+
+Do not use:
+
+- Hosted LLMs in the submitted application.
+- Local LLMs.
+- Distilled LLMs.
+- Generative models.
+- Pretrained transformers larger than 50 million parameters.
+
+Permitted approaches include rules, gazetteers, classical ML, CRFs, and small self-trained models where compliant.
+
+Every model used must be declared in the README.
+
+## 3.3 Configuration
+
+Required file: `raksha.toml`
+
+```toml
+[submission]
+name = "your-team-name"
+setup = "pip install -r requirements.txt"
+run = "python main.py --input {input} --output {output}"
+```
+
+Required environment variable:
+
+```text
+RAKSHA_SECRET
+```
+
+Never change these official identifiers to match LOCKMATE branding.
+
+Never hardcode, print, log, or write the secret to disk.
+
+## 3.4 CLI
+
+```bash
+python main.py --input <input_directory> --output <output_directory>
+```
+
+## 3.5 Required output
+
+```text
+output/
+├── sanitized/
+├── report.json
+└── records.jsonl
+```
+
+### Sanitized files
+
+- Preserve directory structure where appropriate.
+- Preserve supported file formats.
+- CSV and TSV remain CSV and TSV.
+- JSON remains JSON.
+- FHIR output remains valid R4.
+- Use UTF-8.
+- Rename PII-bearing filenames.
+- Never copy raw files as sanitized.
+- Quarantine files that cannot be safely processed.
+
+### report.json
+
+Each input file must have an entry identified by its SHA-256 hash, not its original filename.
+
+Include:
+
+- Output path or null.
+- Sanitized or quarantined status.
+- Quarantine reason when applicable.
+- Accurate totals.
+- Processing duration.
+- Peak memory usage.
+
+Required totals:
+
+- `files_total`
+- `files_sanitized`
+- `files_quarantined`
+- `records_processed`
+- `identifiers_detected`
+- `records_linked`
+- `records_generalized`
+- `records_suppressed`
+- `records_quarantined`
+
+Do not invent metrics or expose original filenames.
+
+### records.jsonl
+
+One line per patient record.
+
+Required information:
+
+- `file`: sanitized file path.
+- `loc`: record location.
+- `patient`: pseudonym or null.
+
+Location conventions:
+
+- CSV row: `row:N`, with first data row `row:0`.
+- JSON: JSON pointer.
+- Text/FHIR: `doc`.
+
+The same patient must have the same pseudonym across all files.
+
+The pseudonym must also appear inside the corresponding sanitized record.
+
+If identity is uncertain, use null.
+
+## 3.6 Validation
+
+Expected organizer command:
+
+```bash
+python3 validate_output.py --input dev/input --output my_output/
+```
+
+Expected success output:
+
+```text
+CONTRACT OK
+```
+
+Do not claim official validation until the actual organizer validator has been obtained and executed.
+
+---
+
+# 4. Revised Technical Architecture
+
+```text
+INPUT DIRECTORY
+      |
+      v
+SECURE INTAKE
+      |
+      |-- Safe discovery
+      |-- SHA-256
+      |-- Path validation
+      |-- Resource limits
+      |
+      v
+FORMAT DETECTION
+      |
+      |-- CSV / TSV
+      |-- JSON
+      |-- FHIR R4
+      |-- Text
+      |-- Metadata / attachments
+      |
+      v
+UNIFIED RECORD MODEL
+      |
+      v
+UNICODE NORMALIZATION
+      |
+      v
+PII DETECTION ENGINE
+      |
+      |-- Structured fields
+      |-- Identifiers
+      |-- Names
+      |-- Contact information
+      |-- Multilingual detection
+      |-- Contextual detection
+      |
+      v
+MEDICAL PRESERVATION
+      |
+      v
+IDENTITY RESOLUTION
+      |
+      |-- Blocking
+      |-- Pairwise scoring
+      |-- Cannot-link rules
+      |-- Conservative clustering
+      |
+      v
+PSEUDONYM SERVICE
+      |
+      v
+PRIVACY TRANSFORMATIONS
+      |
+      |-- Date shifting
+      |-- Age generalization
+      |-- Location generalization
+      |-- Rare-value suppression
+      |
+      v
+SERIALIZATION
+      |
+      v
+INDEPENDENT OUTPUT SECURITY GATE
+      |
+      |-- Residual PII scan
+      |-- Clinical integrity checks
+      |-- Schema validation
+      |-- Filename and metadata checks
+      |
+      +----------------------+
+      |          |           |
+      v          v           v
+ SANITIZED   REPORT.JSON  RECORDS.JSONL
+      |
+      v
+ QUARANTINE UNSAFE OUTPUT
+```
+
+The output security gate must be independent of the detection engine. A file must not be considered safe simply because the detector that transformed it says it is safe.
+
+---
+
+# 5. Stage-by-Stage Implementation Plan
+
+## Stage 0 — Repository and Contract Audit
+
+**Priority: P0**
+
+Before implementation:
+
+1. Inspect the entire existing repository.
+2. Identify official assets versus team-generated scaffold.
+3. Read the organizer's rules and output contract.
+4. Inspect `raksha.toml`.
+5. Inspect `main.py`.
+6. Inspect every module under `src/secret_wards/`.
+7. Run existing tests.
+8. Run the current CLI smoke test.
+9. Locate the official dataset and validator if provided.
+10. Define shared interfaces for all agents.
+
+Deliverables:
+
+- Repository inventory.
+- Contract compliance checklist.
+- Missing functionality report.
+- Shared interface definitions.
+- Prioritized implementation backlog.
+
+**Acceptance:** All assumptions are labelled as official, verified, recommended, or unverified.
+
+## Stage 1 — Secure Intake and Ingestion
+
+**Priority: P0**
+
+Implement safe input discovery and parsing.
+
+### Supported initial formats
+
+- CSV.
+- TSV.
+- JSON.
+- Plain text.
+
+### Extended formats
+
+- FHIR R4.
+- Nested JSON.
+- Metadata.
+- Attachments.
+
+### Implementation
+
+- File discovery.
+- SHA-256 calculation.
+- Encoding detection.
+- Delimiter detection.
+- Column classification.
+- Structural validation.
+- Safe parser errors.
+- Path traversal protection.
+- Symlink handling.
+- Resource limits.
+- Unsupported-file quarantine.
+
+### Encoding correction
+
+Try reliable encoding detection and explicitly supported encodings.
+
+Do not use Latin-1 as an unrestricted fallback that converts arbitrary binary into apparent text.
+
+### Acceptance criteria
+
+- Supported files parse correctly.
+- Original input remains unchanged.
+- Malformed files are quarantined safely.
+- No raw file is silently copied into sanitized output.
+- File identity and record locations remain traceable.
+
+## Stage 2 — Unified Record Model
+
+**Priority: P0**
+
+Build a common internal representation for all supported formats.
+
+It should retain:
+
+- Source file hash.
+- Source format.
+- Record location.
+- Original structural location.
+- Field values.
+- Field types.
+- Original and normalized text.
+- Span-offset mappings.
+- Processing status.
+
+The unified representation must preserve enough structural information to serialize the sanitized output back into the original format.
+
+Do not flatten all records into unstructured text. That would make reliable reconstruction and FHIR preservation difficult.
+
+**Acceptance:** CSV, JSON, and text inputs can use the same detection and privacy pipeline without losing their output structure.
+
+## Stage 3 — Multilingual PII Detection
+
+**Priority: P0**
+
+Implement layered detection.
+
+### 3.1 Unicode normalization
+
+- NFC normalization.
+- Zero-width character handling.
+- Devanagari digit normalization.
+- Whitespace normalization.
+- Relevant script normalization.
+- Bidi and confusable-character checks.
+
+Maintain offset mappings so normalized spans can be safely transformed in the original representation.
+
+### 3.2 Structured detection
+
+Inspect:
+
+- Headers.
+- JSON keys.
+- Nested fields.
+- Field values.
+- Filename components.
+- Metadata.
+- FHIR references and extensions.
+
+Do not trust headers alone.
+
+### 3.3 Direct identifiers
+
+Detect contextually:
+
+- Phone numbers.
+- Email addresses.
+- Aadhaar-like identifiers.
+- ABHA identifiers.
+- PAN.
+- UHID/MRN.
+- Insurance identifiers.
+- Personal addresses.
+- Patient names.
+- Relative names.
+
+Use established libraries where appropriate.
+
+Validate identifier formats and checksums against authoritative specifications before implementing them.
+
+A numeric pattern alone does not establish identity.
+
+### 3.4 Name detection
+
+Combine:
+
+- Honorifics.
+- Relationship markers.
+- Gazetteers.
+- Transliteration.
+- Contextual rules.
+- Optional classical ML.
+
+Examples:
+
+| Input | Expected handling |
+|---|---|
+| Dr. Ramesh | Preserve doctor identity where required |
+| C/O Ramesh | Detect possible relative name |
+| C/O fever | Preserve clinical phrase |
+| S/o Rajan | Detect relative identity |
+| Parkinson's disease | Preserve diagnosis |
+| Dolo 650 BD | Preserve medication and dosage |
+| मोहम्मद आरफ | Recognize possible patient name |
+
+Do not blindly redact every occurrence of a detected name.
+
+Use role-aware classification.
+
+## Stage 4 — Clinical Integrity Protection
+
+**Priority: P0**
+
+Clinical preservation is as important as PII removal.
+
+Protect:
+
+- Drug names.
+- Drug strengths.
+- Dosages.
+- Frequencies.
+- Medication durations.
+- Laboratory names.
+- Units.
+- Vitals.
+- Diagnoses.
+- Procedures.
+- Clinically meaningful stay durations.
+
+The medical layer is a contextual safeguard, not an unconditional whitelist.
+
+For example:
+
+- Preserve `Dolo 650 BD`.
+- Preserve `5 mg`.
+- Preserve `Parkinson's disease`.
+- Detect and redact an actual patient name even if it occurs in a clinical sentence.
+
+Implement span-level protection rather than excluding entire sentences from scanning.
+
+**Acceptance:** Tests demonstrate that personal identifiers are removed while clinical values remain intact.
+
+## Stage 5 — Patient Identity Resolution
+
+**Priority: P1**
+
+This is a flagship differentiator.
+
+### Candidate generation
+
+Use blocking based on suitable signals:
+
+- Normalized names.
+- Transliteration.
+- Phonetic similarity.
+- Shared identifiers.
+- Relative-name evidence.
+- Other contextual attributes.
+
+### Pairwise scoring
+
+Use weighted evidence:
+
+- Name similarity.
+- Token similarity.
+- Transliteration similarity.
+- Shared identifiers.
+- Relative-name agreement.
+- Age plausibility.
+- Geographic consistency.
+- Date consistency.
+
+A Fellegi–Sunter-style model is an option, not a mandatory implementation.
+
+### False-merge prevention
+
+Implement:
+
+- Pairwise thresholds.
+- Cannot-link constraints.
+- Conflicting-identifier checks.
+- Cluster consistency.
+- Conservative decisions.
+
+Never automatically merge connected components based only on transitive similarity.
+
+If identity is uncertain, return null.
+
+**Acceptance:** Linkage precision, recall, and false-merge rate are measured on synthetic labelled fixtures.
+
+## Stage 6 — Stable Pseudonymization
+
+**Priority: P1**
+
+Use HMAC-SHA256 through a vetted cryptographic library.
+
+Conceptual approach:
+
+```text
+pseudonym = HMAC-SHA256(
+    RAKSHA_SECRET,
+    canonical_patient_identity
+)
+```
+
+The actual implementation must define:
+
+- Canonical identity.
+- Encoding.
+- Output representation.
+- Collision considerations.
+- Secret handling.
+- Key separation, if required.
+
+Requirements:
+
+- Same patient and secret produce the same pseudonym.
+- Different secret produces a different pseudonym.
+- Pseudonyms are stable across hospitals.
+- Pseudonyms are not reversible.
+- Uncertain identities receive null.
+
+Do not create custom cryptographic algorithms.
+
+## Stage 7 — Privacy Shield
+
+**Priority: P1**
+
+### 7.1 Date shifting
+
+Use a deterministic patient-specific date shift derived from the secret.
+
+Requirements:
+
+- Consistent shift across a patient's records.
+- Preserve intervals.
+- Preserve chronological ordering.
+- Handle date-only and timezone-aware values correctly.
+- Do not modify unrelated numbers or medication durations.
+- Different secrets produce different transformations.
+
+### 7.2 Age generalization
+
+Use configurable age bands.
+
+Handle:
+
+- Infants.
+- Boundary values.
+- Unknown age.
+- Invalid age.
+- Very high age values.
+
+Do not invent an age when none exists.
+
+### 7.3 Location generalization
+
+Possible transformations:
+
+- Village to district.
+- District to state.
+- PIN code to broader region.
+- Suppression of rare location combinations.
+
+### 7.4 Rare-value suppression
+
+Identify combinations of quasi-identifiers that are too unique.
+
+Possible signals:
+
+- Age.
+- Village.
+- PIN.
+- Dates.
+- Length of stay.
+- Rare diagnosis.
+
+Use k-anonymity as a diagnostic measure, not proof of anonymity.
+
+**Acceptance:** Privacy improvements and utility loss are measured using synthetic data.
+
+## Stage 8 — Independent Output Security Gate
+
+**Priority: P0**
+
+Before publication, verify:
+
+- No unresolved high-confidence PII.
+- No known canary remains.
+- Clinical values remain intact.
+- Schema remains valid.
+- FHIR remains valid R4.
+- Filenames are safe.
+- Metadata is safe.
+- Pseudonyms are consistent.
+- Required transformations are applied.
+- No temporary raw file is published.
+
+If verification fails, quarantine the output.
+
+Never silently skip it.
+
+## Stage 9 — Reporting and Contract Validation
+
+**Priority: P0**
+
+Generate:
+
+- `report.json`.
+- `records.jsonl`.
+- Sanitized files.
+
+Verify all counts against actual pipeline results.
+
+Report:
+
+- Files total.
+- Files sanitized.
+- Files quarantined.
+- Records processed.
+- Identifiers detected.
+- Records linked.
+- Records generalized.
+- Records suppressed.
+- Records quarantined.
+- Actual runtime.
+- Actual peak RSS.
+
+Separate deterministic content from runtime telemetry.
+
+Do not falsify timing or memory values to force byte-identical reports.
+
+## Stage 10 — Red-Team and Performance Hardening
+
+**Priority: P1**
+
+Build synthetic adversarial fixtures.
+
+Test:
+
+- English/Hindi/Hinglish identity variants.
+- False name matches.
+- Doctor and relative names.
+- Medical-term false positives.
+- Shifted columns.
+- Nested JSON.
+- FHIR extensions.
+- Attachments.
+- Filename leakage.
+- Metadata leakage.
+- Path traversal.
+- Symlinks.
+- Malformed files.
+- Oversized files.
+- Decompression bombs.
+- Repeated runs.
+- Different secrets.
+- Re-identification attacks.
+
+Profile under:
+
+- 2 CPUs.
+- 4 GB RAM.
+- 15-minute runtime.
+
+---
+
+# 6. Security Corrections and Implementation Risks
+
+These issues must be explicitly tracked.
+
+| Risk | Required mitigation |
+|---|---|
+| Latin-1 decodes arbitrary binary | Validate file type and structure independently |
+| Medical whitelist hides real names | Contextual, span-level medical protection |
+| Document-wide name replacement | Role-aware mention resolution |
+| Transitive linkage merges unrelated patients | Pairwise evidence and cannot-link constraints |
+| FHIR deep structures leak identity | Traverse references, extensions, contained resources, metadata and attachments |
+| Raw temporary files leak PII | Minimize disk intermediates and control temporary storage |
+| Incorrect AES-GCM usage | Use vetted APIs and correct key/nonce lifecycle |
+| Weak pseudonym canonicalization | Define stable identity canonicalization |
+| Unicode offsets corrupt replacements | Maintain normalization-to-original offset mapping |
+| k-anonymity damages clinical utility | Measure privacy-utility trade-off |
+| CRF consumes time without benefit | Compare against rule-based baseline first |
+| Output collisions overwrite files | Deterministic collision-safe naming |
+| Partial writes expose unsafe files | Atomic publication |
+| Resource exhaustion | File, nesting, decompression and processing limits |
+| Report exposes original filename | Hash-based input identity and safe output paths |
+
+---
+
+# 7. Multi-Agent Implementation Structure
+
+Use the `context.md` document as the shared source of truth.
+
+The orchestrator must approve interfaces before parallel implementation.
+
+## Agent 0 — Orchestrator
+
+Owns:
+
+- Overall architecture.
+- Task dependencies.
+- Interface definitions.
+- Integration.
+- Acceptance criteria.
+- Final validation.
+
+## Agent 1 — Contract Auditor
+
+Owns:
+
+- Official contract mapping.
+- Repository audit.
+- Schema inspection.
+- Test plan.
+- Validator inspection.
+
+## Agent 2 — Ingestion Engineer
+
+Owns:
+
+- File discovery.
+- CSV/TSV/JSON/text parsing.
+- FHIR parsing.
+- Encoding.
+- File safety.
+- Quarantine classification.
+
+## Agent 3 — Detection Engineer
+
+Owns:
+
+- Unicode normalization.
+- PII detection.
+- Multilingual name detection.
+- Identifier detection.
+- Medical preservation.
+- Residual scanning.
+
+## Agent 4 — Linkage Engineer
+
+Owns:
+
+- Transliteration.
+- Blocking.
+- Pairwise matching.
+- Cannot-link constraints.
+- Conservative clustering.
+- HMAC pseudonymization.
+
+## Agent 5 — Privacy Engineer
+
+Owns:
+
+- Date shifting.
+- Age generalization.
+- Location generalization.
+- Rare-value protection.
+- Attacker simulation.
+
+## Agent 6 — Output Engineer
+
+Owns:
+
+- Serialization.
+- Sanitized paths.
+- Report generation.
+- Records mapping.
+- Atomic writes.
+- Contract validation.
+
+## Agent 7 — Red-Team Engineer
+
+Owns:
+
+- Synthetic test fixtures.
+- Canary tests.
+- PII leakage evaluation.
+- False-merge testing.
+- Privacy attack evaluation.
+- Performance testing.
+
+## Frontend Engineer
+
+Owns:
+
+- LOCKMATE visual interface.
+- Voxel/Minecraft-inspired workspace.
+- Pipeline visualization.
+- Evaluation dashboard.
+
+The frontend is optional and must never be required for CLI evaluation.
+
+### File ownership rule
+
+Agents must not edit the same production files concurrently.
+
+Use isolated branches or worktrees.
+
+Each agent must report:
+
+```text
+AGENT:
+TASK:
+FILES INSPECTED:
+FILES MODIFIED:
+IMPLEMENTED:
+NOT IMPLEMENTED:
+TESTS RUN:
+TEST RESULTS:
+KNOWN RISKS:
+INTERFACE CHANGES:
+DEPENDENCIES:
+BLOCKERS:
+```
+
+---
+
+# 8. Shared Data Contracts Before Parallel Work
+
+The orchestrator must define the common interfaces before implementation agents begin.
+
+Required shared concepts:
+
+1. Input file.
+2. Parsed document.
+3. Patient record.
+4. Field representation.
+5. PII span.
+6. Medical span.
+7. Identity candidate.
+8. Pairwise match.
+9. Patient cluster.
+10. Pseudonym.
+11. Privacy transformation.
+12. Quarantine result.
+13. Sanitized record.
+14. Processing metrics.
+
+Every interface must define:
+
+- Input type.
+- Output type.
+- Failure behavior.
+- Optional values.
+- Stable identifiers.
+- Serialization requirements.
+
+Do not let agents independently invent incompatible schemas.
+
+---
+
+# 9. Recommended Development Order
+
+The implementation order should reflect dependencies.
+
+| Order | Workstream | Priority |
+|---|---|---|
+| 1 | Contract and repository audit | P0 |
+| 2 | Shared models and interfaces | P0 |
+| 3 | Secure ingestion | P0 |
+| 4 | Basic CSV/JSON/text sanitization | P0 |
+| 5 | PII detection | P0 |
+| 6 | Clinical preservation | P0 |
+| 7 | Output gate and reporting | P0 |
+| 8 | Identity linkage | P1 |
+| 9 | Pseudonymization | P1 |
+| 10 | Date and age transformations | P1 |
+| 11 | Location and rare-value protection | P1 |
+| 12 | FHIR and extended format hardening | P1 |
+| 13 | Red-team evaluation | P1 |
+| 14 | Performance optimization | P1 |
+| 15 | Frontend and presentation | P2 |
+
+FHIR support must be included early enough to test, not postponed until the final hours.
+
+---
+
+# 10. Evaluation Strategy
+
+The implementation must be measured against the organizer's scoring dimensions.
+
+## Privacy
+
+Measure:
+
+- Direct identifier leakage.
+- Residual PII.
+- Quasi-identifier uniqueness.
+- Re-identification attack success before and after.
+- Canary leakage.
+
+## Detection
+
+Measure:
+
+- Entity-level precision.
+- Entity-level recall.
+- Span-level precision.
+- Span-level recall.
+- False positives on clinical content.
+
+## Clinical preservation
+
+Measure exact preservation of:
+
+- Medicines.
+- Dosages.
+- Frequencies.
+- Diagnoses.
+- Vitals.
+- Laboratory values.
+- Units.
+- Stay durations.
+
+## Identity linkage
+
+Measure:
+
+- Pairwise precision.
+- Pairwise recall.
+- Pairwise F1.
+- False-merge rate.
+- Missed-link rate.
+- Correct null assignment.
+
+## Output quality
+
+Measure:
+
+- Format validity.
+- FHIR validity.
+- Report correctness.
+- Records mapping correctness.
+- Filename safety.
+- Metadata safety.
+- Quarantine correctness.
+
+## Reliability
+
+Measure:
+
+- Runtime.
+- Peak RSS.
+- Offline execution.
+- Crash rate.
+- Deterministic sanitized content.
+- Different-secret behavior.
+- Temporary-file cleanup.
+
+Never report a score without its dataset, test method, and actual execution evidence.
+
+---
+
+# 11. Submission Deliverables
+
+Prepare:
+
+1. Public GitHub repository.
+2. `README.md`.
+3. `raksha.toml`.
+4. `requirements.txt`.
+5. Working `main.py`.
+6. Complete source code.
+7. Unit and integration tests.
+8. Architecture diagram.
+9. Threat model.
+10. Two-page project brief PDF.
+11. Privacy-utility evaluation.
+12. Known limitations.
+13. Demonstration script.
+14. Official validator evidence, if available.
+
+The README must declare all models and explain the offline CPU-only execution approach.
+
+---
+
+# 12. Five-Minute Demonstration
+
+## Minute 1 — Problem
+
+Show synthetic records from multiple hospital systems.
+
+Explain why deleting names alone is insufficient.
+
+## Minute 2 — Identity Intelligence
+
+Show one synthetic patient represented across different scripts and formats.
+
+Demonstrate conservative matching and stable pseudonymization.
+
+## Minute 3 — Clinical Integrity
+
+Show a before-and-after example:
+
+- Patient identity removed.
+- Relative identity removed.
+- Doctor information preserved where required.
+- Medicine preserved.
+- Dosage preserved.
+- Diagnosis preserved.
+
+## Minute 4 — Privacy Attack
+
+Show an attacker attempting to identify a patient through quasi-identifiers.
+
+Compare measured attack success before and after transformations.
+
+## Minute 5 — Verification
+
+Show:
+
+- Sanitized output.
+- Quarantined unsafe input.
+- `report.json`.
+- `records.jsonl`.
+- Test results.
+- Official validator result, if available.
+
+All demonstrations must use actual pipeline results.
+
+---
+
+# 13. Final Priorities
+
+The most important engineering decisions are:
+
+1. Satisfy the exact output contract.
+2. Build a working sanitization pipeline.
+3. Prevent direct identifier leakage.
+4. Preserve clinical utility.
+5. Avoid false patient merges.
+6. Implement stable pseudonyms.
+7. Protect quasi-identifiers.
+8. Validate serialized output independently.
+9. Prove offline and resource compliance.
+10. Demonstrate measurable privacy improvement.
+
+Do not spend disproportionate time on the frontend before the CLI pipeline works.
+
+Do not introduce complicated ML before a strong baseline exists.
+
+Do not implement speculative features without a test demonstrating their value.
+
+---
+
+# 14. Definition of Done
+
+A milestone is complete only when evidence exists.
+
+- [ ] Repository and official assets audited.
+- [ ] Exact contract implemented.
+- [ ] CLI works.
+- [ ] Environment secret handling verified.
+- [ ] CSV parsing verified.
+- [ ] TSV parsing verified.
+- [ ] JSON parsing verified.
+- [ ] Text parsing verified.
+- [ ] FHIR R4 handling verified.
+- [ ] Multilingual PII detection tested.
+- [ ] Medical preservation tested.
+- [ ] Identity linkage tested.
+- [ ] False-merge safeguards tested.
+- [ ] HMAC pseudonymization tested.
+- [ ] Date transformations tested.
+- [ ] Age generalization tested.
+- [ ] Location generalization tested.
+- [ ] Metadata and filename leakage tested.
+- [ ] Attachments handled safely.
+- [ ] Unsupported formats quarantined.
+- [ ] Output security gate implemented.
+- [ ] `report.json` validated.
+- [ ] `records.jsonl` validated.
+- [ ] Offline execution verified.
+- [ ] Resource limits measured.
+- [ ] Deterministic content tested.
+- [ ] Different-secret behavior tested.
+- [ ] Privacy attack measured.
+- [ ] Clinical utility measured.
+- [ ] README completed.
+- [ ] Two-page brief completed.
+- [ ] Demonstration completed.
+- [ ] Official validator executed, if available.
+
+---
+
+# Final Directive
+
+LOCKMATE must be engineered as a reliable privacy firewall, not a collection of impressive but disconnected features.
+
+The winning strategy is to establish a correct contract-compliant vertical slice first, then add multilingual detection, conservative linkage, clinical preservation, and attacker-aware privacy.
+
+Every agent must work from `context.md` and this revised strategy.
+
+Every important claim must be supported by tests.
+
+Every uncertain identity must be handled conservatively.
+
+Every unsafe file must be quarantined.
+
+Every sanitized output must pass independent verification.
+
+**LOCKMATE — Remove identities. Preserve medicine. Defeat linkage attacks.**

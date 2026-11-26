@@ -1,14 +1,7 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-*.egg-info/
-.eggs/
-dist/
-build/
-*.egg
 
 # Virtual environments
 .venv/
@@ -16,20 +9,57 @@ venv/
 env/
 ENV/
 
-# Test artifacts
-.pytest_cache/
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
 .coverage
 .coverage.*
-htmlcov/
-*.report.json
-*.records.jsonl
-*.part*.jsonl
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+coverage/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
 
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
@@ -46,7 +76,6 @@ logs/
 
 # Mypy
 .mypy_cache/
-.mypy_cache/
 
 # Ruff
 .ruff_cache/
@@ -54,3 +83,38 @@ logs/
 # Coverage
 .coverage
 coverage.xml
+
+# Project specific
+output/
+*.log
+*.tmp
+temp/
+*.pkl
+*.pickle
+
+# Secrets
+*.key
+*.pem
+.env
+.secrets/
+
+# Data files (gazetteers generated at runtime)
+data/gazetteers/*.bin
+data/gazetteers/*.pkl
+
+# Test outputs
+test_output/
+test_results/
+*.prof
+
+# Documentation builds
+docs/_build/
+
+# Test artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.report.json
+*.records.jsonl
+*.part*.jsonl
