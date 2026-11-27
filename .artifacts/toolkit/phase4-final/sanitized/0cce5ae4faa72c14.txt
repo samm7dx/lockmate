@@ -1,0 +1,19 @@
+[DOCTOR] HOSPITAL, [DOCTOR] SUMMARY
+
+[ADDRESS]ESS]/Sex: 48 Yrs/F
+UHID: [UHID] No: [UHID]VE]e)
+Ward/Bed: [ADDRESS]S](Medicine) / Bed 23
+Date of Admission: [DATE]charge: [DATE] Essential (primary) hypertension (I10); Type 2 diabetes mellitus without complications (E11.9); 
+Presenting complaints: C/O fever for 3 days, generalised weakness.
+History: K/[RELATIVE]Hg, Pulse 82/min, Temp 98.9 F, SpO2 92%. Haemoglobin 7.6 g/dL. HbA1c 9.9 %. Random Blood Sugar 284 mg/dL. Treated conservatively. Kavita didi ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Amlodipine 5 mg 0-0-1 x 30 days
+ 2. Tab Telmisartan 40 mg 1-0-0 x 15 days
+ 3. Tab Ramipril 5 mg 0-0-1 x 30 days
+ 4. Tab Metformin 500 mg 1-0-1 x 30 days
+ 5. Tab Glimepiride 1 mg 1-0-0 x 30 days
+ 6. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.
+Attendant: [ADDRESS][PHONE]

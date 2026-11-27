@@ -1,0 +1,18 @@
+[DOCTOR] HOSPITAL, [DOCTOR] SUMMARY
+
+[ADDRESS]ESS]ge/Sex: 27 Yrs/F
+UHID: [UHID] No: [UHID]VE]](Surgery) / Bed 4
+Date of Admission: [DATE]charge: [DATE] Typhoid fever (A01.0); Anaemia, unspecified (D64.9); 
+Presenting complaints: C/O fever for 8 days, generalised weakness.
+History: No K/[RELATIVE]IVE]/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 120/66 mmHg, Pulse 93/min, Temp 103.1 F, SpO2 99%. Haemoglobin 8.2 g/dL. HbA1c 9.6 %. Random Blood Sugar 89 mg/dL. Treated conservatively. Shabana didi ki condition ab stable hai.
+Procedure: Appendicectomy done on day 2.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 15 days
+ 3. Tab Ferrous sulphate + Folic acid 100 mg + 0.5 mg 0-1-0 x 30 days
+ 4. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Imtiaz Ahmed.
+Attendant: [ADDRESS]]

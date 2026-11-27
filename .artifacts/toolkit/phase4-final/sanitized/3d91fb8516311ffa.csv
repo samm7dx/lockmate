@@ -1,0 +1,2 @@
+bill_no,uhid,patient_name,pmjay_id,payer_pan,policy_no,package_code,procedure,admission_date,discharge_date,amount_inr,status
+[UHID],[UHID]-[PIN],[ADDRESS],PMJAY-[UHID],[PAN],,SG039B,Laparoscopic cholecystectomy,[DATE],[DATE],26000,approved

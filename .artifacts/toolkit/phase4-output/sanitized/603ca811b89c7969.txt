@@ -1,0 +1,16 @@
+[DOCTOR] HOSPITAL, [DOCTOR] SUMMARY
+
+[ADDRESS]ESS] Age/Sex: 55 Yrs/F
+UHID: [UHID] No: [UHID]VE]edi (MD [ADDRESS]S]S](Pulmonology) / Bed 20
+Date of Admission: [DATE]charge: [DATE] Pneumonia, unspecified organism (J18.9); 
+Presenting complaints: C/O fever for 9 days, generalised weakness.
+History: No K/[RELATIVE]IVE]/HTN. H/O TB 2 yrs back (completed ATT).
+Course in hospital: Patient admitted with above complaints. BP 108/84 mmHg, Pulse 103/min, Temp 102.4 F, SpO2 93%. Haemoglobin 11.1 g/dL. Random Blood Sugar 99 mg/dL. Serum Creatinine 3.0 mg/dL. Treated conservatively. Usha behenji ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Azithromycin 500 mg 1-0-0 x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Harjeet Bedi.
+Attendant: [ADDRESS][PHONE]

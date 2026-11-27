@@ -10,10 +10,26 @@ import re
 from typing import List
 
 from ..contracts import MedicalSpan, MedicalType
-from ..utils.logging import get_logger_adapter
-from ..detection.gazetteer import get_gazetteer
 
 logger = get_logger_adapter("clinical.diagnoses")
+
+
+# Module-level cached patterns
+_diag_cache: dict = {}
+
+
+def _get_cached_patterns():
+    """Get or create cached regex patterns and diagnosis names."""
+    global _diag_cache
+    if not _diag_cache:
+        from ..detection.gazetteer import get_gazetteer
+        gazetteer = get_gazetteer()
+        _diag_cache = {
+            'diagnoses': frozenset(gazetteer.get("medical_diagnoses")),
+            'icd10_pattern': re.compile(r'\b[A-Z]\d{2}(?:\.\d+)?\b'),
+            'proc_pattern': re.compile(r'\b(?:appendectomy|cholecystectomy|herniorrhaphy|mastectomy|hysterectomy|prostatectomy|thyroidectomy|tonsillectomy|adenoidectomy|laparoscopy|endoscopy|colonoscopy|biopsy|cath(?:eteriz(?:ation)?)?|angioplasty|stent|bypass|transplant|dialysis|chemotherapy|radiotherapy)\b', re.IGNORECASE),
+        }
+    return _diag_cache
 
 
 def detect_diagnoses(record) -> List:
@@ -26,19 +42,20 @@ def detect_diagnoses(record) -> List:
     Returns:
         List of MedicalSpan objects
     """
+    from ..contracts import MedicalSpan, MedicalType
+    
     spans = []
     text = record.normalized_text
     
     if not text:
         return spans
     
-    gazetteer = get_gazetteer()
+    cache = _get_cached_patterns()
+    diagnoses = cache['diagnoses']
     
     # Disease names (from gazetteer - ICD-10 derived + eponyms)
-    diagnoses = gazetteer.get("medical_diagnoses")
     for diagnosis in diagnoses:
-        pattern = re.compile(r'\b' + re.escape(diagnosis) + r'\b', re.IGNORECASE)
-        for match in pattern.finditer(record.normalized_text):
+        for match in re.finditer(r'\b' + re.escape(diagnosis) + r'\b', text, re.IGNORECASE):
             spans.append(MedicalSpan(
                 start=match.start(),
                 end=match.end(),
@@ -48,19 +65,15 @@ def detect_diagnoses(record) -> List:
             ))
     
     # ICD-10 code patterns (e.g., E11.9, I10, N39.0, A01.0)
-    # Only match in clear medical context (near diagnosis/condition terms)
-    icd10_pattern = re.compile(
-        r'\b[A-Z]\d{2}(?:\.\d+)?\b'
-    )
-    for match in icd10_pattern.finditer(record.normalized_text):
-        # Validate it looks like an ICD code (letter + 2 digits + optional decimal)
+    # Use cached pattern
+    for match in cache['icd10_pattern'].finditer(text):
         code = match.group()
         if re.match(r'^[A-Z]\d{2}(?:\.\d+)?$', code):
             # Additional validation: exclude common false positives
-            if code not in ['BP', 'HR', 'RR', 'IV', 'IM', 'PO', 'IV', 'IO']:
+            if code not in {'BP', 'HR', 'RR', 'IV', 'IM', 'PO', 'IO'}:
                 # Check for medical context nearby
-                context = record.normalized_text[max(0, match.start()-50):match.end()+50]
-                medical_context = any(term in context.lower() for term in [
+                context = text[max(0, match.start()-50):match.end()+50].lower()
+                medical_context = any(term in context for term in [
                     'diagnosis', 'diagnosed', 'condition', 'disease', 'disorder',
                     'icd', 'code', 'icd-10', 'icd10', 'principal', 'secondary',
                     'comorbidity', 'complication', 'history', 'hx', 'h/o',
@@ -76,33 +89,17 @@ def detect_diagnoses(record) -> List:
                         original_text=match.group()
                     ))
     
-    # Procedure names (common procedures)
-    procedures = {
-        "angiography", "angioplasty", "stent", "bypass", "cabg",
-        "dialysis", "chemotherapy", "radiotherapy", "surgery",
-        "appendectomy", "cholecystectomy", "hysterectomy",
-        "biopsy", "endoscopy", "colonoscopy", "gastroscopy",
-        "mri", "ct scan", "ct-scan", "x-ray", "xray", "ultrasound",
-        "ecg", "ekg", "echocardiogram", "stress test",
-        "cardiac catheterization", "coronary angiogram", "pci", "pta",
-        "laparoscopy", "laparotomy", "thoracotomy", "craniotomy",
-        "amputation", "debridement", "excision", "incision and drainage",
-        "tracheostomy", "intubation", "ventilation", "cpr",
-        "pacemaker", "defibrillator", "ablation", "cardioversion",
-    }
+    # Procedure names - use cached pattern
+    for match in cache['proc_pattern'].finditer(text):
+        spans.append(MedicalSpan(
+            start=match.start(),
+            end=match.end(),
+            medical_type=MedicalType.PROCEDURE,
+            confidence=0.9,
+            original_text=match.group()
+        ))
     
-    for proc in procedures:
-        pattern = re.compile(r'\b' + re.escape(proc) + r'\b', re.IGNORECASE)
-        for match in pattern.finditer(record.normalized_text):
-            spans.append(MedicalSpan(
-                start=match.start(),
-                end=match.end(),
-                medical_type=MedicalType.PROCEDURE,
-                confidence=0.9,
-                original_text=match.group()
-            ))
-    
-    # Eponymous diseases (Parkinson's, Alzheimer's, Crohn's, etc.)
+    # Eponymous diseases
     eponyms = {
         "parkinson's", "alzheimer's", "crohn's", "huntington's",
         "als", "ms", "multiple sclerosis", "lupus", "sle",
@@ -115,6 +112,16 @@ def detect_diagnoses(record) -> List:
         "heart failure", "chf", "atrial fibrillation", "afib",
         "deep vein thrombosis", "dvt", "pulmonary embolism", "pe",
     }
+    
+    for eponym in eponyms:
+        for match in re.finditer(r'\b' + re.escape(eponym) + r'\b', text, re.IGNORECASE):
+            spans.append(MedicalSpan(
+                start=match.start(),
+                end=match.end(),
+                medical_type=MedicalType.DIAGNOSIS,
+                confidence=0.95,
+                original_text=match.group()
+            ))
     
     for eponym in eponyms:
         pattern = re.compile(r'\b' + re.escape(eponym) + r'\b', re.IGNORECASE)

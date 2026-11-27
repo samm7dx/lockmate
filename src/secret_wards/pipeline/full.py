@@ -148,8 +148,8 @@ def _sanitize_document(
     3. Clinical detection (drugs, labs, diagnoses, doctors)
     4. Medical veto (contextual disambiguation)
     5. Span merger with veto
-    5. Text replacement + structured field sanitization
-    6. Serialization preparation
+    6. Text replacement + structured field sanitization
+    7. Serialization preparation
     
     Args:
         parsed_doc: ParsedDocument with URM records
@@ -176,59 +176,54 @@ def _sanitize_document(
     all_pii_spans = []
     all_medical_spans = []
     
+    # Pre-load detectors to avoid re-initialization per record
+    from ..detection.names import _name_detector as name_detector
+    from ..detection.identifiers import _identifier_detector as id_detector
+    from ..detection.structured import _structured_detector as struct_detector
+    from ..clinical.drugs import _drug_detector as drug_detector
+    from ..clinical.labs import _lab_detector as lab_detector
+    from ..clinical.diagnoses import _diag_detector as diag_detector
+    from ..clinical.doctors import _doctor_detector as doctor_detector
+    from ..clinical.veto import _veto_engine as veto_engine
+    
     for record in parsed_doc.records:
-        logger.info("sanitizing_record", record_id=record.record_id)
-        
         # Step 1: Unicode normalization
-        logger.info("normalizing_text", record_id=record.record_id)
         normalized_text, offset_map = apply_normalization(record)
-        logger.info("normalization_returned", record_id=record.record_id, norm_len=len(normalized_text), offset_map_len=len(offset_map))
         record.normalized_text = normalized_text
         record.offset_map = offset_map
-        logger.info("text_normalized", record_id=record.record_id)
         
-        # Step 2: Detect PII - multilingual names
-        logger.info("detecting_names", record_id=record.record_id)
-        name_spans = detect_names(record)
-        logger.info("names_detected", record_id=record.record_id, count=len(name_spans))
+        # Step 2: Detect PII - multilingual names (using cached detector)
+        name_spans = name_detector.detect(record)
         
-        # Step 3: Detect identifiers (Aadhaar, ABHA, PAN, phone, email, etc.)
-        logger.debug("detecting_identifiers", record_id=record.record_id)
-        id_spans = detect_identifiers(record)
-        logger.debug("identifiers_detected", record_id=record.record_id, count=len(id_spans))
+        # Step 3: Detect identifiers
+        id_spans = id_detector.detect(record)
         
-        # Step 4: Detect structured fields PII (JSON keys, CSV headers, FHIR meta)
-        logger.debug("detecting_structured", record_id=record.record_id)
-        struct_spans = scan_structured_fields(record)
-        logger.debug("structured_detected", record_id=record.record_id, count=len(struct_spans))
+        # Step 4: Detect structured fields PII
+        struct_spans = struct_detector.detect(record)
         
         # Extract doctor spans from structured fields for medical veto
         doctor_struct_spans = [s for s in struct_spans if s.pii_type == PIIType.DOCTOR]
         
-        # Step 5: Detect clinical expressions
-        logger.debug("detecting_clinical", record_id=record.record_id)
-        drug_spans = detect_drugs(record)
-        lab_spans = detect_labs(record)
-        diag_spans = detect_diagnoses(record)
-        doctor_spans = detect_doctors(record)
-        logger.debug("clinical_detected", record_id=record.record_id, 
-                    drugs=len(drug_spans), labs=len(lab_spans), diagnoses=len(diag_spans), doctors=len(doctor_spans))
+        # Step 5: Detect clinical expressions (using cached detectors)
+        drug_spans = drug_detector.detect(record)
+        lab_spans = lab_detector.detect(record)
+        diag_spans = diag_detector.detect(record)
+        doctor_spans = doctor_detector.detect(record)
         
-        # Combine all PII spans (excluding doctor spans from structured fields - they're medical)
+        # Combine all PII spans (excluding doctor spans from structured fields)
         pii_spans = []
         pii_spans.extend(name_spans)
         pii_spans.extend(id_spans)
-        # Filter out doctor spans from struct_spans for PII (they're medical, not PII)
         pii_spans.extend([s for s in struct_spans if s.pii_type != PIIType.DOCTOR])
-        pii_spans.extend(detect_pii_placeholder(record))  # Fallback placeholder
+        pii_spans.extend(detect_pii_placeholder(record))
         
-        # Combine all medical spans (including doctor spans from structured fields)
+        # Combine all medical spans
         medical_spans = []
         medical_spans.extend(drug_spans)
         medical_spans.extend(lab_spans)
         medical_spans.extend(diag_spans)
         medical_spans.extend(doctor_spans)
-        medical_spans.extend(doctor_struct_spans)  # Add doctor spans from structured fields
+        medical_spans.extend(doctor_struct_spans)
         medical_spans.extend(detect_all_medical_spans(record))
         
         # Store spans on record for later use
@@ -238,17 +233,13 @@ def _sanitize_document(
         all_pii_spans.extend(pii_spans)
         all_medical_spans.extend(medical_spans)
         
-        # Step 6: Apply medical veto (contextual disambiguation)
-        logger.debug("applying_veto", record_id=record.record_id)
-        filtered_spans = merge_spans_with_veto(pii_spans, medical_spans)
-        logger.debug("veto_applied", record_id=record.record_id, original=len(pii_spans), filtered=len(filtered_spans))
+        # Step 6: Apply medical veto (using cached veto engine)
+        filtered_spans = veto_engine.merge(pii_spans, medical_spans)
         
-        # Step 7: Apply replacements to text AND structured fields
-        logger.debug("sanitizing_record", record_id=record.record_id)
+        # Step 7: Apply replacements
         sanitized_record = sanitize_record(record, filtered_spans)
-        logger.debug("record_sanitized", record_id=record.record_id)
         
-        # Assign placeholder pseudonym (will be replaced in Phase 8)
+        # Assign placeholder pseudonym
         sanitized_record.pseudonym = f"PSN-PLACEHOLDER-{record.record_id[:8]}"
         
         sanitized_records.append(sanitized_record)

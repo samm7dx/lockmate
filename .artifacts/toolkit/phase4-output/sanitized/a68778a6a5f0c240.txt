@@ -1,0 +1,16 @@
+[NAME] SADAN, [NAME] SUMMARY
+
+[NAME]E]Sex: 39 Yrs/M
+UHID: [UHID]]ed: [ADDRESS]S](Medicine) / Bed 18
+Date of Admission: [DATE]charge: [DATE] Addison's disease (E27.1); Typhoid fever (A01.0); 
+Presenting complaints: C/O fever for 9 days, generalised weakness.
+History: No K/[RELATIVE]IVE]/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 117/82 mmHg, Pulse 106/min, Temp 103.2 F, SpO2 97%. Haemoglobin 10.6 g/dL. HbA1c 8.6 %. Random Blood Sugar 125 mg/dL. Treated conservatively. Shahid sahab ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 15 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.
+Attendant: Zubair, Mob. [PHONE]

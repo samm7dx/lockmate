@@ -1,0 +1,17 @@
+[DOCTOR] [DOCTOR], [DOCTOR] SUMMARY
+
+[ADDRESS]ESS]/Sex: 27 Yrs/M
+UHID: [UHID]   IPD No: [UHID]ATIVE]
+Ward/Bed: [ADDRESS]S](Medicine) / Bed 16
+Date of Admission: [DATE]charge: [DATE] Typhoid fever (A01.0); 
+Presenting complaints: C/O fever for 7 days, generalised weakness.
+History: No K/[RELATIVE]IVE]/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 111/86 mmHg, Pulse 96/min, Temp 101.5 F, SpO2 92%. Haemoglobin 10.5 g/dL. Random Blood Sugar 113 mg/dL. Serum Creatinine 1.5 mg/dL. Treated conservatively. Brijesh sahab ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Vandana Kulshrestha.
+Attendant: [ADDRESS][PHONE]

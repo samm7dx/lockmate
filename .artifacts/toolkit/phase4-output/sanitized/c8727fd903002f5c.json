@@ -1,0 +1,29 @@
+[
+  {
+    "_export_meta/system": "eHospital OPD module",
+    "_export_meta/hospital": "[ADDRESS]",
+    "_export_meta/exported_by": "opd.records.clerk",
+    "_export_meta/generated_at": "[DATE]T18:00:00+05:30",
+    "visits/0/visit_id": "OPD/26/05/00089",
+    "visits/0/patient_ref": "[UHID]",
+    "visits/0/visit_date": "[DATE]",
+    "visits/0/department": "Pulmonology",
+    "visits/0/doctor": "[NAME]",
+    "visits/0/complaints": "[RELATIVE]",
+    "visits/0/history": "H/O TB 11 yrs back, completed ATT",
+    "visits/0/vitals/bp": "111/78",
+    "visits/0/vitals/pulse": 67,
+    "visits/0/vitals/temp_f": 99.0,
+    "visits/0/vitals/spo2": 99,
+    "visits/0/vitals/weight_kg": 60,
+    "visits/0/diagnosis/0/code": "A15.0",
+    "visits/0/diagnosis/0/display": "Tuberculosis of lung",
+    "visits/0/rx/0/drug": "Rifampicin + Isoniazid",
+    "visits/0/rx/0/strength": "450 mg + 300 mg",
+    "visits/0/rx/0/frequency": "1-0-0",
+    "visits/0/rx/0/duration": "30 days",
+    "visits/0/notes": "Manoj ka BP 111/78, BP abhi bhi high hai. Review after 2 weeks.",
+    "visits/0/address_note": "[RELATIVE], [ADDRESS]",
+    "visits/0/reviewed_by": "[NAME]."
+  }
+]

@@ -41,6 +41,22 @@ PATIENT_CONTEXT_INDICATORS = {
 }
 
 
+# Module-level cached patterns
+_doctor_cache: dict = {}
+
+
+def _get_cached_patterns():
+    """Get or create cached regex patterns."""
+    global _doctor_cache
+    if not _doctor_cache:
+        _doctor_cache = {
+            'prefix_pattern': re.compile(r'\b(?:Dr\.?|Doctor|डॉ\.?|डॉक्टर)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)', re.IGNORECASE),
+            'clinical_context': frozenset(CLINICAL_CONTEXT_INDICATORS),
+            'patient_context': frozenset(PATIENT_CONTEXT_INDICATORS),
+        }
+    return _doctor_cache
+
+
 def detect_doctors(record) -> List:
     """
     Detect doctor names in clinical context.
@@ -59,40 +75,55 @@ def detect_doctors(record) -> List:
     if not text:
         return []
     
-    # Pattern: Dr./Doctor + name + clinical verb
-    # Dr. Rajesh prescribed...
-    # Doctor Rajesh prescribed...
+    cache = _get_cached_patterns()
+    prefix_pattern = cache['prefix_pattern']
+    clinical_context = cache['clinical_context']
+    patient_context = cache['patient_context']
+    
+    spans = []
+    
+    # Pattern 1: English doctor names with clinical verbs
+    # Dr. Name prescribed / Doctor Name prescribed
+    for match in prefix_pattern.finditer(text):
+        name = match.group(1)
+        end_pos = match.end()
+        
+        # Check for clinical context after the name
+        context_after = text[end_pos:end_pos + 100].lower()
+        context_before = text[max(0, match.start() - 50):match.start()].lower()
+        
+        has_clinical = any(term in context_after for term in clinical_context)
+        has_patient = any(term in context_before or term in context_after for term in patient_context)
+        
+        if has_clinical and not has_patient:
+            spans.append(MedicalSpan(
+                start=match.start(),
+                end=match.end(),
+                medical_type=MedicalType.DOCTOR,
+                confidence=0.9,
+                original_text=match.group()
+            ))
+    
+    # Pattern 2: Devanagari doctor names
     # डॉ. राजेश ने लिखा...
+    devanagari_matches = re.finditer(r'(?:डॉ\.?|डॉक्टर)\s+([\u0900-\u097F]{2,}(?:\s+[\u0900-\u097F]{2,})+)', text, re.IGNORECASE)
+    for match in devanagari_matches:
+        end_pos = match.end()
+        context_after = text[end_pos:end_pos + 100].lower()
+        
+        # Check if followed by clinical action
+        if any(term in context_after for term in CLINICAL_CONTEXT_INDICATORS):
+            spans.append(MedicalSpan(
+                start=match.start(),
+                end=match.end(),
+                medical_type=MedicalType.DOCTOR,
+                confidence=0.85,
+                original_text=match.group()
+            ))
     
-    # Pattern 1: Dr./Doctor + name + clinical verb
-    # Dr. Rajesh prescribed / Doctor Rajesh prescribed
-    clinical_verbs = [
-        'prescribed', 'advised', 'recommended', 'treated',
-        'diagnosed', 'examined', 'consulted', 'referred', 'admitted',
-        'discharged', 'followup', 'follow-up', 'review', 'checkup',
-        'prescription', 'medication', 'dosage', 'dosage', 'mg', 'ml',
-        'tablet', 'capsule', 'injection', 'syrup', 'drops',
-        'advised', 'ordered', 'started', 'stopped', 'continued',
-        'increased', 'decreased', 'adjusted', 'titrated',
-    ]
-    
-    # Pattern 1: Dr./Doctor + name + clinical verb
-    # Dr. Rajesh prescribed / Doctor Rajesh prescribed
-    # Pattern: Dr./Doctor + name + clinical verb
-    
-    # Build pattern for: Dr./Doctor + name + clinical verb
-    clinical_verbs_pattern = '|'.join(re.escape(v) for v in [
-        'prescribed', 'advised', 'recommended', 'treated',
-        'diagnosed', 'examined', 'consulted', 'referred', 'admitted',
-        'discharged', 'followup', 'follow-up', 'review', 'checkup',
-        'prescription', 'medication', 'dosage', 'tablet', 'capsule',
-        'injection', 'syrup', 'drops', 'advised', 'ordered', 'started',
-        'stopped', 'continued', 'increased', 'decreased', 'adjusted',
-        'titrated', 'monitored', 'assessed',
-    ])
-    
-    # Pattern: Dr./Doctor + name + clinical verb
-    doctor_pattern = re.compile(
+    # Pattern 3: Dr. Name with clinical verbs inline
+    # Dr. Rajesh prescribed / Dr. Name treated
+    doctor_with_verb = re.compile(
         r'\b(?:Dr\.?|Doctor)\s+([A-Z][a-z]+(?:\s+[A-Z]\.?\s*)*[A-Z][a-z]+)\s+(?:' + '|'.join(re.escape(v) for v in [
             'prescribed', 'advised', 'recommended', 'treated',
             'diagnosed', 'examined', 'consulted', 'referred', 'admitted',
@@ -105,22 +136,23 @@ def detect_doctors(record) -> List:
         re.IGNORECASE
     )
     
-    # Also check Devanagari: डॉ. राजेश ने लिखा...
-    # Pattern for Devanagari doctor names
-    devanagari_doctor_pattern = re.compile(
-        r'(?:डॉ\.?|डॉक्टर)\s+([\u0900-\u097F]{2,}(?:\s+[\u0900-\u097F]{2,})+)',
-        re.IGNORECASE
-    )
+    for match in doctor_with_verb.finditer(text):
+        spans.append(MedicalSpan(
+            start=match.start(),
+            end=match.end(),
+            medical_type=MedicalType.DOCTOR,
+            confidence=0.95,
+            original_text=match.group()
+        ))
     
-    spans = []
-    text = record.normalized_text
+    # Deduplicate spans (keep highest confidence)
+    seen = {}
+    for span in spans:
+        key = (span.start, span.end)
+        if key not in seen or span.confidence > seen[key].confidence:
+            seen[key] = span
     
-    if not text:
-        return []
-    
-    # Pattern 1: English doctor names with clinical verbs
-    # Dr. Name prescribed / Doctor Name prescribed
-    clinical_verbs_pattern = '|'.join([
+    return list(seen.values())
         'prescribed', 'advised', 'recommended', 'treated',
         'diagnosed', 'examined', 'consulted', 'referred', 'admitted',
         'discharged', 'followup', 'follow-up', 'review', 'checkup',

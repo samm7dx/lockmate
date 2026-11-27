@@ -1,0 +1,12 @@
+[DOCTOR] HOSPITAL, [DOCTOR] SUMMARY
+
+[ADDRESS]ESS] Age/Sex: 52 Yrs/F
+UHID: [UHID] No: [UHID]VE]: C/O fever for 6 days, generalised weakness.
+History: No K/[RELATIVE]IVE]/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 128/85 mmHg, Pulse 64/min, Temp 99.0 F, SpO2 97%. Haemoglobin 8.2 g/dL. Random Blood Sugar 216 mg/dL. Serum Creatinine 3.2 mg/dL. Treated conservatively. Fatima amma ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Cap Doxycycline 100 mg 1-0-1 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Vandana Kulshrestha.
+Attendant: Naseem, Mob. [PHONE]

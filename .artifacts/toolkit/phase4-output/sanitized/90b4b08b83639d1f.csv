@@ -1,0 +1,11 @@
+PatientID,LastName,FirstName,Sex,DOB (MM/DD/YYYY),Guardian,Street,City,District,Zip,Phone,Email,Registered (MM/DD/YYYY),Notes
+[UHID],Patel,Ashok,M,[DATE],[RELATIVE],"[ADDRESS], [ADDRESS]",Gopaldih,Sitapur,[PIN],[PHONE],,[DATE],"Pt allergic to sulfa drugs.
+Old card merged - verify identity on next visit."
+[UHID],Lodhi,Dinesh,M,[DATE],[RELATIVE],[ADDRESS],Mohangarh,Sitapur,[PIN],[PHONE],,[DATE],Temp 101.2°F on arrival – sent to emergency.
+[UHID],Masih,Mary,F,[DATE],[RELATIVE],"[ADDRESS], [ADDRESS]",Shivnagar,Sitapur,[PIN],[PHONE],,[DATE],
+[UHID],,[NAME],M,[DATE],[RELATIVE],"[ADDRESS], [ADDRESS]",[NAME],Sitapur,[PIN],[PHONE],,[DATE],
+[UHID],Sharma,Anita,F,[DATE],[RELATIVE],[ADDRESS],[NAME],Bahraich,[PIN],[PHONE],[EMAIL],[DATE],"Pt allergic to sulfa drugs.
+Old card merged - verify identity on next visit."
+[UHID],,[NAME],M,[DATE],[RELATIVE],"[ADDRESS], [ADDRESS]",[NAME],Sitapur,[PIN],[PHONE],,[DATE],
+[UHID],Yadav,Manoj,M,[DATE],[RELATIVE],[ADDRESS],[NAME],Sitapur,[PIN],[PHONE],,[DATE],Referred by ASHA worker of the [ADDRESS]
+[UHID],Pandey,Parvati,F,[DATE],[RELATIVE],[ADDRESS],Ramdih,Sitapur,[PIN],[PHONE],,[DATE],

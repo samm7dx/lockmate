@@ -1,0 +1,4 @@
+bill_no,uhid,patient_name,pmjay_id,payer_pan,policy_no,package_code,procedure,admission_date,discharge_date,amount_inr,status
+[UHID],[UHID],[NAME],,[PAN],[UHID],SG050A,Inguinal hernia repair,[DATE],[DATE],91000,settled
+[UHID],[UHID],[NAME],PMJAY-[UHID],[PAN],,MG064A,Haemodialysis session,[DATE],[DATE],15000,pending
+[UHID],[UHID],[ADDRESS],PMJAY-[UHID],[PAN],,SG039B,Laparoscopic cholecystectomy,[DATE],[DATE],79500,approved

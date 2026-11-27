@@ -17,6 +17,28 @@ from ..detection.gazetteer import get_gazetteer
 logger = get_logger_adapter("clinical.drugs")
 
 
+# Module-level cached detector state
+_drug_cache: dict = {}
+
+
+def _get_cached_patterns():
+    """Get or create cached regex patterns and drug names."""
+    global _drug_cache
+    if not _drug_cache:
+        from ..detection.gazetteer import get_gazetteer
+        gazetteer = get_gazetteer()
+        drug_names = gazetteer.get("medical_drugs")
+        _drug_cache = {
+            'drug_names': frozenset(drug_names),
+            'dosage_pattern': re.compile(r'\b\d+(?:\.\d+)?\s*(?:mg|g|mL|mcg|IU|U)\b', re.IGNORECASE),
+            'frequency_pattern': re.compile(r'\b(?:OD|BD|TID|QID|HS|SOS|PRN|daily|weekly|monthly|stat)\b', re.IGNORECASE),
+            'duration_pattern': re.compile(r'\b\d+\s*(?:days?|weeks?|months?|years?)\b', re.IGNORECASE),
+            'route_pattern': re.compile(r'\b(?:oral|IV|IM|SC|subcut|inhal|topical|nasal|rectal|vaginal)\b', re.IGNORECASE),
+            'strength_pattern': re.compile(r'\b\d+(?:\.\d+)?\s*(?:mg|g|mcg|IU|U)/\s*(?:mL|tablet|cap|caplet)\b', re.IGNORECASE),
+        }
+    return _drug_cache
+
+
 def detect_drugs(record) -> List:
     """
     Detect drug names, strengths, dosages, frequencies, durations, and routes.
@@ -27,19 +49,21 @@ def detect_drugs(record) -> List:
     Returns:
         List of MedicalSpan objects
     """
+    from ..contracts import MedicalSpan, MedicalType
+    
     spans = []
     text = record.normalized_text
     
     if not text:
         return spans
     
-    gazetteer = get_gazetteer()
+    cache = _get_cached_patterns()
+    drug_names = cache['drug_names']
     
-    # Drug names (from gazetteer)
-    drug_names = gazetteer.get("medical_drugs")
+    # Drug names (from gazetteer) - use pre-compiled patterns
     for drug in drug_names:
-        pattern = re.compile(r'\b' + re.escape(drug) + r'\b', re.IGNORECASE)
-        for match in pattern.finditer(record.normalized_text):
+        # Use word boundary pattern for drug names
+        for match in re.finditer(r'\b' + re.escape(drug) + r'\b', text, re.IGNORECASE):
             spans.append(MedicalSpan(
                 start=match.start(),
                 end=match.end(),
@@ -48,12 +72,8 @@ def detect_drugs(record) -> List:
                 original_text=match.group()
             ))
     
-    # Dosage patterns (e.g., "500 mg", "10 mg/mL", "5 mL", "10 mg", "1-0-0", "0-1-0", "1-1-1")
-    dosage_pattern = re.compile(
-        r'\b\d+(?:\.\d+)?\s*(?:mg|g|mL|mcg|IU|U)\b',
-        re.IGNORECASE
-    )
-    for match in dosage_pattern.finditer(record.normalized_text):
+    # Dosage patterns - use cached pattern
+    for match in cache['dosage_pattern'].finditer(text):
         spans.append(MedicalSpan(
             start=match.start(),
             end=match.end(),
@@ -62,15 +82,8 @@ def detect_drugs(record) -> List:
             original_text=match.group()
         ))
     
-    # Frequency patterns (OD, BD, TDS, QID, SOS, 1-0-0, 0-1-0, 1-1-1, etc.)
-    # Only match in clear medical/prescription context
-    freq_pattern = re.compile(
-        r'\b(?:OD|BD|TDS|QID|SOS|once\s+daily|twice\s+daily|thrice\s+daily|once\s+a\s+day|twice\s+a\s+day|three\s+times\s+a\s+day|'
-        r'(?:\d+-\d+-\d+)(?=\s*(?:mg|ml|tablet|capsule|injection|syrup|drops|x\s+\d+\s*days?))|'
-        r'(?:once|twice|thrice|daily|weekly|monthly|sos|stat|prn|hs|ac|pc|ac\s*bd|ac\s*tds)(?=\s*(?:mg|ml|tablet|capsule|injection|syrup|drops|x\s+\d+\s*days?)))\b',
-        re.IGNORECASE
-    )
-    for match in freq_pattern.finditer(record.normalized_text):
+    # Frequency patterns - use cached pattern
+    for match in cache['frequency_pattern'].finditer(text):
         spans.append(MedicalSpan(
             start=match.start(),
             end=match.end(),
@@ -79,13 +92,12 @@ def detect_drugs(record) -> List:
             original_text=match.group()
         ))
     
-    # Duration patterns (e.g., "5 days", "2 weeks", "1 month", "x 5 days", "x 7 days")
-    # Only in prescription/medical context
+    # Duration patterns - use cached pattern
     duration_pattern = re.compile(
         r'\b(?:for\s+)?\d+\s*(?:days?|weeks?|months?|years?)(?=\s*(?:of\s+(?:therapy|treatment|medication)|x\s+\d+|$|,|\.))\b',
         re.IGNORECASE
     )
-    for match in duration_pattern.finditer(record.normalized_text):
+    for match in duration_pattern.finditer(text):
         spans.append(MedicalSpan(
             start=match.start(),
             end=match.end(),

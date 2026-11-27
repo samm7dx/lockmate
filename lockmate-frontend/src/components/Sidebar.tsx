@@ -7,7 +7,8 @@ import {
   FileCheck, 
   ShieldCheck,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Shield
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -47,14 +48,14 @@ export function Sidebar({ onToggle, collapsed = false }: SidebarProps) {
         {!isCollapsed && (
           <NavLink to="/" className="flex items-center gap-3 text-xl font-bold text-accent-primary" aria-label="LOCKMATE Home">
             <div className="w-8 h-8 rounded-lg bg-accent-muted flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-accent-primary" />
+              <Shield className="w-5 h-5 text-accent-primary" />
             </div>
-            <span>LOCKMATE</span>
+            <span className="font-bold text-primary">LOCKMATE</span>
           </NavLink>
         )}
         <button
           onClick={handleToggle}
-          className="p-2 rounded-md hover:bg-tertiary text-secondary transition-colors"
+          className="p-2 rounded-lg hover:bg-tertiary text-secondary transition-colors"
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           aria-expanded={!isCollapsed}
         >
@@ -71,18 +72,18 @@ export function Sidebar({ onToggle, collapsed = false }: SidebarProps) {
               key={path}
               to={path}
               className={({ isActive }) => `
-                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200
                 ${isActive 
-                  ? 'bg-accent-muted text-accent-primary border border-accent-primary/30' 
-                  : 'text-secondary hover:text-primary hover:bg-tertiary'
+                  ? 'bg-accent-muted text-accent-primary border border-accent-primary/30 shadow-sm' 
+                  : 'text-secondary hover:text-primary hover:bg-tertiary/50'
                 }
-                ${collapsed ? 'justify-center' : ''}
+                ${isCollapsed ? 'justify-center' : ''}
               `}
-              title={collapsed ? label : undefined}
+              title={isCollapsed ? label : undefined}
               aria-current={isActive ? 'page' : undefined}
             >
               <Icon className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              {!collapsed && <span>{label}</span>}
+              {!isCollapsed && <span className="font-medium">{label}</span>}
             </NavLink>
           );
         })}
@@ -90,9 +91,13 @@ export function Sidebar({ onToggle, collapsed = false }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-3 border-t border-primary">
-        {!collapsed && (
-          <div className="text-xs text-muted text-center">
-            LOCKMATE v1.0.0 — Secret Wards Track 3
+        {!isCollapsed && (
+          <div className="text-xs text-muted text-center px-2">
+            <div className="flex items-center gap-2 justify-center text-muted mb-2">
+              <Shield className="w-4 h-4 text-accent-primary/50" />
+              <span>Secret Wards Track 3</span>
+            </div>
+            <div className="text-xs text-muted/50">LOCKMATE v1.0.0</div>
           </div>
         )}
       </div>

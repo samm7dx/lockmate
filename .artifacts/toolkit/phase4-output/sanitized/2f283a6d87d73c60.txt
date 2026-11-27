@@ -1,0 +1,16 @@
+[DOCTOR] HOSPITAL, [DOCTOR] SUMMARY
+
+[ADDRESS]ESS] Age/Sex: 35 Yrs/F
+UHID: [UHID] No: [UHID]VE]: [ADDRESS]S](Neurology) / Bed 24
+Date of Admission: [DATE]charge: [DATE] Bell's palsy (G51.0); Type 2 diabetes mellitus without complications (E11.9); 
+Presenting complaints: C/O fever for 4 days, generalised weakness.
+History: K/C/O DM2 x 11 yrs. H/O TB 7 yrs back (completed ATT).
+Course in hospital: Patient admitted with above complaints. BP 114/84 mmHg, Pulse 100/min, Temp 98.2 F, SpO2 94%. Haemoglobin 7.9 g/dL. HbA1c 10.2 %. Random Blood Sugar 96 mg/dL. Treated conservatively. Zainab amma ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Metformin 500 mg 1-0-1 x 30 days
+ 2. Tab Glimepiride 1 mg 1-0-0 x 30 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Sameer Rizvi.
+Attendant: [ADDRESS]NE]

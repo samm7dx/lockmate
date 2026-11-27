@@ -1,0 +1,38 @@
+{
+  "schema": "raksha-report/1",
+  "files": [
+    {
+      "input_sha256": "7558800cd34c6a62f0e7108ca6235133424d96bcd3b602383675a63dab2d8d60",
+      "output": "7558800cd34c6a62.json",
+      "status": "sanitized",
+      "processing_duration_ms": 0,
+      "peak_memory_mb": 70.4609375,
+      "records_processed": 20,
+      "identifiers_detected": 0,
+      "records_linked": 0,
+      "records_generalized": 0,
+      "records_suppressed": 0,
+      "records_quarantined": 0
+    }
+  ],
+  "counts": {
+    "files_total": 1,
+    "files_sanitized": 1,
+    "files_quarantined": 0,
+    "records_processed": 20,
+    "identifiers_detected": 223,
+    "records_linked": 0,
+    "records_generalized": 0,
+    "records_suppressed": 0,
+    "records_quarantined": 0,
+    "total_processing_duration_ms": 0,
+    "peak_memory_mb": 0
+  },
+  "timing": {
+    "seconds": 0.0
+  },
+  "resources": {
+    "peak_rss_mb": 0
+  },
+  "entities": {}
+}

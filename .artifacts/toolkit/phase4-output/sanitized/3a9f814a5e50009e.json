@@ -1,0 +1,27 @@
+[
+  {
+    "_export_meta/system": "eHospital OPD module",
+    "_export_meta/hospital": "[ADDRESS]",
+    "_export_meta/exported_by": "opd.records.clerk",
+    "_export_meta/generated_at": "2026-04-28T18:00:00+05:30",
+    "visits/0/visit_id": "OPD/26/04/00088",
+    "visits/0/patient_ref": "[UHID]",
+    "visits/0/visit_date": "[DATE]",
+    "visits/0/department": "Medicine",
+    "visits/0/doctor": "[NAME]",
+    "visits/0/complaints": "[RELATIVE]",
+    "visits/0/history": "H/O TB 8 yrs back, completed ATT",
+    "visits/0/vitals/bp": "126/80",
+    "visits/0/vitals/pulse": 71,
+    "visits/0/vitals/temp_f": 98.6,
+    "visits/0/vitals/spo2": 99,
+    "visits/0/vitals/weight_kg": 55,
+    "visits/0/diagnosis/0/code": "D64.9",
+    "visits/0/diagnosis/0/display": "Anaemia, unspecified",
+    "visits/0/rx/0/drug": "Ferrous sulphate + Folic acid",
+    "visits/0/rx/0/strength": "100 mg + 0.5 mg",
+    "visits/0/rx/0/frequency": "0-1-0",
+    "visits/0/rx/0/duration": "5 days",
+    "visits/0/notes": "Ashok ka BP 126/80, khana kam kha rahe hain. Review after 2 weeks."
+  }
+]

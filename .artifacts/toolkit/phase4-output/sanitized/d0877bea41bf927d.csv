@@ -1,0 +1,10 @@
+bill_no,uhid,patient_name,pmjay_id,payer_pan,policy_no,package_code,procedure,admission_date,discharge_date,amount_inr,status
+[UHID],[UHID],[NAME],PMJAY-[UHID],[PAN],,MG006A,Caesarean section,[DATE],[DATE],49500,approved
+[UHID],[UHID],[NAME],,[PAN],[UHID],MG006A,Caesarean section,[DATE],[DATE],92500,pending
+[UHID],[UHID],[ADDRESS],PMJAY-[UHID],[PAN],,SE001A,Cataract surgery (phacoemulsification),[DATE],[DATE],15000,pending
+[UHID],[UHID],[ADDRESS],,[PAN],[UHID],MG064A,Haemodialysis session,[DATE],[DATE],32000,approved
+[UHID],[UHID],[NAME],PMJAY-[UHID],[PAN],,SG039B,Laparoscopic cholecystectomy,[DATE],[DATE],68500,approved
+[UHID],[UHID],[NAME],PMJAY-[UHID],[PAN],,MG006A,Caesarean section,[DATE],[DATE],14500,approved
+[UHID],[UHID],[NAME],PMJAY-[UHID],[PAN],,SN045A,Deep brain stimulation,[DATE],[DATE],55500,approved
+[UHID],[UHID],[NAME],PMJAY-[UHID],[PAN],,SG001A,Appendicectomy,[DATE],[DATE],47500,approved
+[UHID],[UHID],[ADDRESS],,[PAN],[UHID],MG064A,Haemodialysis session,[DATE],[DATE],56000,approved

@@ -1,0 +1,21 @@
+col_0,col_1,col_2,col_3,col_4
+drug,strength,form,category,schedule
+Amlodipine,5 mg,Tab,Antibiotic,H
+Artesunate,100 mg,Tab,Essential,H
+Atorvastatin,10 mg,Tab,Antibiotic,H1
+Azithromycin,500 mg,Tab,Antibiotic,G
+Ceftriaxone,1 g,Inj,Essential,H
+Doxycycline,100 mg,Cap,Antibiotic,H1
+Glimepiride,1 mg,Tab,Essential,H
+Insulin Glargine,10 units,Inj,Antibiotic,H
+Ferrous sulphate + Folic acid,100 mg + 0.5 mg,Tab,Essential,H
+Levodopa + Carbidopa,100/25 mg,Tab,Chronic care,G
+Levothyroxine,50 mcg,Tab,Essential,H
+Metformin,500 mg,Tab,Chronic care,H1
+ORS,1 sachet,Sachet,Antibiotic,H1
+Pantoprazole,40 mg,Tab,Essential,H1
+Paracetamol,650 mg,Tab,Chronic care,H1
+Ramipril,5 mg,Tab,Antibiotic,G
+Rifampicin + Isoniazid,450 mg + 300 mg,Tab,Chronic care,H
+Salbutamol inhaler,100 mcg,Inh,Essential,G
+Telmisartan,40 mg,Tab,Chronic care,G

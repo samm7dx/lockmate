@@ -1,0 +1,30 @@
+[
+  {
+    "hospital": "[ADDRESS]",
+    "week": "2026-W44",
+    "wards/0/ward": "[ADDRESS]",
+    "wards/0/beds": 30,
+    "wards/0/occupied": 21,
+    "wards/0/dengue_cases": 1,
+    "wards/1/ward": "[ADDRESS]",
+    "wards/1/beds": 30,
+    "wards/1/occupied": 17,
+    "wards/1/dengue_cases": 5,
+    "wards/2/ward": "[ADDRESS]",
+    "wards/2/beds": 30,
+    "wards/2/occupied": 21,
+    "wards/2/dengue_cases": 3,
+    "wards/3/ward": "[ADDRESS]",
+    "wards/3/beds": 30,
+    "wards/3/occupied": 19,
+    "wards/3/dengue_cases": 2,
+    "wards/4/ward": "[ADDRESS]",
+    "wards/4/beds": 30,
+    "wards/4/occupied": 20,
+    "wards/4/dengue_cases": 0,
+    "wards/5/ward": "[ADDRESS]",
+    "wards/5/beds": 30,
+    "wards/5/occupied": 13,
+    "wards/5/dengue_cases": 4
+  }
+]

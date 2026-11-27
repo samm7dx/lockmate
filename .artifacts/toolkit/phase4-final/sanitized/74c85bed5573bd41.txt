@@ -1,0 +1,3 @@
+[DOCTOR] - [ADDRESS]S](Medicine), Bed 2 - [UHID]hwinder ji ka BP 109/76, pulse 117. Bukhar 100 F. Paracetamol 650 mg diya.
+Next morning 06:00 - Patient ne raat theek se neend li. RBS 199 mg/dL.
+14:00 - [ADDRESS]/O dengue. Attendant ([RELATIVE]

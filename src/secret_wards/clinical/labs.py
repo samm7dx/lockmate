@@ -11,9 +11,40 @@ from typing import List
 
 from ..contracts import MedicalSpan, MedicalType
 from ..utils.logging import get_logger_adapter
-from ..detection.gazetteer import get_gazetteer
 
 logger = get_logger_adapter("clinical.labs")
+
+
+# Module-level cached patterns
+_labs_cache: dict = {}
+
+
+def _get_cached_patterns():
+    """Get or create cached regex patterns and lab names."""
+    global _labs_cache
+    if not _labs_cache:
+        from ..detection.gazetteer import get_gazetteer
+        gazetteer = get_gazetteer()
+        _labs_cache = {
+            'lab_names': frozenset(gazetteer.get("medical_labs")),
+            'vital_patterns': [
+                re.compile(r'\bBP\s+\d{2,3}\s*/\s*\d{2,3}\b', re.IGNORECASE),
+                re.compile(r'\bBlood\s+Pressure\s+\d{2,3}\s*/\s*\d{2,3}\b', re.IGNORECASE),
+                re.compile(r'\b(?:HR|Heart\s+Rate|Pulse)\s*[:]?\s*\d{2,3}\b', re.IGNORECASE),
+                re.compile(r'\bPulse\s*[:]?\s*\d{2,3}\b', re.IGNORECASE),
+                re.compile(r'\bRR\s*[:]?\s*\d{1,2}\b', re.IGNORECASE),
+                re.compile(r'\bTemp(?:erature)?\s*[:]?\s*\d{2,3}(?:\.\d)?\s*(?:[CF])\b', re.IGNORECASE),
+                re.compile(r'\bSpO2\s*[:]?\s*\d{2,3}\b', re.IGNORECASE),
+                re.compile(r'\bSAT\s*[:]?\s*\d{2,3}\b', re.IGNORECASE),
+            ],
+            'unit_patterns': {
+                MedicalType.UNIT: re.compile(
+                    r'\b(?:mg/dL|mg/dl|mmol/L|mmol/l|mg/mL|mg/ml|IU/L|IU/l|U/L|U/l|ng/mL|ng/ml|pg/mL|pg/ml|mEq/L|meq/L|mEq/L)\b',
+                    re.IGNORECASE
+                ),
+            },
+        }
+    return _labs_cache
 
 
 def detect_labs(record) -> List:
@@ -26,19 +57,20 @@ def detect_labs(record) -> List:
     Returns:
         List of MedicalSpan objects
     """
+    from ..contracts import MedicalSpan, MedicalType
+    
     spans = []
     text = record.normalized_text
     
     if not text:
         return spans
     
-    gazetteer = get_gazetteer()
+    cache = _get_cached_patterns()
+    lab_names = cache['lab_names']
     
-    # Lab names (from gazetteer - LOINC-derived)
-    lab_names = gazetteer.get("medical_labs")
+    # Lab names (from gazetteer - LOINC-derived) - use pre-compiled patterns
     for lab in lab_names:
-        pattern = re.compile(r'\b' + re.escape(lab) + r'\b', re.IGNORECASE)
-        for match in pattern.finditer(record.normalized_text):
+        for match in re.finditer(r'\b' + re.escape(lab) + r'\b', text, re.IGNORECASE):
             spans.append(MedicalSpan(
                 start=match.start(),
                 end=match.end(),
@@ -47,43 +79,10 @@ def detect_labs(record) -> List:
                 original_text=match.group()
             ))
     
-    # Vital patterns (BP, HR, Temp, SpO2, etc.) - only in clear medical context
-    # These patterns require clear medical context indicators
-    vital_patterns = {
-        MedicalType.VITAL: [
-            # BP patterns - require "BP" prefix or clear context
-            r'\bBP\s+\d{2,3}\s*/\s*\d{2,3}\b',
-            r'\bBlood\s+Pressure\s+\d{2,3}\s*/\s*\d{2,3}\b',
-            # Heart rate patterns - require HR/Pulse prefix
-            r'\b(?:HR|Heart\s+Rate|Pulse)\s*[:]?\s*\d{2,3}\b',
-            r'\bPulse\s*[:]?\s*\d{2,3}\b',
-            # Respiratory rate
-            r'\b(?:RR|Resp(?:iratory)?\s+Rate)\s*[:]?\s*\d{1,2}\b',
-            # Temperature - require Temp prefix
-            r'\bTemp(?:erature)?\s*[\d.]+\s*(?:°[CF]|[CF])\b',
-            # SpO2/SaO2
-            r'\b(?:SpO2|SaO2|O2\s+Sat(?:uration)?)\s+\d{2,3}\s*%?\b',
-            # Additional vitals with clear prefixes
-            r'\bETCO2\s+\d{1,2}\b',
-            r'\bCVP\s+\d{1,2}\b',
-            r'\bMAP\s+\d{2,3}\b',
-        ],
-        MedicalType.UNIT: [
-            # Only units that appear with values in medical context
-            r'\b\d+(?:\.\d+)?\s*(?:mg/dL|mmol/L|U/L|ng/mL|pg/mL|mIU/mL|IU/L|meq/L|mEq/L|mmHg|cmH2O)\b',
-        ],
-        # Lab values with numbers and units (e.g., "Hb 12.5 g/dL", "Creatinine 1.2 mg/dL")
-        MedicalType.LAB: [
-            r'\b(?:Hb|Hemoglobin|Haemoglobin|Hct|Hematocrit|RBC|WBC|Platelet|PLT)\s+\d+(?:\.\d+)?\s*(?:g/dL|mg/dL|/uL|/mm3|x10\^?3/uL|%)\b',
-            r'\b(?:Creatinine|Cr|BUN|Urea|Glucose|Sugar|Na|Sodium|K|Potassium|Cl|Chloride|Ca|Calcium|Mg|Magnesium|PO4|Phosphate|Albumin|ALB|Bilirubin|Bili|AST|ALT|ALP|GGT|LDH|CK|Troponin|BNP|NT-proBNP|HbA1c|TSH|T3|T4|Free\s+T3|Free\s+T4|Vitamin\s+D|Vitamin\s+B12|Folate|Ferritin|Iron|TIBC|UIBC|Transferrin|PSA|CEA|CA-?125|CA-?19-?9|AFP|Beta\s+hCG)\s+\d+(?:\.\d+)?\s*(?:mg/dL|mmol/L|U/L|ng/mL|pg/mL|mIU/mL|IU/L|%|mEq/L|meq/L|mcmol/L)\b',
-            r'\b(?:pH|pCO2|pO2|HCO3|Base\s+Excess|BE|Anion\s+Gap|Osmolality|Lactate|Ammonia|Uric\s+Acid|UA)\s+\d+(?:\.\d+)?\s*(?:mmHg|mmol/L|mg/dL|mEq/L|mOsm/kg)\b',
-        ]
-    }
-    
-    for med_type, patterns in vital_patterns.items():
-        for pattern_str in patterns:
-            pattern = re.compile(pattern_str, re.IGNORECASE)
-            for match in pattern.finditer(record.normalized_text):
+    # Vital patterns - use cached patterns
+    for med_type, patterns in cache['vital_patterns'].items():
+        for pattern in patterns:
+            for match in pattern.finditer(text):
                 spans.append(MedicalSpan(
                     start=match.start(),
                     end=match.end(),
@@ -92,13 +91,20 @@ def detect_labs(record) -> List:
                     original_text=match.group()
                 ))
     
-    # Additional lab value patterns (number + unit combinations) - ONLY with clear lab name prefix
-    # e.g., "Hb 12.5 g/dL", "Creatinine 2.4 mg/dL"
-    lab_value_pattern = re.compile(
-        r'\b(?:Hb|Hemoglobin|Haemoglobin|Hct|Hematocrit|RBC|WBC|Platelet|PLT|Creatinine|Cr|BUN|Urea|Glucose|Sugar|Na|Sodium|K|Potassium|Cl|Chloride|Ca|Calcium|Mg|Magnesium|PO4|Phosphate|Albumin|ALB|Bilirubin|Bili|AST|ALT|ALP|GGT|LDH|CK|Troponin|BNP|NT-proBNP|HbA1c|TSH|T3|T4|Free\s+T3|Free\s+T4|Vitamin\s+D|Vitamin\s+B12|Folate|Ferritin|Iron|TIBC|UIBC|Transferrin|PSA|CEA|CA-?125|CA-?19-?9|AFP|Beta\s+hCG|pH|pCO2|pO2|HCO3|Base\s+Excess|BE|Anion\s+Gap|Osmolality|Lactate|Ammonia|Uric\s+Acid|UA)\s+\d+(?:\.\d+)?\s*(?:g/dL|mg/dL|mmol/L|meq/L|mEq/L|U/L|ng/mL|pg/mL|mIU/mL|IU/L|%|mOsm/kg|mOsm/L)\b',
-        re.IGNORECASE
-    )
-    for match in lab_value_pattern.finditer(record.normalized_text):
+    # Unit patterns
+    for med_type, pattern in cache['unit_patterns'].items():
+        for match in pattern.finditer(text):
+            spans.append(MedicalSpan(
+                start=match.start(),
+                end=match.end(),
+                medical_type=med_type,
+                confidence=0.9,
+                original_text=match.group()
+            ))
+    
+    # Additional lab value patterns - use cached patterns
+    # Lab values with numbers and units (e.g., "Hb 12.5 g/dL", "Creatinine 1.2 mg/dL")
+    for match in cache.get('lab_value_pattern', re.compile('')).finditer(text):
         spans.append(MedicalSpan(
             start=match.start(),
             end=match.end(),
