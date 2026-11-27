@@ -1,0 +1,17 @@
+[NAME] [NAME], [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 46 Yrs/M
+UHID: JJH-0077157        IPD No: IP/26/00130
+[RELATIVE] Khurd, Tehsil Haidergarh, Distt. Barabanki - [PIN]bile: +91 60043 94755
+Consultant: [NAME]ard 7 (Medicine) / Bed 8
+Date of Admission: [DATE]ge: [DATE] fever (A01.0); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 126/86 mmHg, Pulse 76/min, Temp 101.2 F, SpO2 94%. Haemoglobin 8.6 g/dL. Random Blood Sugar 235 mg/dL. Serum Creatinine 2.0 mg/dL. Treated conservatively. Jaspreet bhai ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 30 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME][PHONE]

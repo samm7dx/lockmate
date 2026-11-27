@@ -75,6 +75,8 @@ class PIIScrubbingFormatter(logging.Formatter):
         """Recursively scrub PII from any value."""
         if isinstance(value, str):
             return self._scrub_message(value)
+        elif isinstance(value, Path):
+            return str(value)
         elif isinstance(value, dict):
             return {k: self._scrub_value(v) for k, v in value.items()}
         elif isinstance(value, (list, tuple)):
@@ -133,6 +135,17 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(f"lockmate.{name}")
 
 
+# Reserved LogRecord attribute names that cannot be used as extra fields
+_RESERVED_LOG_ATTRS = {
+    "name", "msg", "args", "created", "filename", "funcName",
+    "levelname", "levelno", "lineno", "module", "msecs",
+    "message", "pathname", "process", "processName",
+    "relativeCreated", "thread", "threadName",
+    "exc_info", "exc_text", "stack_info", "getMessage",
+    "level", "logger", "timestamp"
+}
+
+
 class LoggerAdapter:
     """
     Logger adapter that supports keyword arguments for structured logging.
@@ -147,7 +160,22 @@ class LoggerAdapter:
     
     def _log(self, level: int, msg: str, **kwargs) -> None:
         if kwargs:
-            self._logger.log(level, msg, extra=kwargs)
+            # Filter out reserved attribute names to avoid KeyError
+            safe_kwargs = {k: v for k, v in kwargs.items() if k not in _RESERVED_LOG_ATTRS}
+            # Also rename common conflicting names
+            renamed = {}
+            for k, v in safe_kwargs.items():
+                if k == "name":
+                    renamed["log_name"] = v
+                elif k == "file":
+                    renamed["log_file"] = v
+                elif k == "path":
+                    renamed["log_path"] = v
+                elif k == "type":
+                    renamed["log_type"] = v
+                else:
+                    renamed[k] = v
+            self._logger.log(level, msg, extra=renamed)
         else:
             self._logger.log(level, msg)
     
@@ -165,9 +193,6 @@ class LoggerAdapter:
     
     def critical(self, msg: str, **kwargs) -> None:
         self._log(logging.CRITICAL, msg, **kwargs)
-    
-    def warning(self, msg: str, **kwargs) -> None:
-        self._log(logging.WARNING, msg, **kwargs)
     
     def exception(self, msg: str, **kwargs) -> None:
         self._logger.exception(msg, **kwargs)

@@ -15,11 +15,14 @@ from typing import Any, Dict, Generator, List, Optional, Tuple
 from ..contracts import (
     InputFile, ParsedDocument, UnifiedRecord, RecordLocation,
     FieldValue, FieldType, RecordLocationType, RecordStatus,
-    RecordLocation
+    RecordLocation, PIISpan, PIIType
 )
 from .base import BaseParser, build_record_location, create_parsed_document
 from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
+from ..detection.structured import sanitize_csv_headers, scan_structured_fields
+from ..detection.placeholder import detect_pii_placeholder
+from ..detection.identifiers import detect_identifiers
 
 logger = get_logger_adapter("parsers.csv")
 
@@ -57,6 +60,7 @@ class CSVParser(BaseParser):
         self.delimiter: str = ","
         self.has_header: bool = True
         self.headers: List[str] = []
+        self.header_spans: List = []
     
     def parse(self) -> ParsedDocument:
         """Parse CSV/TSV file to URM records."""
@@ -87,6 +91,9 @@ class CSVParser(BaseParser):
                     except StopIteration:
                         self.headers = []
                         self.has_header = False
+                
+                # Scan headers for PII
+                self.header_spans = self._scan_headers_for_pii()
                 
                 # Parse records
                 for row_idx, row in enumerate(reader):
@@ -151,6 +158,49 @@ class CSVParser(BaseParser):
             # Heuristic: first row has fewer numeric values than subsequent rows
             self.has_header = True
     
+    def _scan_headers_for_pii(self) -> List[PIISpan]:
+        """
+        Scan CSV headers for PII.
+        
+        Returns:
+            List of PIISpan objects found in headers
+        """
+        if not self.headers:
+            return []
+        
+        spans = []
+        header_text = " | ".join(self.headers)
+        
+        # Create a mock record for detection
+        from ..contracts import UnifiedRecord, RecordLocation, RecordStatus
+        
+        mock_record = UnifiedRecord(
+            record_id=f"{self.input_file.sha256}:headers",
+            location=RecordLocation.from_json_pointer("/headers"),
+            fields={},
+            raw_text=header_text,
+            normalized_text=header_text,
+            offset_map=[],
+            status=RecordStatus.PENDING
+        )
+        
+        # Run detectors on header text
+        spans.extend(detect_pii_placeholder(mock_record))
+        spans.extend(detect_identifiers(mock_record))
+        
+        # Update detector names to indicate header source
+        for span in spans:
+            span.detector = f"csv_header.{span.detector}"
+            span.context = f"CSV header: {span.context}"
+        
+        if spans:
+            logger.info("csv_header_pii_detected", 
+                       file=self.input_file.sha256[:16],
+                       spans=len(spans),
+                       headers=self.headers)
+        
+        return spans
+    
     def _parse_row(self, row: List[str], row_idx: int) -> Optional[UnifiedRecord]:
         """
         Parse a single row into UnifiedRecord.
@@ -201,15 +251,17 @@ class CSVParser(BaseParser):
         # Combine raw text for searching
         raw_text = " | ".join(raw_text_parts) if raw_text_parts else ""
         
-        return UnifiedRecord(
+        record = UnifiedRecord(
             record_id=record_id,
             location=location,
             fields=fields,
             raw_text=raw_text,
             normalized_text=raw_text,  # Will be normalized later
             offset_map=[],  # Will be populated during normalization
-            status=RecordStatus.PENDING
+            status=RecordStatus.PENDING,
+            pii_spans=self.header_spans.copy() if self.header_spans else []  # Attach header spans
         )
+        return record
     
     def _is_identifier_header(self, header: str) -> bool:
         """Check if header suggests identifier field."""

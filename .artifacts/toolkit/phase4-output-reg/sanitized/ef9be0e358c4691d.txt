@@ -1,0 +1,15 @@
+[NAME] HOSPITAL, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 52 Yrs/F
+UHID: SNJ/26/[PIN]     IPD No: IPD-2026-00461
+[RELATIVE]No. 143, near Kali Mata Mandir, Vill. Jalalnagar Khurd, Tehsil Dalmau, Distt. Rae Bareli - [PIN]bile: +91 84631 22585
+Consultant: [NAME]rd/Bed: Ward 4 (Medicine) / Bed 29
+Date of Admission: [DATE]ge: [DATE] tract infection, site not specified (N39.0); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 128/85 mmHg, Pulse 64/min, Temp 99.0 F, SpO2 97%. Haemoglobin 8.2 g/dL. Random Blood Sugar 216 mg/dL. Serum Creatinine 3.2 mg/dL. Treated conservatively. Fatima amma ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Cap Doxycycline 100 mg 1-0-1 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME]em, Mob. [PHONE]

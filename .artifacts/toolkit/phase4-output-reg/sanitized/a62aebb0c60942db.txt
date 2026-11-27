@@ -1,0 +1,15 @@
+[NAME] [NAME], [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 53 Yrs/F
+UHID: JJH-0077132        IPD No: IP/26/00129
+[RELATIVE]ohalla Nai Basti, Vill. Amarganj Khurd, Tehsil Nawabganj, Distt. Barabanki - [PIN]bile: +91 71511 21544
+Consultant: [NAME]ard 8 (Medicine) / Bed 10
+Date of Admission: [DATE]ge: [DATE] tract infection, site not specified (N39.0); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 135/67 mmHg, Pulse 105/min, Temp 97.9 F, SpO2 95%. Haemoglobin 11.0 g/dL. Random Blood Sugar 231 mg/dL. Serum Creatinine 1.5 mg/dL. Treated conservatively. Geeta ji ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Cap Doxycycline 100 mg 1-0-1 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME][PHONE]

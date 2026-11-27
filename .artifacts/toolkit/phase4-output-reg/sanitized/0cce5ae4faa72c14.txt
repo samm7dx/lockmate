@@ -1,0 +1,20 @@
+[NAME] HOSPITAL, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 48 Yrs/F
+UHID: SNJ/26/[PIN]     IPD No: IPD-2026-00450
+[RELATIVE]l. Bhimganj, Tehsil Malihabad, Distt. Lucknow - [PIN]bile: +91 73579 32472
+Consultant: [NAME]ard 8 (Medicine) / Bed 23
+Date of Admission: [DATE]ge: [DATE]al (primary) hypertension (I10); Type 2 diabetes mellitus without complications (E11.9); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: K/C/O DM2 x 6 yrs. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 161/93 mmHg, Pulse 82/min, Temp 98.9 F, SpO2 92%. Haemoglobin 7.6 g/dL. HbA1c 9.9 %. Random Blood Sugar 284 mg/dL. Treated conservatively. Kavita didi ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Amlodipine 5 mg 0-0-1 x 30 days
+ 2. Tab Telmisartan 40 mg 1-0-0 x 15 days
+ 3. Tab Ramipril 5 mg 0-0-1 x 30 days
+ 4. Tab Metformin 500 mg 1-0-1 x 30 days
+ 5. Tab Glimepiride 1 mg 1-0-0 x 30 days
+ 6. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME][PHONE]

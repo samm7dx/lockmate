@@ -1,0 +1,9 @@
+Group 0: 'विजय यादव'
+Groups: ()
+Group 1 error: no such group
+CAPS Group 0: 'VIJAY YADAV'
+CAPS Group 1: 'VIJAY YADAV'
+CAPS Groups: ('VIJAY YADAV',)
+TITLE Group 0: 'Vijay Yadav'
+TITLE Group 1: 'Vijay Yadav'
+TITLE Groups: ('Vijay Yadav',)

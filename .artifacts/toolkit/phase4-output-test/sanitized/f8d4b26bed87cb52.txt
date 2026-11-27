@@ -1,0 +1,17 @@
+[DOCTOR] HOSPITAL, [DOCTOR] SUMMARY
+
+[ADDRESS]]Sex: 44 Yrs/F
+UHID: [UHID] No: [UHID]VE]e)
+Ward/Bed: [ADDRESS]S](Medicine) / Bed 20
+Date of Admission: [DATE]charge: [DATE] Dengue, unspecified (A97.9); Type 2 diabetes mellitus without complications (E11.9); Addison's disease (E27.1); 
+Presenting complaints: C/O fever for 9 days, generalised weakness.
+History: K/[RELATIVE]Hg, Pulse 117/min, Temp 100.6 F, SpO2 92%. Haemoglobin 9.8 g/dL. HbA1c 7.7 %. Random Blood Sugar 305 mg/dL. Treated conservatively. Sukhwinder amma ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 2. Tab Metformin 500 mg 1-0-1 x 15 days
+ 3. Tab Glimepiride 1 mg 1-0-0 x 15 days
+ 4. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Vandana Kulshrestha.
+Attendant: [ADDRESS]HONE]

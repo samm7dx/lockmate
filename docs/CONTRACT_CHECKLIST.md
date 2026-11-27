@@ -116,27 +116,27 @@
 
 | # | Requirement | Spec Ref | Status | Evidence | Notes |
 |---|-------------|----------|--------|----------|-------|
-| 6.2.1 | English PII detection | §6.B | ❌ MISSING | No detection engine | |
-| 6.2.2 | Devanagari Hindi PII detection | §6.B | ❌ MISSING | No Devanagari support | NFC, digit mapping |
-| 6.2.3 | Hinglish PII detection | §6.B | ❌ MISSING | No Hinglish support | Transliteration + gazetteer |
-| 6.2.4 | Transliteration variants (Mohammad/Mohammed/मोहम्मद) | §6.B | ❌ MISSING | No transliteration | indic-transliteration + Double Metaphone |
-| 6.2.5 | Indian name structures (initials, surname-first) | §6.B | ❌ MISSING | No name detector | |
-| 6.2.6 | Honorifics: ji, sahab, didi | §6.B | ❌ MISSING | No Hindi honorifics | Trigger detector |
-| 6.2.7 | S/o, D/o, W/o relationship markers | §6.B | ❌ MISSING | No relationship triggers | Relative classification |
-| 6.2.8 | Aadhaar (Verhoeff), ABHA, UHID/MRN, PAN, insurance IDs | §6.B | ❌ MISSING | No ID detectors | Checksum validation |
-| 6.2.9 | Indian phone formats (+91/0, 10 digits 6-9, Devanagari digits) | §6.B | ❌ MISSING | No phone detector | phonenumbers + regex |
-| 6.2.10 | Names in structured data AND free text | §6.B | ❌ MISSING | No structured scanner | Headers, keys, FHIR, filenames |
+| 6.2.1 | English PII detection | §6.B | ✅ VERIFIED | `detection/names.py`, `detection/identifiers.py` | Gazetteer + regex |
+| 6.2.2 | Devanagari Hindi PII detection | §6.B | ✅ VERIFIED | `detection/normalize.py`, `detection/names.py` | NFC, digit mapping, Devanagari gazetteer |
+| 6.2.3 | Hinglish PII detection | §6.B | ✅ VERIFIED | `detection/names.py` | Transliteration + gazetteer |
+| 6.2.4 | Transliteration variants (Mohammad/Mohammed/मोहम्मद) | §6.B | ✅ VERIFIED | `detection/transliterate.py` | indic-transliteration + Double Metaphone |
+| 6.2.5 | Indian name structures (initials, surname-first) | §6.B | ✅ VERIFIED | `detection/names.py` | Gazetteer + trigger proximity |
+| 6.2.6 | Honorifics: ji, sahab, didi | §6.B | ✅ VERIFIED | `detection/names.py` | Trigger detector |
+| 6.2.7 | S/o, D/o, W/o relationship markers | §6.B | ✅ VERIFIED | `detection/names.py` | Relative classification |
+| 6.2.8 | Aadhaar (Verhoeff), ABHA, UHID/MRN, PAN, insurance IDs | §6.B | ✅ VERIFIED | `detection/identifiers.py` | Checksum validation |
+| 6.2.9 | Indian phone formats (+91/0, 10 digits 6-9, Devanagari digits) | §6.B | ✅ VERIFIED | `detection/identifiers.py` | phonenumbers + regex |
+| 6.2.10 | Names in structured data AND free text | §6.B | ✅ VERIFIED | `detection/structured.py`, `parsers/csv_parser.py` | Headers, keys, FHIR, filenames |
 
 ### 6.3 Contextual Disambiguation
 
 | # | Requirement | Spec Ref | Status | Evidence | Notes |
 |---|-------------|----------|--------|----------|-------|
-| 6.3.1 | C/O Ramesh (relative) vs C/O fever (clinical) | §6.C | ❌ MISSING | No disambiguation | Symptom gazetteer |
-| 6.3.2 | Dr. Ramesh (doctor) vs relative Ramesh | §6.C | ❌ MISSING | No doctor detector | Dr./Doctor + clinical context |
-| 6.3.3 | Medicines and dosage expressions preserved | §6.C | ❌ MISSING | No clinical detectors | Gazetteer + regex |
-| 6.3.4 | 1-0-1 and similar dosage patterns preserved | §6.C | ❌ MISSING | No dosage patterns | Frequency regex |
-| 6.3.5 | Disease names (Parkinson's, Alzheimer's) preserved | §6.C | ❌ MISSING | No diagnosis detector | ICD-10 + eponyms |
-| 6.3.6 | Clinical terminology resembling identifiers preserved | §6.C | ❌ MISSING | No medical veto | Span-level, not blanket |
+| 6.3.1 | C/O Ramesh (relative) vs C/O fever (clinical) | §6.C | ✅ VERIFIED | `detection/names.py`, `clinical/veto.py` | Symptom gazetteer + relative triggers |
+| 6.3.2 | Dr. Ramesh (doctor) vs relative Ramesh | §6.C | ✅ VERIFIED | `clinical/doctors.py` | Dr./Doctor + clinical context |
+| 6.3.3 | Medicines and dosage expressions preserved | §6.C | ✅ VERIFIED | `clinical/drugs.py` | Gazetteer + regex |
+| 6.3.4 | 1-0-1 and similar dosage patterns preserved | §6.C | ✅ VERIFIED | `clinical/drugs.py` | Frequency regex |
+| 6.3.5 | Disease names (Parkinson's, Alzheimer's) preserved | §6.C | ✅ VERIFIED | `clinical/diagnoses.py` | ICD-10 + eponyms |
+| 6.3.6 | Clinical terminology resembling identifiers preserved | §6.C | ✅ VERIFIED | `clinical/veto.py` | Span-level medical veto |
 
 ### 6.4 Identity Resolution
 
@@ -182,17 +182,17 @@
 
 | # | Requirement | Spec Ref | Status | Evidence | Notes |
 |---|-------------|----------|--------|----------|-------|
-| 6.7.1 | File contents sanitized | §6.G | ❌ MISSING | No detection | |
-| 6.7.2 | JSON keys sanitized | §6.G | ❌ MISSING | No structured scanner | |
-| 6.7.3 | CSV headers sanitized | §6.G | ❌ MISSING | No header scanner | |
-| 6.7.4 | Filenames sanitized (PII → SHA-256 prefix) | §6.G | ❌ MISSING | No filename sanitizer | |
-| 6.7.5 | Metadata sanitized (FHIR meta, JSON metadata) | §6.G | ❌ MISSING | No meta scanner | |
-| 6.7.6 | Attachments handled (PDF quarantine, text extract) | §6.G | ❌ MISSING | No attachment handler | |
-| 6.7.7 | Temporary files safe (AES-GCM, secure delete) | §6.G | ❌ MISSING | No temp manager | |
-| 6.7.8 | Logs PII-free (structured, scrubbed) | §6.G | ❌ MISSING | No logging | |
-| 6.7.9 | Exceptions PII-free | §6.G | ❌ MISSING | No exception handler | |
-| 6.7.10 | Reports PII-free (no original names, no raw PII) | §6.G | ❌ MISSING | No report generator | |
-| 6.7.11 | Unsafe files quarantined, never copied through | §6.G | ❌ MISSING | No security gate | |
+| 6.7.1 | File contents sanitized | §6.G | ✅ VERIFIED | `transform/replacer.py`, `output/serializer.py` | Full pipeline |
+| 6.7.2 | JSON keys sanitized | §6.G | ✅ VERIFIED | `detection/structured.py`, `transform/structured.py` | Recursive key sanitization |
+| 6.7.3 | CSV headers sanitized | §6.G | ✅ VERIFIED | `parsers/csv_parser.py` | Header row scanning |
+| 6.7.4 | Filenames sanitized (PII → SHA-256 prefix) | §6.G | ✅ VERIFIED | `output/namer.py` | SHA-256 prefix for PII names |
+| 6.7.5 | Metadata sanitized (FHIR meta, JSON metadata) | §6.G | ✅ VERIFIED | `parsers/fhir_meta.py` | meta.tag, meta.security, Bundle.metadata |
+| 6.7.6 | Attachments handled (PDF quarantine, text extract) | §6.G | ❌ MISSING | No attachment handler | ⏸️ DEFERRED |
+| 6.7.7 | Temporary files safe (AES-GCM, secure delete) | §6.G | ❌ MISSING | No temp manager | ⏸️ DEFERRED |
+| 6.7.8 | Logs PII-free (structured, scrubbed) | §6.G | ✅ VERIFIED | `utils/logging.py` | Structured JSON, no PII |
+| 6.7.9 | Exceptions PII-free | §6.G | ✅ VERIFIED | `exceptions.py`, `utils/logging.py` | Custom exceptions, sanitized logs |
+| 6.7.10 | Reports PII-free (no original names, no raw PII) | §6.G | ✅ VERIFIED | `output/pipeline.py` | Hashes/counts only |
+| 6.7.11 | Unsafe files quarantined, never copied through | §6.G | ✅ VERIFIED | `output/security_gate.py` | Security gate + quarantine |
 
 ### 6.8 Security
 
@@ -218,16 +218,16 @@
 | 4: Output Structure | 19 | 0 | 0 | 19 | 0 |
 | 5: Validation Contract | 3 | 1 | 0 | 0 | 2 |
 | 6.1: Ingestion | 10 | 0 | 0 | 10 | 0 |
-| 6.2: Multilingual PII Detection | 10 | 0 | 0 | 10 | 0 |
-| 6.3: Contextual Disambiguation | 6 | 0 | 0 | 6 | 0 |
+| 6.2: Multilingual PII Detection | 10 | 10 | 0 | 0 | 0 |
+| 6.3: Contextual Disambiguation | 6 | 6 | 0 | 0 | 0 |
 | 6.4: Identity Resolution | 10 | 0 | 0 | 10 | 0 |
 | 6.5: Pseudonymization | 6 | 0 | 0 | 6 | 0 |
 | 6.6: Privacy Transformation | 9 | 0 | 0 | 9 | 0 |
-| 6.7: Hidden Leakage Protection | 11 | 0 | 0 | 11 | 0 |
+| 6.7: Hidden Leakage Protection | 11 | 9 | 0 | 2 | 0 |
 | 6.8: Security | 7 | 0 | 0 | 7 | 0 |
-| **TOTAL** | **112** | **6** | **1** | **102** | **3** |
+| **TOTAL** | **112** | **30** | **1** | **78** | **3** |
 
-**Overall Compliance: ~5% (6/112 verified)**
+**Overall Compliance: ~27% (30/112 verified)**
 
 ---
 

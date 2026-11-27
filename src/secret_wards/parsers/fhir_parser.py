@@ -12,11 +12,12 @@ from typing import Any, Dict, Generator, List, Optional, Union
 
 from ..contracts import (
     InputFile, ParsedDocument, UnifiedRecord, RecordLocation,
-    FieldValue, FieldType, RecordLocationType, RecordStatus
+    FieldValue, FieldType, RecordLocationType, RecordStatus, PIISpan, PIIType
 )
 from .base import BaseParser, build_record_location, create_parsed_document
 from ..utils.logging import get_logger_adapter
 from ..utils.metrics import FileMetrics
+from ..parsers.fhir_meta import scan_fhir_metadata
 
 logger = get_logger_adapter("parsers.fhir")
 
@@ -71,6 +72,11 @@ class FHIRParser(BaseParser):
             with self.input_file.path.open("r", encoding=self.encoding) as f:
                 data = json.load(f)
             
+            # Scan FHIR metadata for PII
+            meta_spans = scan_fhir_metadata(data)
+            if meta_spans:
+                logger.debug("fhir_metadata_pii_detected", count=len(meta_spans))
+            
             # Check if it's a Bundle
             if isinstance(data, dict) and data.get("resourceType") == "Bundle":
                 records = list(self._parse_bundle(data))
@@ -83,6 +89,10 @@ class FHIRParser(BaseParser):
             else:
                 logger.warning("not_valid_fhir", file=self.input_file.path)
                 raise ValueError("Not a valid FHIR Bundle or Resource")
+            
+            # Attach metadata spans to all records
+            for record in records:
+                record.pii_spans = meta_spans
                 
         except json.JSONDecodeError as e:
             logger.error("json_decode_error", file=self.input_file.path, error=str(e))

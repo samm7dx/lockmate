@@ -1,0 +1,7 @@
+patient_name,age,phone,aadhaar,diagnosis,notes
+Rahul Sharma,35,9876543210,123456789012,Diabetes,"Patient Rahul Sharma visited"
+Priya Patel,28,9876543211,234567890123,Hypertension,"Dr. Amit Kumar prescribed"
+अमित कुमार,42,9876543212,345678901234,Cardiology,"अमित कुमार को दवा दी"
+Rahul शर्मा,30,9876543213,456789012345,Neurology,"Rahul शर्मा is patient"
+S/o Rajesh Kumar,25,9876543214,567890123456,Pediatrics,"S/o Rajesh Kumar brought child"
+Dr. Priya Singh,40,9876543215,678901234567,Oncology,"Dr. Priya Singh treated"

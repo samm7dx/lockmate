@@ -1,0 +1,33 @@
+# Relationship markers (Latin and Devanagari)
+# English
+s/o
+d/o
+w/o
+c/o
+son of
+daughter of
+wife of
+husband of
+father of
+mother of
+brother of
+sister of
+
+# Devanagari
+पुत्र
+पुत्री
+पत्नी
+पति
+पिता
+माता
+भाई
+बहन
+के/की देखभाल में
+की देखभाल में
+देखभाल में
+
+# Abbreviations
+s/o
+d/o
+w/o
+c/o

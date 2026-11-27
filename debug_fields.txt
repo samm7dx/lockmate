@@ -1,0 +1,15 @@
+Record 0 fields:
+  Reg No: JJH-0077305
+  Naam: कमला निषाद
+  Ling: महिला
+  Umar: 47 वर्ष
+  Janm Tithi: 29-07-1978
+  Pita/Pati ka Naam: D/o किशन निषाद
+  Pata: मकान नं. 32, जामा मस्जिद के पीछे, तहसील नवाबगंज, जिला बाराबंकी
+  Gaon: अमरगंज खुर्द
+  Tehsil: नवाबगंज
+  Jila: बाराबंकी
+  Pin Code: 225127
+  Mobile No: 060062-72163
+  Aadhar: 9795 9973 0131
+  Registration Date: 08-05-2026

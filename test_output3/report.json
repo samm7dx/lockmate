@@ -1,0 +1,65 @@
+{
+  "files": {
+    "4e6a5fe0eaec734ffb81428590dcb478011f2ac1f9d1630df7585cd5a461b8ac": {
+      "input_sha256": "4e6a5fe0eaec734ffb81428590dcb478011f2ac1f9d1630df7585cd5a461b8ac",
+      "output_path": "4e6a5fe0eaec734f.csv",
+      "status": "sanitized",
+      "quarantine_reason": null,
+      "processing_duration_ms": 0,
+      "peak_memory_mb": 40.1015625,
+      "records_processed": 6,
+      "identifiers_detected": 0,
+      "records_linked": 0,
+      "records_generalized": 0,
+      "records_suppressed": 0,
+      "records_quarantined": 0
+    },
+    "6c4af52feb2ee737984e55f4937faa3227b6ea66e07b7176ec41a10ec732cf5d": {
+      "input_sha256": "6c4af52feb2ee737984e55f4937faa3227b6ea66e07b7176ec41a10ec732cf5d",
+      "output_path": "6c4af52feb2ee737.csv",
+      "status": "sanitized",
+      "quarantine_reason": null,
+      "processing_duration_ms": 0,
+      "peak_memory_mb": 40.1015625,
+      "records_processed": 3,
+      "identifiers_detected": 0,
+      "records_linked": 0,
+      "records_generalized": 0,
+      "records_suppressed": 0,
+      "records_quarantined": 0
+    },
+    "e1af4ff1fd14dd6da59133c7b3cb06360ee324703756c11ca3ed391d2f3b2380": {
+      "input_sha256": "e1af4ff1fd14dd6da59133c7b3cb06360ee324703756c11ca3ed391d2f3b2380",
+      "output_path": "e1af4ff1fd14dd6d.json",
+      "status": "sanitized",
+      "quarantine_reason": null,
+      "processing_duration_ms": 0,
+      "peak_memory_mb": 40.1015625,
+      "records_processed": 3,
+      "identifiers_detected": 0,
+      "records_linked": 0,
+      "records_generalized": 0,
+      "records_suppressed": 0,
+      "records_quarantined": 0
+    }
+  },
+  "counts": {
+    "files_total": 3,
+    "files_sanitized": 3,
+    "files_quarantined": 0,
+    "records_processed": 12,
+    "identifiers_detected": 0,
+    "records_linked": 0,
+    "records_generalized": 0,
+    "records_suppressed": 0,
+    "records_quarantined": 0,
+    "total_processing_duration_ms": 0,
+    "peak_memory_mb": 0
+  },
+  "timing": {
+    "seconds": 0.0
+  },
+  "resources": {
+    "peak_rss_mb": 0
+  }
+}

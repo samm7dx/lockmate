@@ -1,0 +1,26 @@
+[
+  {
+    "patient_name": "[NAME]",
+    "age": 35,
+    "phone": "[PHONE]",
+    "aadhaar": "[UID]",
+    "diagnosis": "Diabetes",
+    "notes": "Patient [NAME] visited"
+  },
+  {
+    "patient_name": "[NAME]",
+    "age": 28,
+    "phone": "[PHONE]",
+    "aadhaar": "[UID]",
+    "diagnosis": "Hypertension",
+    "notes": "[NAME]"
+  },
+  {
+    "patient_name": "[NAME]",
+    "age": 42,
+    "phone": "[PHONE]",
+    "aadhaar": "[UID]",
+    "diagnosis": "Cardiology",
+    "notes": "[NAME] को दवा दी"
+  }
+]

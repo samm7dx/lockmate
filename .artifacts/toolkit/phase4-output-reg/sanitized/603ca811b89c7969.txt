@@ -1,0 +1,19 @@
+[NAME] HOSPITAL, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 55 Yrs/F
+UHID: SNJ/26/[PIN]     IPD No: IPD-2026-00442
+[RELATIVE]mardih, Tehsil Purwa, Distt. Unnao - [PIN]bile: +91 62600 89196
+ABHA No: 91-7283-7950-6570
+Consultant: [NAME]nary Medicine)
+Ward/Bed: Ward 5 (Pulmonology) / Bed 20
+Date of Admission: [DATE]ge: [DATE]umonia, unspecified organism (J18.9); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. H/O TB 2 yrs back (completed ATT).
+Course in hospital: Patient admitted with above complaints. BP 108/84 mmHg, Pulse 103/min, Temp 102.4 F, SpO2 93%. Haemoglobin 11.1 g/dL. Random Blood Sugar 99 mg/dL. Serum Creatinine 3.0 mg/dL. Treated conservatively. Usha behenji ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Azithromycin 500 mg 1-0-0 x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME]t: [NAME], Mob. [PHONE]

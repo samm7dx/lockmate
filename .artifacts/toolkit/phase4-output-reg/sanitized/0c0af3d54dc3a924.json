@@ -1,0 +1,29 @@
+[
+  {
+    "facility/name": "District Hospital Hardoi",
+    "facility/type": "District Hospital",
+    "facility/state": "UP",
+    "exported_at": "2026-11-20T08:15:00+05:30",
+    "schema": "dhh.registration.v3",
+    "patients/0/uhid": "DHH2026-[PIN]",
+    "patients/0/name/first": "Sunita",
+    "patients/0/name/last": "Patel",
+    "patients/0/name/local": "[NAME]",
+    "patients/0/gender": "female",
+    "patients/0/dob": "[DATE]",
+    "patients/0/age": 51,
+    "patients/0/guardian/relation": "D/o",
+    "patients/0/guardian/name": "[NAME]",
+    "patients/0/contact/mobile": "[PHONE]",
+    "patients/0/contact/email": null,
+    "patients/0/address/line": "H.No. 414, Ward 1, Mohalla Chowk Kotwali, near Gurudwara, Tehsil Bilgram, Distt. Hardoi",
+    "patients/0/address/village": "Bhimpur",
+    "patients/0/address/tehsil": "Bilgram",
+    "patients/0/address/district": "Hardoi",
+    "patients/0/address/pin": "[PIN]",
+    "patients/0/ids/aadhar_no": 902115225016,
+    "patients/0/ids/abha": null,
+    "patients/0/ids/abha_address": null,
+    "patients/0/registered_on": "[DATE]"
+  }
+]

@@ -1,0 +1,12 @@
+Sanjeevani Multispeciality Hospital - OPD Prescription
+Name: [NAME]   Age: 49/F   Reg No: SNJ/26/[PIN]te: [DATE] body ache
+K/C/O: I10
+Rx
+1. Tab Amlodipine 5 mg 0-0-1 x 1 month
+2. Tab Telmisartan 40 mg 1-0-0 x 1 month
+3. Tab Ramipril 5 mg 0-0-1 x 1 month
+4. Tab Metformin 500 mg 1-0-1 x 1 month
+5. Tab Glimepiride 1 mg 1-0-0 x 2 wks
+6. Tab Pantoprazole 40 mg 1-0-0 x 2 wks
+Adv: Low salt diet. Review after 2 wks.
+[NAME]

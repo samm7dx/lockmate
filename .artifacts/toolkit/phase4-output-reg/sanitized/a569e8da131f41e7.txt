@@ -1,0 +1,17 @@
+[NAME] SADAN, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 46 Yrs/M
+UHID: UHID-[PIN]     IPD No: ADM000162
+[RELATIVE]20, Mohalla Subhash Nagar, near Panchayat Bhawan, Gram Gopaldih, Tehsil Misrikh, Distt. Sitapur - [PIN]bile: +91 67499 97417
+ABHA No: 91-3514-4654-5892
+Consultant: [NAME]rd/Bed: Ward 3 (Surgery) / Bed 28
+Date of Admission: [DATE]ge: [DATE]emia, unspecified (D64.9); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 127/66 mmHg, Pulse 104/min, Temp 97.8 F, SpO2 89%. Haemoglobin 9.9 g/dL. Random Blood Sugar 258 mg/dL. Serum Creatinine 2.4 mg/dL. Treated conservatively. Ashok bhai ki condition ab stable hai.
+Procedure: Cataract surgery (phacoemulsification) done on day 2.
+
+Medications on discharge:
+ 1. Tab Ferrous sulphate + Folic acid 100 mg + 0.5 mg 0-1-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME]ME], Mob. [PHONE]

@@ -1,0 +1,12 @@
+District Hospital Hardoi, [NAME]n discharge:
+ 1. Tab Azithromycin 500 mg 1-0-0 x 30 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 15 days
+ 3. Tab Artesunate 100 mg 1-0-1 x 15 days
+ 4. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+ 5. Tab Ramipril 5 mg 0-0-1 x 15 days
+
+Address (attendant): [RELATIVE] 1
+OPD: [RELATIVE]days
+Ward: 4 (Medicine)
+Medicine: Ramipril 5 mg
+[NAME]Review in OPD after 2 weeks with [NAME][PHONE]

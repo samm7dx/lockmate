@@ -1,0 +1,7 @@
+Arogya Seva Sadan, [NAME]5 mg 0-0-1 x 30 days
+
+Address (attendant): [RELATIVE] 8
+OPD: [RELATIVE]days
+Ward: 4 (Medicine)
+Medicine: Ramipril 5 mg
+[NAME]Review in OPD after 2 weeks with [NAME][PHONE]

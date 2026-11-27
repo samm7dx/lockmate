@@ -1,0 +1,26 @@
+[
+  {
+    "patient_name": "Rahul Sharma",
+    "age": 35,
+    "phone": "9876543210",
+    "aadhaar": "123456789012",
+    "diagnosis": "Diabetes",
+    "notes": "Patient Rahul Sharma visited"
+  },
+  {
+    "patient_name": "Priya Patel",
+    "age": 28,
+    "phone": "9876543211",
+    "aadhaar": "234567890123",
+    "diagnosis": "Hypertension",
+    "notes": "Dr. Amit Kumar prescribed"
+  },
+  {
+    "patient_name": "अमित कुमार",
+    "age": 42,
+    "phone": "9876543212",
+    "aadhaar": "345678901234",
+    "diagnosis": "Cardiology",
+    "notes": "अमित कुमार को दवा दी"
+  }
+]

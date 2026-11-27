@@ -43,6 +43,7 @@ class Replacement:
     replacement: str     # Replacement text
     original_text: str   # Original text being replaced
     pii_type: Optional[object] = None  # PIIType for reference
+    confidence: float = 0.0  # Confidence for tie-breaking
 
 
 def apply_replacements(
@@ -61,15 +62,16 @@ def apply_replacements(
         replacements: List of Replacement objects with original offsets
         offset_map: Optional list of (norm_start, norm_end) -> (orig_start, orig_end)
                    mappings from normalization step
-        
+                   
     Returns:
         Tuple of (transformed_text, new_offset_map)
     """
     if not replacements:
         return text, offset_map or []
     
-    # Sort replacements by start offset (descending) for correct indexing
-    sorted_replacements = sorted(replacements, key=lambda r: r.start, reverse=True)
+    # Sort replacements by start offset (descending), then by confidence (descending) for tie-breaking
+    # Higher confidence replacements win for the same position
+    sorted_replacements = sorted(replacements, key=lambda r: (r.start, r.confidence), reverse=True)
     
     # Convert text to list for efficient mutation
     chars = list(text)
@@ -105,7 +107,7 @@ def create_replacements_from_spans(
     Uses the record's offset_map to map normalized offsets back to original text.
     
     Args:
-        record: UnifiedRecord with offset_map
+        record: UnifiedRecord with offset_map (list of (orig_offset, norm_offset) per normalized char)
         pii_spans: List of PIISpan objects (offsets in normalized_text)
         replacement_map: Optional custom replacement tokens by PIIType
         
@@ -117,16 +119,24 @@ def create_replacements_from_spans(
     
     replacements = []
     
-    # Build reverse offset map: norm_offset -> orig_offset
-    norm_to_orig = {}
-    for norm_start, norm_end, orig_start, orig_end in record.offset_map:
-        norm_to_orig[norm_start] = orig_start
-        norm_to_orig[norm_end] = orig_end
+    # offset_map is list of (orig_offset, norm_offset) for each normalized character
+    # For a span [norm_start, norm_end), we need to find the corresponding original offsets
+    offset_map = record.offset_map
     
     for span in pii_spans:
-        # Map normalized offsets to original offsets
-        orig_start = norm_to_orig.get(span.start, span.start)
-        orig_end = norm_to_orig.get(span.end, span.end)
+        norm_start = span.start
+        norm_end = span.end
+        
+        # Map normalized offsets to original offsets using the offset_map
+        if norm_start < len(offset_map):
+            orig_start = offset_map[norm_start][0]
+        else:
+            orig_start = norm_start
+            
+        if norm_end - 1 < len(offset_map):
+            orig_end = offset_map[norm_end - 1][0] + 1
+        else:
+            orig_end = orig_start + (norm_end - norm_start)
         
         # Get replacement token
         replacement = replacement_map.get(span.pii_type, "[REDACTED]")
@@ -136,7 +146,8 @@ def create_replacements_from_spans(
             end=orig_end,
             replacement=replacement,
             original_text=span.original_text,
-            pii_type=span.pii_type
+            pii_type=span.pii_type,
+            confidence=span.confidence
         ))
     
     return replacements

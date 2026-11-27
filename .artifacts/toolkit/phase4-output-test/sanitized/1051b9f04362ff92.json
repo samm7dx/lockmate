@@ -1,0 +1,10 @@
+[
+  {
+    "system": "Helpdesk",
+    "tickets/0/id": "HD-1042",
+    "tickets/0/category": "billing query",
+    "tickets/0/meta/raised_by/name": "[ADDRESS]",
+    "tickets/0/meta/raised_by/callback": "[PHONE]",
+    "tickets/0/status": "closed"
+  }
+]

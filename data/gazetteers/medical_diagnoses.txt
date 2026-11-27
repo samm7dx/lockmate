@@ -1,0 +1,846 @@
+# Common Medical Diagnoses (ICD-10 derived + eponyms)
+# Cardiovascular
+hypertension
+essential hypertension
+secondary hypertension
+hypertensive heart disease
+hypertensive renal disease
+hypertensive heart and renal disease
+ischemic heart disease
+angina pectoris
+stable angina
+unstable angina
+prinzmetal angina
+acute myocardial infarction
+st elevation myocardial infarction
+non st elevation myocardial infarction
+subendocardial infarction
+transmural infarction
+old myocardial infarction
+heart failure
+congestive heart failure
+left ventricular failure
+right ventricular failure
+biventricular failure
+cardiomyopathy
+dilated cardiomyopathy
+hypertrophic cardiomyopathy
+restrictive cardiomyopathy
+arrhythmogenic right ventricular cardiomyopathy
+valvular heart disease
+mitral stenosis
+mitral regurgitation
+aortic stenosis
+aortic regurgitation
+tricuspid stenosis
+tricuspid regurgitation
+pulmonary stenosis
+pulmonary regurgitation
+rheumatic heart disease
+infective endocarditis
+pericarditis
+myocarditis
+cardiomegaly
+heart block
+atrioventricular block
+bundle branch block
+sick sinus syndrome
+atrial fibrillation
+atrial flutter
+ventricular tachycardia
+ventricular fibrillation
+supraventricular tachycardia
+wolff parkinson white syndrome
+long qt syndrome
+brugada syndrome
+congenital heart disease
+atrial septal defect
+ventricular septal defect
+patent ductus arteriosus
+tetralogy of fallot
+transposition of great arteries
+coarctation of aorta
+pulmonary hypertension
+cor pulmonale
+
+# Respiratory
+asthma
+allergic asthma
+non allergic asthma
+status asthmaticus
+chronic obstructive pulmonary disease
+chronic bronchitis
+emphysema
+bronchiectasis
+pneumonia
+community acquired pneumonia
+hospital acquired pneumonia
+ventilator associated pneumonia
+aspiration pneumonia
+tuberculosis
+pulmonary tuberculosis
+extrapulmonary tuberculosis
+multidrug resistant tuberculosis
+extensively drug resistant tuberculosis
+lung cancer
+small cell lung cancer
+non small cell lung cancer
+mesothelioma
+pulmonary embolism
+deep vein thrombosis
+pleural effusion
+pneumothorax
+hemothorax
+empyema
+lung abscess
+interstitial lung disease
+idiopathic pulmonary fibrosis
+sarcoidosis
+hypersensitivity pneumonitis
+eosinophilic pneumonia
+acute respiratory distress syndrome
+acute lung injury
+respiratory failure
+chronic respiratory failure
+sleep apnea
+obstructive sleep apnea
+central sleep apnea
+
+# Endocrine and Metabolic
+diabetes mellitus
+type 1 diabetes mellitus
+type 2 diabetes mellitus
+gestational diabetes
+diabetic ketoacidosis
+hyperosmolar hyperglycemic state
+hypoglycemia
+diabetic nephropathy
+diabetic retinopathy
+diabetic neuropathy
+diabetic foot
+diabetic gastroparesis
+thyroid disorders
+hypothyroidism
+hyperthyroidism
+thyroiditis
+hashimoto thyroiditis
+graves disease
+goiter
+thyroid nodules
+thyroid cancer
+adrenal insufficiency
+addison disease
+cushing syndrome
+pheochromocytoma
+hyperaldosteronism
+congenital adrenal hyperplasia
+pituitary disorders
+acromegaly
+gigantism
+diabetes insipidus
+syndrome of inappropriate antidiuretic hormone
+hyperparathyroidism
+hypoparathyroidism
+osteoporosis
+osteopenia
+rickets
+osteomalacia
+paget disease of bone
+hyperlipidemia
+familial hypercholesterolemia
+mixed hyperlipidemia
+metabolic syndrome
+obesity
+morbid obesity
+
+# Gastrointestinal
+gastroesophageal reflux disease
+peptic ulcer disease
+gastric ulcer
+duodenal ulcer
+gastritis
+erosive gastritis
+atrophic gastritis
+helicobacter pylori infection
+functional dyspepsia
+irritable bowel syndrome
+inflammatory bowel disease
+crohn disease
+ulcerative colitis
+microscopic colitis
+celiac disease
+malabsorption
+lactose intolerance
+food allergy
+eosinophilic esophagitis
+barrett esophagus
+esophageal cancer
+gastric cancer
+colorectal cancer
+colon cancer
+rectal cancer
+anal cancer
+liver disease
+fatty liver
+nonalcoholic fatty liver disease
+alcoholic liver disease
+viral hepatitis
+hepatitis a
+hepatitis b
+hepatitis c
+hepatitis d
+hepatitis e
+autoimmune hepatitis
+primary biliary cholangitis
+primary sclerosing cholangitis
+cirrhosis
+portal hypertension
+esophageal varices
+hepatic encephalopathy
+hepatocellular carcinoma
+cholangiocarcinoma
+gallstones
+cholecystitis
+choledocholithiasis
+cholangitis
+pancreatitis
+acute pancreatitis
+chronic pancreatitis
+pancreatic cancer
+pancreatic insufficiency
+cystic fibrosis
+
+# Neurological
+stroke
+ischemic stroke
+hemorrhagic stroke
+transient ischemic attack
+subarachnoid hemorrhage
+intracerebral hemorrhage
+subdural hematoma
+epidural hematoma
+traumatic brain injury
+concussion
+epilepsy
+generalized epilepsy
+focal epilepsy
+status epilepticus
+migraine
+migraine with aura
+migraine without aura
+chronic migraine
+cluster headache
+tension type headache
+multiple sclerosis
+amyotrophic lateral sclerosis
+parkinson disease
+parkinsonism
+progressive supranuclear palsy
+multiple system atrophy
+corticobasal degeneration
+alzheimer disease
+vascular dementia
+lewy body dementia
+frontotemporal dementia
+creutzfeldt jakob disease
+normal pressure hydrocephalus
+hydrocephalus
+meningitis
+bacterial meningitis
+viral meningitis
+fungal meningitis
+tuberculous meningitis
+encephalitis
+brain abscess
+cerebral palsy
+muscular dystrophy
+myasthenia gravis
+lambert eaton syndrome
+guillain barre syndrome
+chronic inflammatory demyelinating polyneuropathy
+peripheral neuropathy
+diabetic neuropathy
+carpal tunnel syndrome
+radiculopathy
+sciatica
+trigeminal neuralgia
+bell palsy
+hemifacial spasm
+essential tremor
+dystonia
+huntington disease
+spinocerebellar ataxia
+friedreich ataxia
+
+# Renal and Urological
+chronic kidney disease
+acute kidney injury
+end stage renal disease
+glomerulonephritis
+nephrotic syndrome
+minimal change disease
+focal segmental glomerulosclerosis
+membranous nephropathy
+iga nephropathy
+lupus nephritis
+diabetic nephropathy
+hypertensive nephrosclerosis
+polycystic kidney disease
+renal artery stenosis
+renal vein thrombosis
+hydronephrosis
+nephrolithiasis
+ureteral stone
+bladder stone
+urethral stricture
+urinary tract infection
+pyelonephritis
+cystitis
+prostatitis
+benign prostatic hyperplasia
+prostate cancer
+bladder cancer
+renal cell carcinoma
+transitional cell carcinoma
+wilms tumor
+neurogenic bladder
+urinary incontinence
+overactive bladder
+interstitial cystitis
+urethral syndrome
+
+# Hematology and Oncology
+anemia
+iron deficiency anemia
+megaloblastic anemia
+pernicious anemia
+folate deficiency anemia
+vitamin b12 deficiency anemia
+hemolytic anemia
+sickle cell disease
+thalassemia
+glucose 6 phosphate dehydrogenase deficiency
+aplastic anemia
+pure red cell aplasia
+diamond blackfan anemia
+fanconi anemia
+leukemia
+acute lymphoblastic leukemia
+acute myeloid leukemia
+chronic lymphocytic leukemia
+chronic myeloid leukemia
+hairy cell leukemia
+lymphoma
+hodgkin lymphoma
+non hodgkin lymphoma
+diffuse large b cell lymphoma
+follicular lymphoma
+mantle cell lymphoma
+marginal zone lymphoma
+burkitt lymphoma
+t cell lymphoma
+cutaneous t cell lymphoma
+myeloma
+multiple myeloma
+solitary plasmacytoma
+amyloidosis
+waldenstrom macroglobulinemia
+heavy chain disease
+monoclonal gammopathy of undetermined significance
+smoldering myeloma
+polycythemia vera
+essential thrombocythemia
+primary myelofibrosis
+chronic myelomonocytic leukemia
+myelodysplastic syndromes
+acute leukemia
+lymphoproliferative disorder
+
+# Rheumatology and Autoimmune
+rheumatoid arthritis
+juvenile idiopathic arthritis
+psoriatic arthritis
+ankylosing spondylitis
+reactive arthritis
+enteropathic arthritis
+osteoarthritis
+gout
+pseudogout
+calcium pyrophosphate deposition disease
+systemic lupus erythematosus
+systemic sclerosis
+dermatomyositis
+polymyositis
+mixed connective tissue disease
+sjogren syndrome
+behcet disease
+vasculitis
+giant cell arteritis
+takayasu arteritis
+polyarteritis nodosa
+microscopic polyangiitis
+granulomatosis with polyangiitis
+eosinophilic granulomatosis with polyangiitis
+cryoglobulinemic vasculitis
+henoch schonlein purpura
+kawasaki disease
+antiphospholipid syndrome
+sarcoidosis
+relapsing polychondritis
+adult onset still disease
+familial mediterranean fever
+tumor necrosis factor receptor associated periodic syndrome
+hyperimmunoglobulin d syndrome
+pyogenic arthritis pyoderma gangrenosum acne syndrome
+blau syndrome
+
+# Infectious Diseases
+sepsis
+septic shock
+bacteremia
+fungemia
+endocarditis
+osteomyelitis
+septic arthritis
+cellulitis
+necrotizing fasciitis
+abscess
+empyema
+meningitis
+encephalitis
+brain abscess
+pneumonia
+tuberculosis
+hiv aids
+malaria
+dengue
+chikungunya
+zika
+yellow fever
+japanese encephalitis
+rabies
+leptospirosis
+typhoid fever
+paratyphoid fever
+cholera
+shigellosis
+salmonellosis
+campylobacteriosis
+clostridium difficile infection
+hepatitis
+amoebiasis
+giardiasis
+cryptosporidiosis
+toxoplasmosis
+cysticercosis
+hydatid disease
+filariasis
+schistosomiasis
+strongyloidiasis
+ascariasis
+hookworm
+trichuriasis
+enterobiasis
+scabies
+pediculosis
+fungal infections
+candidiasis
+aspergillosis
+mucormycosis
+cryptococcosis
+histoplasmosis
+coccidioidomycosis
+blastomycosis
+sporotrichosis
+chromomycosis
+pneumocystis pneumonia
+
+# Dermatology
+eczema
+atopic dermatitis
+contact dermatitis
+seborrheic dermatitis
+psoriasis
+psoriatic erythroderma
+pustular psoriasis
+lichen planus
+lichen sclerosus
+vitiligo
+alopecia areata
+androgenetic alopecia
+telogen effluvium
+anagen effluvium
+acne vulgaris
+acne conglobata
+acne fulminans
+rosacea
+perioral dermatitis
+seborrhea
+hyperhidrosis
+anhidrosis
+pruritus
+urticaria
+angioedema
+hereditary angioedema
+erythema multiforme
+stevens johnson syndrome
+toxic epidermal necrolysis
+drug reaction with eosinophilia and systemic symptoms
+acute generalized exanthematous pustulosis
+pemphigus vulgaris
+pemphigus foliaceus
+bullous pemphigoid
+cicatricial pemphigoid
+epidermolysis bullosa
+dermatitis herpetiformis
+linear iga disease
+porphyria cutanea tarda
+erythropoietic protoporphyria
+xeroderma pigmentosum
+albinism
+ichthyosis
+palmoplantar keratoderma
+keratosis pilaris
+actinic keratosis
+bowen disease
+basal cell carcinoma
+squamous cell carcinoma
+melanoma
+merkel cell carcinoma
+kaposi sarcoma
+dermatofibrosarcoma protuberans
+mycosis fungoides
+sezary syndrome
+paget disease of breast
+extramammary paget disease
+
+# Ophthalmology
+cataract
+senile cataract
+congenital cataract
+traumatic cataract
+glaucoma
+primary open angle glaucoma
+angle closure glaucoma
+normal tension glaucoma
+congenital glaucoma
+secondary glaucoma
+macular degeneration
+age related macular degeneration
+diabetic retinopathy
+hypertensive retinopathy
+retinal detachment
+retinal vein occlusion
+retinal artery occlusion
+central serous chorioretinopathy
+macular hole
+epiretinal membrane
+vitreous hemorrhage
+uveitis
+anterior uveitis
+intermediate uveitis
+posterior uveitis
+panuveitis
+scleritis
+episcleritis
+keratitis
+corneal ulcer
+corneal dystrophy
+keratoconus
+pterygium
+pinguecula
+dry eye syndrome
+blepharitis
+chalazion
+hordeolum
+conjunctivitis
+allergic conjunctivitis
+viral conjunctivitis
+bacterial conjunctivitis
+gonococcal conjunctivitis
+chlamydial conjunctivitis
+trachoma
+orbital cellulitis
+preseptal cellulitis
+thyroid eye disease
+optic neuritis
+ischemic optic neuropathy
+papilledema
+optic atrophy
+retinitis pigmentosa
+cone rod dystrophy
+stargardt disease
+best disease
+usher syndrome
+color blindness
+night blindness
+amblyopia
+strabismus
+nystagmus
+ptosis
+entropion
+ectropion
+trichiasis
+distichiasis
+lagophthalmos
+exophthalmos
+enophthalmos
+
+# ENT
+otitis media
+acute otitis media
+chronic otitis media
+otitis media with effusion
+mastoiditis
+cholesteatoma
+otosclerosis
+macoes disease
+vestibular neuritis
+labyrinthitis
+benign paroxysmal positional vertigo
+tinnitus
+hearing loss
+conductive hearing loss
+sensorineural hearing loss
+mixed hearing loss
+sudden sensorineural hearing loss
+noise induced hearing loss
+presbycusis
+eustachian tube dysfunction
+perforated tympanic membrane
+rhinitis
+allergic rhinitis
+non allergic rhinitis
+vasomotor rhinitis
+sinusitis
+acute sinusitis
+chronic sinusitis
+nasal polyps
+deviated nasal septum
+epistaxis
+nasal fracture
+adenoid hypertrophy
+tonsillitis
+acute tonsillitis
+chronic tonsillitis
+peritonsillar abscess
+pharyngitis
+laryngitis
+vocal cord nodules
+vocal cord polyps
+vocal cord paralysis
+laryngeal cancer
+hypopharyngeal cancer
+oropharyngeal cancer
+nasopharyngeal cancer
+salivary gland tumors
+parotid tumor
+submandibular tumor
+sublingual tumor
+thyroid nodules
+thyroid cancer
+parathyroid adenoma
+hyperparathyroidism
+hypoparathyroidism
+multiple endocrine neoplasia
+
+# Eponymous diseases
+parkinson disease
+alzheimer disease
+huntington disease
+wilson disease
+wilson's disease
+menkes disease
+menkes' disease
+crohn disease
+crohn's disease
+addison disease
+addison's disease
+cushing disease
+cushing's disease
+cushing syndrome
+conn syndrome
+conn's syndrome
+bartter syndrome
+gitelman syndrome
+liddle syndrome
+pseudohypoaldosteronism
+gordon syndrome
+gordon's syndrome
+brachiocephalic syndrome
+thoracic outlet syndrome
+superior vena cava syndrome
+superior vena cava obstruction
+paget disease
+paget's disease
+paget disease of bone
+paget disease of breast
+paget disease of vulva
+paget disease of penis
+paget disease of scrotum
+paget disease of anus
+paget disease of eyelid
+paget disease of ear
+paget disease of nose
+paget disease of lip
+paget disease of anus
+paget disease of perianal
+paget disease of scrotum
+paget disease of penis
+paget disease of vulva
+paget disease of breast
+paget disease of bone
+paget disease
+paget's disease
+behcet disease
+behcet's disease
+behcet syndrome
+behcet's syndrome
+reiter syndrome
+reiter's syndrome
+reactive arthritis
+fiessinger leroy rey syndrome
+fiessinger-leroy-rey syndrome
+reiter disease
+reiter's disease
+ankylosing spondylitis
+marie strumpell disease
+marie-strumpell disease
+bekhterev disease
+bekhterev's disease
+rheumatoid arthritis
+still disease
+still's disease
+systemic juvenile idiopathic arthritis
+adult onset still disease
+felty syndrome
+felty's syndrome
+caplan syndrome
+caplan's syndrome
+sjogren syndrome
+sjogren's syndrome
+sicca syndrome
+mikulicz disease
+mikulicz's disease
+mikulicz syndrome
+mikulicz's syndrome
+systemic lupus erythematosus
+libman sacks endocarditis
+libman-sacks endocarditis
+verrucous endocarditis
+lupus nephritis
+lupus cerebritis
+lupus anticoagulant
+antiphospholipid syndrome
+hughes syndrome
+hughes' syndrome
+catastrophic antiphospholipid syndrome
+asherson syndrome
+asherson's syndrome
+scleroderma
+systemic sclerosis
+crest syndrome
+calcinosis
+raynaud phenomenon
+raynaud's phenomenon
+esophageal dysmotility
+sclerodactyly
+telangiectasia
+polymyositis
+dermatomyositis
+amyopathic dermatomyositis
+cancer associated myositis
+overlap syndrome
+mixed connective tissue disease
+sharp syndrome
+sharp's syndrome
+undifferentiated connective tissue disease
+relapsing polychondritis
+atrophic polychondritis
+wegener granulomatosis
+wegener's granulomatosis
+granulomatosis with polyangiitis
+microscopic polyangiitis
+churg strauss syndrome
+churg-strauss syndrome
+eosinophilic granulomatosis with polyangiitis
+allergic granulomatosis
+allergic angiitis
+polyarteritis nodosa
+kawasaki disease
+kawasaki syndrome
+mucocutaneous lymph node syndrome
+takayasu arteritis
+takayasu's arteritis
+pulseless disease
+aortic arch syndrome
+giant cell arteritis
+temporal arteritis
+horton disease
+horton's disease
+cranial arteritis
+polymyalgia rheumatica
+paget disease
+paget's disease
+familial mediterranean fever
+armenian disease
+armenian's disease
+periodic fever syndrome
+tumor necrosis factor receptor associated periodic syndrome
+trash
+hids
+hids syndrome
+hyperimmunoglobulin d syndrome
+pyogenic arthritis pyoderma gangrenosum acne syndrome
+papas
+papas syndrome
+blau syndrome
+blau's syndrome
+early onset sarcoidosis
+camellia syndrome
+camellia's syndrome
+nod2 associated autoinflammatory disease
+nlrp12 associated autoinflammatory disease
+nlrp3 associated autoinflammatory disease
+cryopyrin associated periodic syndromes
+caps
+caps syndrome
+familial cold autoinflammatory syndrome
+fcass
+fcass syndrome
+muckle wells syndrome
+mws
+mws syndrome
+neonatal onset multisystem inflammatory disease
+nomsid
+nomsid syndrome
+chronic infantile neurologic cutaneous articular syndrome
+cinca
+cinca syndrome
+pyogenic sterile arthritis pyoderma gangrenosum acne syndrome
+papas
+papas syndrome
+papa syndrome
+papa's syndrome
+papa syndrome
+papa's syndrome
+deficiency of interleukin 1 receptor antagonist
+dira
+dira syndrome
+deficiency of adenosine deaminase 2
+dad2
+dad2 syndrome
+sneddon syndrome
+sneddon's syndrome
+livedoid vasculopathy
+atrophie blanche
+antiphospholipid syndrome
+primary antiphospholipid syndrome
+secondary antiphospholipid syndrome
+catastrophic antiphospholipid syndrome
+asherson syndrome
+asherson's syndrome
+sneddon syndrome
+sneddon's syndrome
+livedoid vasculopathy
+atrophie blanche

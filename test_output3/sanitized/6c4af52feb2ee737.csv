@@ -1,0 +1,4 @@
+patient_name,age,phone,aadhaar,diagnosis
+[NAME],35,[PHONE],[UID],Diabetes
+[NAME],28,[PHONE],[UID],Hypertension
+[NAME],42,[PHONE],[UID],Cardiology

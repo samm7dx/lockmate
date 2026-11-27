@@ -1,0 +1,20 @@
+[NAME] HOSPITAL, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 49 Yrs/M
+UHID: SNJ/26/[PIN]     IPD No: IPD-2026-00432
+[RELATIVE]halla Raja Bazar, Durgamau Kalan, Tehsil Lalganj, Distt. Rae Bareli - [PIN]bile: +91 72864 90658
+Consultant: [NAME]ard 4 (Medicine) / Bed 24
+Date of Admission: [DATE]ge: [DATE] fever (A01.0); Type 2 diabetes mellitus without complications (E11.9); Anaemia, unspecified (D64.9); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: K/C/O DM2 x 9 yrs. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 127/80 mmHg, Pulse 96/min, Temp 99.0 F, SpO2 90%. Haemoglobin 10.2 g/dL. HbA1c 8.8 %. Random Blood Sugar 223 mg/dL. Treated conservatively. Mahesh bhai ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 30 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 3. Tab Metformin 500 mg 1-0-1 x 30 days
+ 4. Tab Glimepiride 1 mg 1-0-0 x 30 days
+ 5. Tab Ferrous sulphate + Folic acid 100 mg + 0.5 mg 0-1-0 x 30 days
+ 6. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME][PHONE]

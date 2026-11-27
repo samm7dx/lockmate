@@ -1,0 +1,18 @@
+﻿python : gazetteer_missing
+At line:1 char:29
++ cd C:\Users\samri\lockmate; python -c "
++                             ~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (gazetteer_missing:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+gazetteer_missing
+gazetteer_missing
+gazetteer_missing
+encoding_error
+unexpected_error
+json_decode_error
+unexpected_error
+encoding_error
+unexpected_error
+fhir_parse_error
+unexpected_error

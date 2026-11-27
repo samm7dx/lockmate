@@ -1,0 +1,23 @@
+# Honorifics and titles (Latin script)
+mr
+mrs
+ms
+miss
+dr
+dr.
+prof
+prof.
+master
+master.
+shri
+smt
+kumari
+kumar
+bhai
+behen
+didi
+ji
+sahab
+saheb
+babu
+babuji

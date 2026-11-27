@@ -1,0 +1,20 @@
+[NAME] HOSPITAL, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 27 Yrs/F
+UHID: SNJ/26/[PIN]     IPD No: IPD-2026-00474
+[RELATIVE] 13, [NAME] Tola, Vill. Bhimganj, Tehsil Malihabad, Distt. Lucknow - [PIN]bile: +91 68386 56785
+ABHA No: 91-3444-7750-0940
+Consultant: [NAME]rd/Bed: Ward 3 (Surgery) / Bed 4
+Date of Admission: [DATE]ge: [DATE] fever (A01.0); Anaemia, unspecified (D64.9); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 120/66 mmHg, Pulse 93/min, Temp 103.1 F, SpO2 99%. Haemoglobin 8.2 g/dL. HbA1c 9.6 %. Random Blood Sugar 89 mg/dL. Treated conservatively. Shabana didi ki condition ab stable hai.
+Procedure: Appendicectomy done on day 2.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 15 days
+ 3. Tab Ferrous sulphate + Folic acid 100 mg + 0.5 mg 0-1-0 x 30 days
+ 4. Tab Pantoprazole 40 mg 1-0-0 x 15 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME]hid Siddiqui, Mob. [PHONE]

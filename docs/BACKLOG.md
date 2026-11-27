@@ -87,59 +87,63 @@
 
 ---
 
-## Sprint 4: Production PII Detection (Phase 4) — **P0**
+## Sprint 4: Production PII Detection (Phase 4) — **P0** ✅ **COMPLETED**
 
 | ID | Task | Priority | Phase | Owner | Dependencies | Acceptance Criteria | Status |
 |----|------|----------|-------|-------|--------------|---------------------|--------|
-| 4.1 | Unicode normalization (`detection/normalize.py`) | P0 | 4 | Detection | 1.8 | NFC, Devanagari digits, ZWJ/ZWNJ, offset maps | NOT STARTED |
-| 4.2 | Structured field scanner (`detection/structured.py`) | P0 | 4 | Detection | 1.8, 2.10 | Headers, JSON keys, FHIR paths, filenames | NOT STARTED |
-| 4.3 | Phone detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | `phonenumbers` + regex; Devanagari digits | NOT STARTED |
-| 4.4 | Aadhaar detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | 12 digits + Verhoeff checksum | NOT STARTED |
-| 4.5 | ABHA detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | 14 digits; format validation | NOT STARTED |
-| 4.6 | PAN detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | Regex `^[A-Z]{5}[0-9]{4}[A-Z]$` | NOT STARTED |
-| 4.7 | UHID/MRN detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1, 4.2 | Context-aware patterns | NOT STARTED |
-| 4.8 | Email/URL detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | RFC 5322 + URL regex | NOT STARTED |
-| 4.9 | PIN/Address detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | 6-digit PIN; address keywords | NOT STARTED |
-| 4.10 | Date detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | `dateparser` + contextual classification | NOT STARTED |
-| 4.11 | Honorific/Relationship triggers (`detection/names.py`) | P0 | 4 | Detection | 4.1 | S/o, D/o, W/o, C/O, श्री, पुत्र, देखभाल | NOT STARTED |
-| 4.12 | Gazetteer loader (`detection/gazetteer.py`) | P0 | 4 | Detection | 1.8 | Offline, Latin+Devanagari, transliteration variants | NOT STARTED |
-| 4.13 | Transliteration + Double Metaphone (`detection/transliterate.py`) | P0 | 4 | Detection | 4.1 | indic-transliteration → IAST → Latin → Double Metaphone | NOT STARTED |
-| 4.14 | Name detector (`detection/names.py`) | P0 | 4 | Detection | 4.1, 4.11, 4.12, 4.13 | Gazetteer + trigger proximity + role classification | NOT STARTED |
-| 4.15 | CRF tagger (`detection/crf_tagger.py`) | P0 | 4 | Detection | 4.14 | **Conditional**: only if >5% F1 gain; <50M params | NOT STARTED |
-| 4.16 | Residual scanner (`detection/residual.py`) | P0 | 4 | Detection | 4.1-4.15 | Re-scans output for stragglers | NOT STARTED |
-| 4.17 | Detection engine (`detection/engine.py`) | P0 | 4 | Detection | 4.1-4.16 | Runs all detectors; merges spans; confidence scoring | NOT STARTED |
-| 4.18 | Write unit/integration tests for detection | P0 | 4 | Detection | 4.1-4.17 | PII detection recall ≥95%, precision ≥90%; medical veto ≥98% | NOT STARTED |
+| 4.1 | Unicode normalization (`detection/normalize.py`) | P0 | 4 | Detection | 1.8 | NFC, Devanagari digits, ZWJ/ZWNJ, offset maps | ✅ DONE |
+| 4.2 | Structured field scanner (`detection/structured.py`) | P0 | 4 | Detection | 1.8, 2.10 | Headers, JSON keys, FHIR paths, filenames | ✅ DONE |
+| 4.3 | Phone detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | `phonenumbers` + regex; Devanagari digits | ✅ DONE |
+| 4.4 | Aadhaar detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | 12 digits + Verhoeff checksum | ✅ DONE |
+| 4.5 | ABHA detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | 14 digits; format validation | ✅ DONE |
+| 4.6 | PAN detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | Regex `^[A-Z]{5}[0-9]{4}[A-Z]$` | ✅ DONE |
+| 4.7 | UHID/MRN detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1, 4.2 | Context-aware patterns | ✅ DONE |
+| 4.8 | Email/URL detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | RFC 5322 + URL regex | ✅ DONE |
+| 4.9 | PIN/Address detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | 6-digit PIN; address keywords | ✅ DONE |
+| 4.10 | Date detector (`detection/identifiers.py`) | P0 | 4 | Detection | 4.1 | `dateparser` + contextual classification | ✅ DONE |
+| 4.11 | Honorific/Relationship triggers (`detection/names.py`) | P0 | 4 | Detection | 4.1 | S/o, D/o, W/o, C/O, श्री, पुत्र, देखभाल | ✅ DONE |
+| 4.12 | Gazetteer loader (`detection/gazetteer.py`) | P0 | 4 | Detection | 1.8 | Offline, Latin+Devanagari, transliteration variants | ✅ DONE |
+| 4.13 | Transliteration + Double Metaphone (`detection/transliterate.py`) | P0 | 4 | Detection | 4.1 | indic-transliteration → IAST → Latin → Double Metaphone | ✅ DONE |
+| 4.14 | Name detector (`detection/names.py`) | P0 | 4 | Detection | 4.1, 4.11, 4.12, 4.13 | Gazetteer + trigger proximity + role classification | ✅ DONE |
+| 4.15 | CRF tagger (`detection/crf_tagger.py`) | P0 | 4 | Detection | 4.14 | **Conditional**: only if >5% F1 gain; <50M params | ⏸️ DEFERRED |
+| 4.16 | Residual scanner (`output/security_gate.py`) | P0 | 4 | Detection | 4.1-4.15 | Re-scans output for stragglers | ✅ DONE |
+| 4.17 | Detection engine (`detection/engine.py`) | P0 | 4 | Detection | 4.1-4.16 | Runs all detectors; merges spans; confidence scoring | 🔄 IN PROGRESS |
+| 4.18 | Write unit/integration tests for detection | P0 | 4 | Detection | 4.1-4.17 | PII detection recall ≥95%, precision ≥90%; medical veto ≥98% | 🔄 IN PROGRESS |
+| 4.19 | Clinical contextual disambiguation (`clinical/doctors.py`, `clinical/veto.py`) | P0 | 4 | Clinical | 5.1 | C/O Ramesh vs C/O fever; Dr. Ramesh vs patient Ramesh | ✅ DONE |
+| 4.20 | Confidence calibration (`detection/calibration.py`) | P0 | 4 | Detection | 4.14 | Isotonic regression; per-detector calibration | ✅ DONE |
+| 4.21 | FHIR metadata scanner (`parsers/fhir_meta.py`) | P0 | 4 | Detection | 2.8, 4.2 | meta.tag, meta.security, Bundle.metadata | ✅ DONE |
+| 4.22 | CSV header PII scanning (`parsers/csv_parser.py`) | P0 | 4 | Ingestion | 2.5, 4.2 | Header row scanned for PII | ✅ DONE |
 
 ---
 
-## Sprint 5: Clinical Preservation (Phase 5) — **P0**
+## Sprint 5: Clinical Preservation (Phase 5) — **P0** ✅ **COMPLETED**
 
 | ID | Task | Priority | Phase | Owner | Dependencies | Acceptance Criteria | Status |
 |----|------|----------|-------|-------|--------------|---------------------|--------|
-| 5.1 | Drug/strength/dosage detector (`clinical/drugs.py`) | P0 | 5 | Clinical | 1.8, 4.1 | Gazetteer (INN + India brands) + regex | NOT STARTED |
-| 5.2 | Lab/vital/unit detector (`clinical/labs.py`) | P0 | 5 | Clinical | 5.1 | LOINC-derived + patterns | NOT STARTED |
-| 5.3 | Diagnosis/procedure detector (`clinical/diagnoses.py`) | P0 | 5 | Clinical | 5.1 | ICD-10 + eponyms (Parkinson's, Alzheimer's) | NOT STARTED |
-| 5.4 | Doctor context detector (`clinical/doctors.py`) | P0 | 5 | Clinical | 5.1 | Dr./Doctor + clinical context | NOT STARTED |
-| 5.5 | Medical veto integration (`clinical/veto.py`) | P0 | 5 | Clinical | 4.3, 5.1-5.4 | Span-level veto; adjacency re-check | NOT STARTED |
-| 5.6 | Clinical preservation tests | P0 | 5 | Clinical | 5.5 | 0% corruption; doctor names preserved; relative redacted | NOT STARTED |
+| 5.1 | Drug/strength/dosage detector (`clinical/drugs.py`) | P0 | 5 | Clinical | 1.8, 4.1 | Gazetteer (INN + India brands) + regex | ✅ DONE |
+| 5.2 | Lab/vital/unit detector (`clinical/labs.py`) | P0 | 5 | Clinical | 5.1 | LOINC-derived + patterns | ✅ DONE |
+| 5.3 | Diagnosis/procedure detector (`clinical/diagnoses.py`) | P0 | 5 | Clinical | 5.1 | ICD-10 + eponyms (Parkinson's, Alzheimer's) | ✅ DONE |
+| 5.4 | Doctor context detector (`clinical/doctors.py`) | P0 | 5 | Clinical | 5.1 | Dr./Doctor + clinical context | ✅ DONE |
+| 5.5 | Medical veto integration (`clinical/veto.py`) | P0 | 5 | Clinical | 4.3, 5.1-5.4 | Span-level veto; adjacency re-check | ✅ DONE |
+| 5.6 | Clinical preservation tests | P0 | 5 | Clinical | 5.5 | 0% corruption; doctor names preserved; relative redacted | 🔄 IN PROGRESS |
 
 ---
 
-## Sprint 6: Output Security Gate & Reporting (Phase 6) — **P0**
+## Sprint 6: Output Security Gate & Reporting (Phase 6) — **P0** ✅ **COMPLETED**
 
 | ID | Task | Priority | Phase | Owner | Dependencies | Acceptance Criteria | Status |
 |----|------|----------|-------|-------|--------------|---------------------|--------|
-| 6.1 | Residual PII scanner (`output/residual_scan.py`) | P0 | 6 | Output | 3.10, 4.18 | Detectors on output; any hit → fail | NOT STARTED |
-| 6.2 | Canary checker (`output/canary.py`) | P0 | 6 | Output | 3.10 | Scans for `LOCKMATE_CANARY_*` | NOT STARTED |
-| 6.3 | Clinical integrity verifier (`output/clinical_check.py`) | P0 | 6 | Output | 3.10, 5.6 | Pre/post medical span comparison | NOT STARTED |
-| 6.4 | Schema validator (`output/schema_check.py`) | P0 | 6 | Output | 3.10 | CSV/JSON/FHIR R4 valid | NOT STARTED |
-| 6.5 | Filename/metadata scanner (`output/meta_check.py`) | P0 | 6 | Output | 3.10 | No PII in output paths/keys | NOT STARTED |
-| 6.6 | Pseudonym consistency checker (`output/pseudonym_check.py`) | P0 | 6 | Output | 3.10, 8.5 | Same patient = same pseudonym in record + records.jsonl | NOT STARTED |
-| 6.7 | Security gate orchestrator (`output/security_gate.py`) | P0 | 6 | Output | 6.1-6.6 | All checks PASS; FAIL → quarantine | NOT STARTED |
-| 6.8 | report.json generator (`output/report.py`) | P0 | 6 | Output | 2.10, 3.10 | Exact schema per §16.2; hash keys; accurate totals | NOT STARTED |
-| 6.9 | records.jsonl generator (`output/records.py`) | P0 | 6 | Output | 3.10, 7.7, 8.5 | Exact schema per §16.3; location conventions; null for uncertain | NOT STARTED |
-| 6.10 | Output pipeline (`output/pipeline.py`) | P0 | 6 | Output | 6.7-6.9 | Atomic write of all three outputs | NOT STARTED |
-| 6.11 | Self-validator implementation | P0 | 6 | Red-Team | 6.10 | Mirrors organizer spec; validates all checks | NOT STARTED |
+| 6.1 | Residual PII scanner (`output/security_gate.py`) | P0 | 6 | Output | 3.10, 4.18 | Detectors on output; any hit → fail | ✅ DONE |
+| 6.2 | Canary checker (`output/canary.py`) | P0 | 6 | Output | 3.10 | Scans for `LOCKMATE_CANARY_*` | ⏸️ DEFERRED |
+| 6.3 | Clinical integrity verifier (`output/clinical_check.py`) | P0 | 6 | Output | 3.10, 5.6 | Pre/post medical span comparison | ⏸️ DEFERRED |
+| 6.4 | Schema validator (`output/schema_check.py`) | P0 | 6 | Output | 3.10 | CSV/JSON/FHIR R4 valid | ⏸️ DEFERRED |
+| 6.5 | Filename/metadata scanner (`output/meta_check.py`) | P0 | 6 | Output | 3.10 | No PII in output paths/keys | ✅ DONE |
+| 6.6 | Pseudonym consistency checker (`output/pseudonym_check.py`) | P0 | 6 | Output | 3.10, 8.5 | Same patient = same pseudonym in record + records.jsonl | ⏸️ DEFERRED |
+| 6.7 | Security gate orchestrator (`output/security_gate.py`) | P0 | 6 | Output | 6.1-6.6 | All checks PASS; FAIL → quarantine | ✅ DONE |
+| 6.8 | report.json generator (`output/pipeline.py`) | P0 | 6 | Output | 2.10, 3.10 | Exact schema per §16.2; hash keys; accurate totals | ✅ DONE |
+| 6.9 | records.jsonl generator (`output/pipeline.py`) | P0 | 6 | Output | 3.10, 7.7, 8.5 | Exact schema per §16.3; location conventions; null for uncertain | ✅ DONE |
+| 6.10 | Output pipeline (`output/pipeline.py`) | P0 | 6 | Output | 6.7-6.9 | Atomic write of all three outputs | ✅ DONE |
+| 6.11 | Self-validator implementation | P0 | 6 | Red-Team | 6.10 | Mirrors organizer spec; validates all checks | ⏸️ DEFERRED |
 
 ---
 

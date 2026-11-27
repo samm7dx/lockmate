@@ -1,0 +1,588 @@
+# Common Medical Laboratory Tests and Parameters
+# Hematology
+hemoglobin
+haemoglobin
+hb
+hgb
+hematocrit
+haematocrit
+hct
+packed cell volume
+pcv
+red blood cell count
+rbc count
+red cell count
+erythrocyte count
+white blood cell count
+wbc count
+leukocyte count
+total leukocyte count
+tlc
+differential leukocyte count
+dlc
+neutrophil count
+lymphocyte count
+monocyte count
+eosinophil count
+basophil count
+platelet count
+plt count
+thrombocyte count
+mean corpuscular volume
+mcv
+mean corpuscular hemoglobin
+mch
+mean corpuscular hemoglobin concentration
+mchc
+red cell distribution width
+rdw
+reticulocyte count
+retic count
+erythrocyte sedimentation rate
+esr
+c reactive protein
+crp
+procalcitonin
+pct
+lactate dehydrogenase
+ldh
+creatine kinase
+ck
+ck mb
+troponin i
+troponin t
+troponin
+high sensitivity troponin
+hs troponin
+myoglobin
+bnp
+nt probnp
+nt-probnp
+d dimer
+fibrinogen
+prothrombin time
+pt
+international normalized ratio
+inr
+activated partial thromboplastin time
+aptt
+thrombin time
+antithrombin iii
+protein c
+protein s
+factor v leiden
+prothrombin gene mutation
+lupus anticoagulant
+anticardiolipin antibody
+beta 2 glycoprotein 1 antibody
+
+# Biochemistry
+glucose
+fasting glucose
+postprandial glucose
+random glucose
+hba1c
+glycated hemoglobin
+fructosamine
+insulin
+c peptide
+oral glucose tolerance test
+ogtt
+blood urea nitrogen
+bun
+urea
+creatinine
+estimated glomerular filtration rate
+egfr
+gfr
+uric acid
+uricacid
+sodium
+na
+potassium
+k
+chloride
+cl
+bicarbonate
+hco3
+carbon dioxide
+co2
+anion gap
+calcium
+ca
+ionized calcium
+phosphate
+phosphorus
+po4
+magnesium
+mg
+alkaline phosphatase
+alp
+alanine aminotransferase
+alt
+sgpt
+aspartate aminotransferase
+ast
+sgot
+gamma glutamyl transferase
+ggt
+total bilirubin
+direct bilirubin
+indirect bilirubin
+total protein
+albumin
+globulin
+a g ratio
+albumin globulin ratio
+cholesterol
+total cholesterol
+hdl cholesterol
+high density lipoprotein
+ldl cholesterol
+low density lipoprotein
+vldl cholesterol
+very low density lipoprotein
+triglycerides
+tg
+non hdl cholesterol
+apolipoprotein a1
+apolipoprotein b
+lipoprotein a
+hs crp
+hs-crp
+high sensitivity c reactive protein
+homocysteine
+vitamin b12
+folate
+folic acid
+vitamin d
+25 hydroxy vitamin d
+1,25 dihydroxy vitamin d
+vitamin d3
+parathyroid hormone
+pth
+intact pth
+thyroid stimulating hormone
+tsh
+free thyroxine
+ft4
+free triiodothyronine
+ft3
+total thyroxine
+tt4
+total triiodothyronine
+tt3
+thyroglobulin
+antithyroglobulin antibody
+anti tpo antibody
+thyroid peroxidase antibody
+thyroglobulin antibody
+calcitonin
+carcinoembryonic antigen
+cea
+alpha fetoprotein
+afp
+cancer antigen 125
+ca 125
+cancer antigen 19 9
+ca 19-9
+cancer antigen 15 3
+ca 15-3
+prostate specific antigen
+psa
+free psa
+total psa
+beta human chorionic gonadotropin
+beta hcg
+hcg
+luteinizing hormone
+lh
+follicle stimulating hormone
+fsh
+prolactin
+estradiol
+progesterone
+testosterone
+free testosterone
+sex hormone binding globulin
+shbg
+dehydroepiandrosterone sulfate
+dheas
+cortisol
+adrenocorticotropic hormone
+acth
+growth hormone
+gh
+insulin like growth factor 1
+igf 1
+insulin like growth factor binding protein 3
+igfbp 3
+erythropoietin
+epo
+transferrin
+ferritin
+iron
+total iron binding capacity
+tibc
+unsaturated iron binding capacity
+uibc
+transferrin saturation
+copper
+ceruloplasmin
+zinc
+selenium
+magnesium
+ammonia
+lactate
+pyruvate
+ketones
+beta hydroxybutyrate
+acetoacetate
+osmolality
+serum osmolality
+urine osmolality
+
+# Coagulation
+prothrombin time
+pt
+international normalized ratio
+inr
+activated partial thromboplastin time
+aptt
+fibrinogen
+thrombin time
+antithrombin iii
+protein c
+protein s
+d dimer
+fibrin degradation products
+fdp
+plasminogen
+alpha 2 antiplasmin
+tissue plasminogen activator
+tpa
+plasminogen activator inhibitor 1
+pai 1
+
+# Immunology
+immunoglobulin g
+igg
+immunoglobulin a
+iga
+immunoglobulin m
+igm
+immunoglobulin e
+ige
+immunoglobulin d
+igd
+complement 3
+c3
+complement 4
+c4
+total complement
+ch50
+c1q
+c1 inhibitor
+rheumatoid factor
+rf
+anti cyclic citrullinated peptide antibody
+anti ccp
+anti nuclear antibody
+ana
+anti double stranded dna antibody
+anti dsdna
+anti smith antibody
+anti sm
+anti rnp antibody
+anti rnp
+anti ssa antibody
+anti ro antibody
+anti ssb antibody
+anti la antibody
+anti scl 70 antibody
+anti topoisomerase 1 antibody
+anti centromere antibody
+anti jo 1 antibody
+anti pm scl antibody
+anti m2 antibody
+anti lkm antibody
+anti mitochondrial antibody
+anti smooth muscle antibody
+anti parietal cell antibody
+anti neutrophil cytoplasmic antibody
+anca
+c anca
+p anca
+anti proteinase 3 antibody
+anti pr3
+anti myeloperoxidase antibody
+anti mpo
+anti glomerular basement membrane antibody
+anti gbm
+anti phospholipid antibody
+anticardiolipin antibody
+beta 2 glycoprotein 1 antibody
+lupus anticoagulant
+beta 2 glycoprotein 1 igg
+beta 2 glycoprotein 1 igm
+anti cardiolipin igg
+anti cardiolipin igm
+anti beta 2 glycoprotein 1 igg
+anti beta 2 glycoprotein 1 igm
+
+# Tumor markers
+carcinoembryonic antigen
+cea
+alpha fetoprotein
+afp
+ca 125
+ca 19 9
+ca 15 3
+prostate specific antigen
+psa
+beta human chorionic gonadotropin
+beta hcg
+hcg
+neuron specific enolase
+nse
+chromogranin a
+progastrin releasing peptide
+progrp
+squamous cell carcinoma antigen
+scca
+cytokeratin 19 fragment
+cyfra 21 1
+tissue polypeptide specific antigen
+tps
+tissue polypeptide antigen
+tpa
+cancer antigen 125
+ca 125
+cancer antigen 19 9
+ca 19-9
+cancer antigen 15 3
+ca 15-3
+cancer antigen 27 29
+ca 27-29
+cancer antigen 72 4
+ca 72-4
+cancer antigen 50
+ca 50
+cancer antigen 242
+ca 242
+cancer antigen 195
+ca 195
+ferritin
+beta 2 microglobulin
+b2m
+beta 2 microglobulin
+thyroglobulin
+calcitonin
+prostate specific antigen
+psa
+free psa
+total psa
+prostate specific membrane antigen
+psma
+
+# Urinalysis
+urine color
+urine appearance
+urine specific gravity
+urine ph
+urine protein
+urine glucose
+urine ketones
+urine blood
+urine leukocytes
+urine nitrite
+urine bilirubin
+urine urobilinogen
+urine red blood cells
+urine white blood cells
+urine epithelial cells
+urine casts
+urine crystals
+urine bacteria
+urine yeast
+urine mucus
+urine sperm
+24 hour urine protein
+24 hour urine creatinine
+24 hour urine volume
+albumin creatinine ratio
+acr
+protein creatinine ratio
+pcr
+microalbuminuria
+albuminuria
+proteinuria
+hematuria
+pyuria
+glycosuria
+ketonuria
+bilirubinuria
+urobilinogenuria
+
+# Microbiology
+culture
+sensitivity
+antibiotic susceptibility
+minimum inhibitory concentration
+mic
+minimum bactericidal concentration
+mbc
+e test
+disk diffusion
+broth microdilution
+agar dilution
+beta lactamase
+extended spectrum beta lactamase
+esbl
+ampc beta lactamase
+carbapenemase
+metallo beta lactamase
+mbl
+klebsiella pneumoniae carbapenemase
+kpc
+new delhi metallo beta lactamase
+ndm
+oxacillinase
+oxa
+verona integron encoded metallo beta lactamase
+vim
+imipenemase
+imp
+santiago metallo beta lactamase
+sim
+german imipenemase
+gim
+peru imipenemase
+pim
+seoul imipenemase
+sim
+tokyo metallo beta lactamase
+tmc
+methicillin resistant staphylococcus aureus
+mrsa
+vancomycin resistant enterococcus
+vre
+vancomycin intermediate staphylococcus aureus
+visa
+vancomycin resistant staphylococcus aureus
+vrsa
+carbapenem resistant enterobacteriaceae
+cre
+multidrug resistant
+mdr
+extensively drug resistant
+xdr
+pan drug resistant
+pdr
+
+# Serology
+hepatitis b surface antigen
+hbsag
+hepatitis b surface antibody
+hbsab
+anti hbs
+hepatitis b core antibody
+hbcab
+anti hbc
+hepatitis b e antigen
+hbeag
+hepatitis b e antibody
+hbeab
+anti hbe
+hepatitis b virus dna
+hbv dna
+hepatitis c antibody
+anti hcv
+hepatitis c virus rna
+hcv rna
+hepatitis a antibody
+anti hav
+igm anti hav
+igm anti hav
+hepatitis e antibody
+anti hev
+igm anti hev
+human immunodeficiency virus antibody
+hiv antibody
+hiv antigen
+hiv rna
+hiv viral load
+cd4 count
+cd4 percentage
+cd8 count
+cd4 cd8 ratio
+syphilis
+rapid plasma reagin
+rpr
+venereal disease research laboratory
+vdrl
+treponema pallidum hemagglutination
+tpha
+fluorescent treponemal antibody absorption
+fta abs
+toxo igg
+toxo igm
+rubella igg
+rubella igm
+cmv igg
+cmv igm
+ebv vca igg
+ebv vca igm
+ebv ea igg
+ebv ebna igg
+hsv 1 igg
+hsv 1 igm
+hsv 2 igg
+hsv 2 igm
+varicella zoster igg
+varicella zoster igm
+measles igg
+measles igm
+mumps igg
+mumps igm
+rubella igg
+rubella igm
+hepatitis a igg
+hepatitis a igm
+hepatitis e igg
+hepatitis e igm
+dengue igg
+dengue igm
+dengue ns1 antigen
+chikungunya igg
+chikungunya igm
+zika igg
+zika igm
+leptospira igg
+leptospira igm
+brucella igg
+brucella igm
+mycoplasma igg
+mycoplasma igm
+chlamydia igg
+chlamydia igm
+chlamydia trachomatis igg
+chlamydia trachomatis igm
+chlamydia pneumoniae igg
+chlamydia pneumoniae igm
+legionella igg
+legionella igm
+coxiella burnetii igg
+coxiella burnetii igm
+rickettsia igg
+rickettsia igm
+bartonella igg
+bartonella igm
+treponema pallidum igg
+treponema pallidum igm
+borrelia burgdorferi igg
+borrelia burgdorferi igm
+west nile virus igg
+west nile virus igm
+japanese encephalitis igg
+japanese encephalitis igm

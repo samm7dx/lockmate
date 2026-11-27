@@ -1,0 +1,11 @@
+PatientID,LastName,FirstName,Sex,DOB (MM/DD/YYYY),Guardian,Street,City,District,Zip,Phone,Email,Registered (MM/DD/YYYY),Notes
+UHID-[PIN],Patel,Ashok,M,[DATE],[RELATIVE],"H.No. 180, Mohalla Subhash Nagar",Gopaldih,Sitapur,[PIN],67499-97417,,[DATE],"Pt allergic to sulfa drugs.
+Old card merged - verify identity on next visit."
+UHID-[PIN],Lodhi,Dinesh,M,[DATE],[RELATIVE],H.No. 323,Mohangarh,Sitapur,[PIN],91826-40788,,[DATE],Temp 101.2°F on arrival – sent to emergency.
+UHID-[PIN],Masih,Mary,F,[DATE],[RELATIVE],"H.No. 192, Mohalla Purani Basti",Shivnagar,Sitapur,[PIN],98049-40521,,[DATE],
+UHID-[PIN],,[NAME],M,[DATE],S/O ZUBAIR,"H.No. 101, Mohalla Harijan Basti",Mohanganj Kalan,Sitapur,[PIN],93685-91915,,[DATE],
+UHID-[PIN],Sharma,Anita,F,[DATE],[RELATIVE],H.No. 317,Rasoolnagar Khurd,Bahraich,[PIN],75856-97553,[EMAIL],[DATE],"Pt allergic to sulfa drugs.
+Old card merged - verify identity on next visit."
+UHID-[PIN],,[NAME],M,[DATE],S/O ZUBAIR,"H.No. 101, Mohalla Harijan Basti",Mohanganj Kalan,Sitapur,[PIN],93685-91915,,[DATE],
+UHID-[PIN],Yadav,Manoj,M,[DATE],[RELATIVE],H.No. 133,Madhavdih Kalan,Sitapur,[PIN],89216-78541,,[DATE],Referred by ASHA worker of the village.
+UHID-[PIN],Pandey,Parvati,F,[DATE],[RELATIVE],H.No. 236,Ramdih,Sitapur,[PIN],78880-23923,,[DATE],

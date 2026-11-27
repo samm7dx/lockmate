@@ -257,6 +257,7 @@ writer.writeheader()  # Original headers written
 | `loc` (row:N / JSON Pointer / doc) | ⚠️ Partial | CSV row parsing incomplete |
 | `patient` (pseudonym/null) | ⚠️ Placeholder | Uses `PSN-PLACEHOLDER-...` |
 | Same patient = same pseudonym | ❌ | All records get same placeholder |
+| Uncertain identity → `null` | ❌ | All records get placeholder |
 
 ### 5.3 Quarantine Behavior
 
@@ -429,7 +430,7 @@ for doc in docs:
 
 ---
 
-## 11. Phase 4 Entry Criteria
+## 10. Phase 4 Entry Criteria
 
 Phase 4 may begin when:
 

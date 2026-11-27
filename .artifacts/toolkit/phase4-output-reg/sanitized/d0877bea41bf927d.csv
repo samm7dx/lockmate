@@ -1,0 +1,10 @@
+bill_no,uhid,patient_name,pmjay_id,payer_pan,policy_no,package_code,procedure,admission_date,discharge_date,amount_inr,status
+BL/26/[PIN],SNJ/26/[PIN],[NAME],PMJAY-UP-[PHONE],[PAN],,MG006A,Caesarean section,[DATE],[DATE],49500,approved
+BL/26/[PIN],SNJ/26/[PIN],[NAME],,[PAN],POL/44/22262805,MG006A,Caesarean section,[DATE],[DATE],92500,pending
+BL/26/[PIN],SNJ/26/[PIN],[NAME],PMJAY-UP-[PHONE],[PAN],,SE001A,Cataract surgery (phacoemulsification),[DATE],[DATE],15000,pending
+BL/26/[PIN],SNJ/26/[PIN],[NAME],,[PAN],POL/91/49864784,MG064A,Haemodialysis session,[DATE],[DATE],32000,approved
+BL/26/[PIN],SNJ/26/[PIN],Sukhwinder Kaur,PMJAY-UP-[PHONE],[PAN],,SG039B,Laparoscopic cholecystectomy,[DATE],[DATE],68500,approved
+BL/26/[PIN],SNJ/26/[PIN],[NAME],PMJAY-UP-[PHONE],[PAN],,MG006A,Caesarean section,[DATE],[DATE],14500,approved
+BL/26/[PIN],SNJ/26/[PIN],[NAME],PMJAY-UP-[PHONE],[PAN],,SN045A,Deep brain stimulation,[DATE],[DATE],55500,approved
+BL/26/[PIN],SNJ/26/[PIN],[NAME],PMJAY-UP-[PHONE],[PAN],,SG001A,Appendicectomy,[DATE],[DATE],47500,approved
+BL/26/[PIN],SNJ/26/[PIN],[NAME],,[PAN],POL/86/10056324,MG064A,Haemodialysis session,[DATE],[DATE],56000,approved

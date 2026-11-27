@@ -34,7 +34,7 @@ def quarantine_file(
     Returns:
         QuarantineResult with output path and metadata
     """
-    quarantine_dir = output_dir / "sanitized" / "quarantined"
+    quarantine_dir = output_dir / "quarantined"
     quarantine_dir.mkdir(parents=True, exist_ok=True)
     
     # Generate quarantine filename: sha256 + original extension
@@ -75,7 +75,7 @@ def create_quarantine_entry(
     
     Used when file was already partially processed but failed.
     """
-    quarantine_dir = output_dir / "sanitized" / "quarantined"
+    quarantine_dir = output_dir / "quarantined"
     quarantine_dir.mkdir(parents=True, exist_ok=True)
     
     quarantine_filename = f"{input_file.sha256}{input_file.path.suffix}"

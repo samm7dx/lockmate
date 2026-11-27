@@ -1,0 +1,16 @@
+[NAME] [NAME], [NAME] SUMMARY
+
+Patient Name: Kamla Nishad        Age/Sex: 48 Yrs/F
+UHID: JJH-0077305        IPD No: IP/26/00136
+[RELATIVE] behind Jama Masjid, Amarganj Khurd, Tehsil Nawabganj, Distt. Barabanki - [PIN]bile: +91 60062 72163
+Consultant: [NAME]rd/Bed: Ward 1 (Surgery) / Bed 11
+Date of Admission: [DATE]ge: [DATE]ous gastroenteritis and colitis, unspecified (A09); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. H/O TB 9 yrs back (completed ATT).
+Course in hospital: Patient admitted with above complaints. BP 134/66 mmHg, Pulse 84/min, Temp 98.1 F, SpO2 91%. Haemoglobin 11.5 g/dL. Random Blood Sugar 252 mg/dL. Serum Creatinine 2.9 mg/dL. Treated conservatively. Kamla ji ki condition ab stable hai.
+Procedure: Cataract surgery (phacoemulsification) done on day 2.
+
+Medications on discharge:
+ 1. Sachet ORS 1 sachet after each loose stool x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME]han Nishad, Mob. [PHONE]

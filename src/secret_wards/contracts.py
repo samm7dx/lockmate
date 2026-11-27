@@ -70,6 +70,7 @@ class PIIType(Enum):
     DOCTOR = "doctor"
     URL = "url"
     PIN = "pin"
+    INSURANCE = "insurance"
     OTHER = "other"
 
 
@@ -84,6 +85,9 @@ class MedicalType(Enum):
     LAB = "lab"
     VITAL = "vital"
     UNIT = "unit"
+    DOCTOR = "doctor"
+    ICD_CODE = "icd_code"
+    ROUTE = "route"
 
 
 class QuarantineReason(Enum):
@@ -548,8 +552,8 @@ class ProcessingMetrics:
 class FileReportEntry:
     """Single file entry in report.json."""
     input_sha256: str
-    output_path: Optional[str]
-    status: str  # "sanitized" or "quarantined"
+    output: Optional[str]
+    status: str  # "sanitized" or "quarantined" or "suppressed"
     quarantine_reason: Optional[str] = None
     processing_duration_ms: int = 0
     peak_memory_mb: int = 0
@@ -561,11 +565,10 @@ class FileReportEntry:
     records_quarantined: int = 0
     
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        d = {
             "input_sha256": self.input_sha256,
-            "output_path": self.output_path,
+            "output": self.output,
             "status": self.status,
-            "quarantine_reason": self.quarantine_reason,
             "processing_duration_ms": self.processing_duration_ms,
             "peak_memory_mb": self.peak_memory_mb,
             "records_processed": self.records_processed,
@@ -575,6 +578,9 @@ class FileReportEntry:
             "records_suppressed": self.records_suppressed,
             "records_quarantined": self.records_quarantined
         }
+        if self.quarantine_reason is not None:
+            d["reason"] = self.quarantine_reason
+        return d
 
 
 @dataclass
@@ -629,17 +635,21 @@ class ReportResources:
 @dataclass
 class FullReport:
     """Complete report.json structure."""
-    files: Dict[str, FileReportEntry] = field(default_factory=dict)
+    schema: str = "raksha-report/1"
+    files: List[FileReportEntry] = field(default_factory=list)
     counts: ReportTotals = field(default_factory=ReportTotals)
     timing: ReportTiming = field(default_factory=ReportTiming)
     resources: ReportResources = field(default_factory=ReportResources)
+    entities: Dict[str, int] = field(default_factory=dict)
     
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "files": {k: v.to_dict() for k, v in self.files.items()},
+            "schema": self.schema,
+            "files": [f.to_dict() for f in self.files],
             "counts": self.counts.to_dict(),
             "timing": self.timing.to_dict(),
-            "resources": self.resources.to_dict()
+            "resources": self.resources.to_dict(),
+            "entities": self.entities
         }
     
     def to_json(self) -> str:

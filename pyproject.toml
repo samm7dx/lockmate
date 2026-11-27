@@ -23,6 +23,9 @@ dependencies = [
     "psutil==5.9.8",
     "tqdm==4.66.5",
     "typing-extensions==4.12.2",
+    "fastapi==0.110.0",
+    "uvicorn[standard]==0.29.0",
+    "python-multipart==0.0.9",
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,10 @@
+bill_no,uhid,patient_name,pmjay_id,payer_pan,policy_no,package_code,procedure,admission_date,discharge_date,amount_inr,status
+BL/26/[PIN],JJH-0076900,[NAME],PMJAY-UP-[PHONE],[PAN],,MG006A,Caesarean section,[DATE],[DATE],14000,pending
+BL/26/[PIN],JJH-0076928,Reena Nishad,PMJAY-UP-[PHONE],[PAN],,SG039B,Laparoscopic cholecystectomy,[DATE],[DATE],78500,pending
+BL/26/[PIN],JJH-0077112,Zainab Siddiqui,PMJAY-UP-[PHONE],[PAN],,SE001A,Cataract surgery (phacoemulsification),[DATE],[DATE],[PIN],approved
+BL/26/[PIN],JJH-0077132,[NAME],PMJAY-UP-[PHONE],[PAN],,SE001A,Cataract surgery (phacoemulsification),[DATE],[DATE],[PIN],approved
+BL/26/[PIN],JJH-0077157,[NAME],PMJAY-UP-[PHONE],[PAN],,SG001A,Appendicectomy,[DATE],[DATE],6000,pending
+BL/26/[PIN],JJH-0077243,[NAME],PMJAY-UP-[PHONE],[PAN],,SG001A,Appendicectomy,[DATE],[DATE],54500,pending
+BL/26/[PIN],JJH-0077305,[NAME],PMJAY-UP-[PHONE],[PAN],,SE001A,Cataract surgery (phacoemulsification),[DATE],[DATE],64500,approved
+BL/26/[PIN],JJH-0077357,[NAME],,[PAN],POL/44/64155358,SG039B,Laparoscopic cholecystectomy,[DATE],[DATE],14500,approved
+BL/26/[PIN],JJH-0077508,[NAME],PMJAY-UP-[PHONE],[PAN],,SG071A,Whipple procedure (pancreaticoduodenectomy),[DATE],[DATE],82000,pending

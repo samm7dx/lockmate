@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument xmlns="urn:hl7-org:v3">
+  <recordTarget><patientRole><id extension="826573307111" root="2.16.356.aadhaar"/>
+    <patient><name>Vikas Kumar</name></patient></patientRole></recordTarget>
+  <component><section><title>Discharge diagnosis</title><text>Dengue fever</text></section></component>
+</ClinicalDocument>

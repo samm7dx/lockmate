@@ -1,0 +1,11 @@
+Sanjeevani Multispeciality Hospital - OPD Prescription
+Name: [NAME]   Age: 26/M   Reg No: SNJ/26/[PIN]te: [DATE]4
+C/O: fever x 4 days, body ache
+K/C/O: B54
+Rx
+1. Tab Artesunate 100 mg 1-0-1 x 2 wks
+2. Tab Paracetamol 650mg 1-1-1 x 5 days
+3. Tab Rifampicin + Isoniazid 450 mg + 300 mg 1-0-0 x 5 days
+4. Tab Pantoprazole 40 mg 1-0-0 x 5 days
+Adv: Low salt diet. Review after 2 wks.
+[NAME]

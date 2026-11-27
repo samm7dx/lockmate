@@ -1,0 +1,5 @@
+[NAME][RELATIVE]ne: Ramipril 5 mg
+Dr. Ramesh Srivastava reviewed the patient.
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.
+Attendant: [ADDRESS][PHONE]

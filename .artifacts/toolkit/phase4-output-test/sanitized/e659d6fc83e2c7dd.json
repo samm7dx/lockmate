@@ -1,0 +1,28 @@
+[
+  {
+    "_export_meta/system": "eHospital OPD module",
+    "_export_meta/hospital": "[ADDRESS]",
+    "_export_meta/exported_by": "opd.records.clerk",
+    "_export_meta/generated_at": "2026-02-28T18:00:00+05:30",
+    "_export_meta/source_path": "D:\\HIS\\exports\\opd\\Anita_Sharma_[PIN]\\visits_2026_02.json",
+    "visits/0/visit_id": "OPD/26/02/00085",
+    "visits/0/patient_ref": "[UHID]",
+    "visits/0/visit_date": "[DATE]",
+    "visits/0/department": "Medicine",
+    "visits/0/doctor": "[NAME]",
+    "visits/0/complaints": "[RELATIVE]",
+    "visits/0/history": "K/[RELATIVE]",
+    "visits/0/vitals/bp": "112/78",
+    "visits/0/vitals/pulse": 90,
+    "visits/0/vitals/temp_f": 97.9,
+    "visits/0/vitals/spo2": 98,
+    "visits/0/vitals/weight_kg": 9,
+    "visits/0/diagnosis/0/code": "K50.9",
+    "visits/0/diagnosis/0/display": "Crohn's disease, unspecified",
+    "visits/0/rx/0/drug": "Paracetamol",
+    "visits/0/rx/0/strength": "650 mg",
+    "visits/0/rx/0/frequency": "1-1-1",
+    "visits/0/rx/0/duration": "7 days",
+    "visits/0/notes": "Anita behenji ka BP 112/78, ulti band ho gayi. Review after 2 weeks."
+  }
+]

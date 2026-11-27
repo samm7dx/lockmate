@@ -1,0 +1,17 @@
+[NAME] SADAN, [NAME] SUMMARY
+
+Patient Name: [NAME]        Age/Sex: 39 Yrs/M
+UHID: UHID-[PIN]     IPD No: ADM000161
+[RELATIVE]101, Ward 10, Mohalla Harijan Basti, Vill. Mohanganj Kalan, Tehsil Biswan, Distt. Sitapur - [PIN]bile: +91 93685 91915
+Consultant: [NAME]ard 9 (Medicine) / Bed 18
+Date of Admission: [DATE]ge: [DATE]'s disease (E27.1); Typhoid fever (A01.0); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: No K/C/O DM/HTN. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 117/82 mmHg, Pulse 106/min, Temp 103.2 F, SpO2 97%. Haemoglobin 10.6 g/dL. HbA1c 8.6 %. Random Blood Sugar 125 mg/dL. Treated conservatively. Shahid sahab ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Inj Ceftriaxone 1 g IV x 15 days
+ 2. Tab Paracetamol 650 mg 1-1-1 x 15 days
+ 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME][PHONE]

@@ -1,0 +1,7 @@
+patient_name,age,phone,aadhaar,diagnosis,notes
+[NAME],35,[PHONE],[UID],Diabetes,Patient [NAME] visited
+[NAME],28,[PHONE],[UID],Hypertension,[NAME]
+[NAME],42,[PHONE],[UID],Cardiology,[NAME] को दवा दी
+[NAME],30,[PHONE],45[PHONE],Neurology,[NAME] is patient
+S/o [NAME],25,[PHONE],56[PHONE],Pediatrics,S/o [NAME] brought child
+Dr. [NAME],40,[PHONE],67[PHONE],Oncology,Dr. [NAME] treated

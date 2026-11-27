@@ -1,0 +1,456 @@
+# Clinical Units of Measurement
+# Length
+mm
+millimeter
+millimeters
+cm
+centimeter
+centimeters
+m
+meter
+meters
+km
+kilometer
+kilometers
+in
+inch
+inches
+ft
+foot
+feet
+yd
+yard
+yards
+
+# Area
+mm2
+mm²
+square millimeter
+square millimeters
+cm2
+cm²
+square centimeter
+square centimeters
+m2
+m²
+square meter
+square meters
+km2
+km²
+square kilometer
+square kilometers
+ha
+hectare
+hectares
+acre
+acres
+
+# Volume
+ml
+milliliter
+milliliters
+cc
+cubic centimeter
+cubic centimeters
+l
+liter
+liters
+litre
+litres
+dl
+deciliter
+deciliters
+cl
+centiliter
+centiliters
+ul
+microliter
+microliters
+µl
+cubic meter
+cubic meters
+m3
+m³
+gallon
+gallons
+quart
+quarts
+pint
+pints
+cup
+cups
+fl oz
+fluid ounce
+fluid ounces
+tbsp
+tablespoon
+tablespoons
+tsp
+teaspoon
+teaspoons
+
+# Mass/Weight
+mg
+milligram
+milligrams
+g
+gram
+grams
+kg
+kilogram
+kilograms
+µg
+mcg
+microgram
+micrograms
+ng
+nanogram
+nanograms
+pg
+picogram
+picograms
+t
+ton
+tons
+tonne
+tonnes
+metric ton
+metric tons
+lb
+pound
+pounds
+oz
+ounce
+ounces
+st
+stone
+stones
+gr
+grain
+grains
+dr
+dram
+drams
+
+# Concentration
+mg/dl
+mg/dL
+mg/dL
+mg per deciliter
+milligram per deciliter
+mg/l
+mg/L
+mg per liter
+milligram per liter
+µg/ml
+µg/mL
+ug/ml
+ug/mL
+microgram per milliliter
+ng/ml
+ng/mL
+nanogram per milliliter
+pg/ml
+pg/mL
+picogram per milliliter
+mmol/l
+mmol/L
+millimole per liter
+µmol/l
+µmol/L
+umol/l
+umol/L
+micromole per liter
+nmol/l
+nmol/L
+nanomole per liter
+pmol/l
+pmol/L
+picomole per liter
+meq/l
+meq/L
+milliequivalent per liter
+iu/l
+iu/L
+international unit per liter
+u/l
+u/L
+unit per liter
+kat/l
+kat/L
+katal per liter
+% 
+percent
+percentage
+fraction
+ratio
+g/dl
+g/dL
+gram per deciliter
+g/l
+g/L
+gram per liter
+mg/kg
+mg per kilogram
+µg/kg
+ug/kg
+microgram per kilogram
+ng/kg
+nanogram per kilogram
+
+# Pressure
+mmhg
+mmHg
+mm Hg
+millimeter of mercury
+cmh2o
+cmH2O
+cm H2O
+centimeter of water
+kpa
+kPa
+kilopascal
+pa
+Pa
+pascal
+bar
+mbar
+millibar
+atm
+atmosphere
+psi
+pound per square inch
+torr
+
+# Temperature
+c
+°C
+celsius
+centigrade
+f
+°F
+fahrenheit
+k
+K
+kelvin
+
+# Time
+s
+sec
+second
+seconds
+min
+minute
+minutes
+h
+hr
+hour
+hours
+d
+day
+days
+wk
+week
+weeks
+mo
+month
+months
+yr
+year
+years
+
+# Frequency
+hz
+Hz
+hertz
+khz
+kHz
+kilohertz
+mhz
+MHz
+megahertz
+ghz
+GHz
+gigahertz
+bpm
+beats per minute
+rpm
+revolutions per minute
+cpm
+cycles per minute
+
+# Energy
+j
+J
+joule
+kj
+kJ
+kilojoule
+mj
+MJ
+megajoule
+cal
+calorie
+kcal
+kilocalorie
+kcal
+Cal
+Calorie
+btu
+BTU
+british thermal unit
+ev
+eV
+electronvolt
+kev
+keV
+kiloelectronvolt
+mev
+MeV
+megaelectronvolt
+
+# Power
+w
+W
+watt
+kw
+kW
+kilowatt
+mw
+MW
+megawatt
+hp
+HP
+horsepower
+btu/h
+BTU/h
+
+# Electrical
+v
+V
+volt
+kv
+kV
+kilovolt
+mv
+mV
+millivolt
+µv
+µV
+microvolt
+a
+A
+ampere
+amp
+amps
+ma
+mA
+milliampere
+µa
+µA
+microampere
+ohm
+Ω
+kilohm
+kΩ
+megohm
+MΩ
+siemens
+S
+mho
+farad
+F
+microfarad
+µF
+nanofarad
+nF
+picofarad
+pF
+henry
+H
+millihenry
+mH
+microhenry
+µH
+
+# Radioactivity
+bq
+Bq
+becquerel
+kbq
+kBq
+kilobecquerel
+mbq
+MBq
+megabecquerel
+gbq
+GBq
+gigabecquerel
+ci
+Ci
+curie
+mci
+mCi
+millicurie
+µci
+µCi
+microcurie
+rad
+Rad
+gray
+Gy
+sievert
+Sv
+rem
+Rem
+roentgen
+R
+
+# Miscellaneous clinical units
+iu
+IU
+international unit
+units
+unit
+dose
+doses
+tablet
+tablets
+tab
+tabs
+cap
+caps
+capsule
+capsules
+ml/hr
+ml/h
+ml per hour
+ml/min
+ml per minute
+drops/min
+gtt/min
+drops per minute
+mcg/kg/min
+µg/kg/min
+mg/kg
+mg per kg
+mg/kg/hr
+mg per kg per hour
+units/kg
+units per kg
+units/kg/hr
+units per kg per hour
+ml/kg
+ml per kg
+ml/kg/hr
+ml per kg per hour
+l/min
+l per minute
+l/min/m2
+l per minute per square meter
+ml/kg/min
+ml per kg per minute
+mEq/kg
+mEq per kg
+mmol/kg
+mmol per kg

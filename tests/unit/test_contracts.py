@@ -367,7 +367,7 @@ class TestReportStructures:
     def test_file_report_entry(self):
         entry = FileReportEntry(
             input_sha256="a" * 64,
-            output_path="sanitized/file.csv",
+            output="sanitized/file.csv",
             status="sanitized",
             processing_duration_ms=100,
             peak_memory_mb=50,
@@ -375,6 +375,25 @@ class TestReportStructures:
             identifiers_detected=5
         )
         assert entry.status == "sanitized"
+        assert entry.output == "sanitized/file.csv"
+        # Test to_dict includes correct fields
+        d = entry.to_dict()
+        assert d["input_sha256"] == "a" * 64
+        assert d["output"] == "sanitized/file.csv"
+        assert d["status"] == "sanitized"
+        assert "reason" not in d  # not present when None
+    
+    def test_file_report_entry_quarantined(self):
+        entry = FileReportEntry(
+            input_sha256="b" * 64,
+            output=None,
+            status="quarantined",
+            quarantine_reason="unsupported_format"
+        )
+        d = entry.to_dict()
+        assert d["output"] is None
+        assert d["status"] == "quarantined"
+        assert d["reason"] == "unsupported_format"
     
     def test_report_totals(self):
         totals = ReportTotals(
@@ -392,11 +411,11 @@ class TestReportStructures:
     
     def test_full_report_serialization(self):
         report = FullReport()
-        report.files["abc"] = FileReportEntry(
+        report.files = [FileReportEntry(
             input_sha256="abc",
-            output_path="sanitized/file.csv",
+            output="sanitized/file.csv",
             status="sanitized"
-        )
+        )]
         report.counts = ReportTotals(files_total=1, files_sanitized=1)
         
         json_str = report.to_json()
@@ -404,6 +423,15 @@ class TestReportStructures:
         assert "counts" in json_str
         assert "timing" in json_str
         assert "resources" in json_str
+        assert "schema" in json_str
+        assert "entities" in json_str
+        # Verify files is a list
+        import json
+        data = json.loads(json_str)
+        assert isinstance(data["files"], list)
+        assert len(data["files"]) == 1
+        assert data["files"][0]["input_sha256"] == "abc"
+        assert data["files"][0]["output"] == "sanitized/file.csv"
 
 
 class TestRecordsEntry:

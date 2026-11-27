@@ -1,0 +1,19 @@
+[NAME] HOSPITAL, [NAME] SUMMARY
+
+Patient Name: Sukhwinder Kaur        Age/Sex: 44 Yrs/F
+UHID: SNJ/26/[PIN]     IPD No: IPD-2026-00454
+[RELATIVE]ohalla Tilak Nagar, Durgamau Kalan, Tehsil Lalganj, Distt. Rae Bareli - [PIN]bile: +91 88636 25768
+ABHA No: 91-7529-2330-5116
+Consultant: [NAME]rd/Bed: Ward 1 (Medicine) / Bed 20
+Date of Admission: [DATE]ge: [DATE]gue, unspecified (A97.9); Type 2 diabetes mellitus without complications (E11.9); Addison's disease (E27.1); 
+Presenting complaints: [RELATIVE]days, generalised weakness.
+History: K/C/O DM2 x 6 yrs. No significant past history.
+Course in hospital: Patient admitted with above complaints. BP 109/76 mmHg, Pulse 117/min, Temp 100.6 F, SpO2 92%. Haemoglobin 9.8 g/dL. HbA1c 7.7 %. Random Blood Sugar 305 mg/dL. Treated conservatively. Sukhwinder amma ki condition ab stable hai.
+
+Medications on discharge:
+ 1. Tab Paracetamol 650 mg 1-1-1 x 30 days
+ 2. Tab Metformin 500 mg 1-0-1 x 15 days
+ 3. Tab Glimepiride 1 mg 1-0-0 x 15 days
+ 4. Tab Pantoprazole 40 mg 1-0-0 x 30 days
+
+Advice: Low salt, diabetic diet. Review in OPD after 2 weeks with [NAME]E], Mob. [PHONE]
