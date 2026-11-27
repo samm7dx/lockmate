@@ -68,7 +68,3 @@ output/
 ✅ Validator: CONTRACT OK
 ```
 
-⚠️ Known Limitations (Phase 5+):
-- Patient linkage/pseudonymization not yet implemented
-- Address component detection (village, house, locality) in progress
-- Date shifting and age banding not yet implemented
