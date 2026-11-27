@@ -12,6 +12,7 @@ interface UploadZoneProps {
   isProcessing: boolean;
   onStartProcessing: () => void;
   canProcess: boolean;
+  uploadProgress?: number; // 0-100
 }
 
 const SUPPORTED_FORMATS = [
@@ -27,7 +28,8 @@ export function UploadZone({
   onRemoveFile, 
   isProcessing, 
   onStartProcessing,
-  canProcess 
+  canProcess,
+  uploadProgress 
 }: UploadZoneProps) {
   const [dragActive, setDragActive] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
@@ -208,6 +210,26 @@ export function UploadZone({
               </div>
             ))}
           </div>
+
+          {/* Progress Bar (when uploading/processing) */}
+          {(uploadProgress !== undefined && uploadProgress > 0) && (
+            <div className="px-4 py-3 bg-tertiary/30 border-t border-primary">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-2 bg-tertiary rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-accent-primary rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${Math.min(uploadProgress, 100)}%` }}
+                  />
+                </div>
+                <span className="text-sm font-medium text-primary w-12 text-right">
+                  {Math.min(uploadProgress, 100).toFixed(0)}%
+                </span>
+              </div>
+              <p className="text-xs text-muted mt-1 text-center">
+                {uploadProgress < 100 ? 'Uploading files...' : 'Upload complete, starting processing...'}
+              </p>
+            </div>
+          )}
 
           {/* Start Processing Button */}
           <div className="px-4 py-4 bg-tertiary/30">

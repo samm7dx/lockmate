@@ -137,6 +137,11 @@ export const api = {
       if (!res.ok) throw new ApiError(res.status, 'Failed to download sanitized files');
       return res.blob();
     }),
+
+  cancelJob: (jobId: string) => 
+    fetchApi<{ job_id: string; status: string; message: string }>(`/api/runs/${jobId}/cancel`, {
+      method: 'POST',
+    }),
 };
 
 export { ApiError };

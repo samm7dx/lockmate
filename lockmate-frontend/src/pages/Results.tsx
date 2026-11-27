@@ -1,6 +1,7 @@
 // LOCKMATE Results Page
 
 import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { 
   Download, FileCheck, AlertTriangle, FileText, 
@@ -14,6 +15,7 @@ import { Header } from '../components/Header';
 
 export function Results() {
   const { jobId } = useParams<{ jobId: string }>();
+  const [activeTab, setActiveTab] = useState<'sanitized' | 'quarantined' | 'report'>('sanitized');
   
   const { data: job, isLoading: jobLoading, refetch: refetchJob } = useQuery({
     queryKey: ['run', jobId],
@@ -77,6 +79,17 @@ export function Results() {
     URL.revokeObjectURL(url);
   };
 
+  const handleCancelJob = async () => {
+    if (!jobId || !confirm('Cancel this processing job?')) return;
+    try {
+      await api.cancelJob(jobId);
+      refetchJob();
+    } catch (error) {
+      console.error('Cancel failed:', error);
+      alert('Failed to cancel job');
+    }
+  };
+
   if (!jobId) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -123,6 +136,14 @@ export function Results() {
               {job.status === 'failed' && <XCircle className="w-4 h-4" />}
               {getStatusLabel(job.status)}
             </span>
+            {(job.status === 'running' || job.status === 'pending') && (
+              <button
+                onClick={handleCancelJob}
+                className="px-3 py-1.5 text-sm font-medium text-status-error bg-status-error/10 border border-status-error/30 rounded-lg hover:bg-status-error/20 transition-colors"
+              >
+                Cancel Job
+              </button>
+            )}
           </div>
         </div>
 
@@ -245,28 +266,37 @@ export function Results() {
               </div>
             </div>
 
-            {/* File Details Tabs */}
+            {/* File Details Tabs - Fixed with proper state */}
             <div className="bg-card border border-primary rounded-lg overflow-hidden">
               <div className="border-b border-primary">
                 <nav className="flex gap-1 px-4" role="tablist">
                   <button
                     role="tab"
-                    aria-selected={true}
-                    className="px-4 py-3 text-sm font-medium text-accent-primary border-b-2 border-accent-primary"
+                    aria-selected={activeTab === 'sanitized'}
+                    onClick={() => setActiveTab('sanitized')}
+                    className={`px-4 py-3 text-sm font-medium ${activeTab === 'sanitized' 
+                      ? 'text-accent-primary border-b-2 border-accent-primary' 
+                      : 'text-secondary hover:text-primary'}`}
                   >
                     Sanitized ({sanitizedFiles.length})
                   </button>
                   <button
                     role="tab"
-                    aria-selected={false}
-                    className="px-4 py-3 text-sm font-medium text-secondary hover:text-primary"
+                    aria-selected={activeTab === 'quarantined'}
+                    onClick={() => setActiveTab('quarantined')}
+                    className={`px-4 py-3 text-sm font-medium ${activeTab === 'quarantined' 
+                      ? 'text-accent-primary border-b-2 border-accent-primary' 
+                      : 'text-secondary hover:text-primary'}`}
                   >
                     Quarantined ({quarantinedFiles.length})
                   </button>
                   <button
                     role="tab"
-                    aria-selected={false}
-                    className="px-4 py-3 text-sm font-medium text-secondary hover:text-primary"
+                    aria-selected={activeTab === 'report'}
+                    onClick={() => setActiveTab('report')}
+                    className={`px-4 py-3 text-sm font-medium ${activeTab === 'report' 
+                      ? 'text-accent-primary border-b-2 border-accent-primary' 
+                      : 'text-secondary hover:text-primary'}`}
                   >
                     Report Summary
                   </button>
@@ -274,96 +304,102 @@ export function Results() {
               </div>
 
               <div className="p-4 max-h-96 overflow-y-auto">
-                {/* Sanitized Files */}
-                <div role="tabpanel">
-                  {sanitizedFiles.length === 0 ? (
-                    <p className="text-muted text-center py-8">No sanitized files</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {sanitizedFiles.map((file, index) => (
-                        <div key={`${file.input_sha256}-${index}`} className="flex items-center justify-between p-3 bg-tertiary/50 rounded border border-primary">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <FileText className="w-5 h-5 text-accent-primary flex-shrink-0" />
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-primary truncate">{file.output || 'Unknown'}</p>
-                              <p className="text-xs text-muted font-mono">
-                                SHA256: {file.input_sha256.slice(0, 16)}... • {file.records_processed} records
-                              </p>
+                {/* Sanitized Files Tab */}
+                {activeTab === 'sanitized' && (
+                  <div role="tabpanel">
+                    {sanitizedFiles.length === 0 ? (
+                      <p className="text-muted text-center py-8">No sanitized files</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {sanitizedFiles.map((file, index) => (
+                          <div key={`${file.input_sha256}-${index}`} className="flex items-center justify-between p-3 bg-tertiary/50 rounded border border-primary">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <FileText className="w-5 h-5 text-accent-primary flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-primary truncate">{file.output || 'Unknown'}</p>
+                                <p className="text-xs text-muted font-mono">
+                                  SHA256: {file.input_sha256.slice(0, 16)}... • {file.records_processed} records
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-muted">
+                              <span>{formatDuration(file.processing_duration_ms)}</span>
+                              <span>•</span>
+                              <span>{file.peak_memory_mb.toFixed(1)} MB</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-muted">
-                            <span>{formatDuration(file.processing_duration_ms)}</span>
-                            <span>•</span>
-                            <span>{file.peak_memory_mb.toFixed(1)} MB</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                {/* Quarantined Files */}
-                <div role="tabpanel" hidden>
-                  {quarantinedFiles.length === 0 ? (
-                    <p className="text-muted text-center py-8">No quarantined files</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {quarantinedFiles.map((file, index) => (
-                        <div key={`${file.input_sha256}-${index}`} className="flex items-center justify-between p-3 bg-status-error/5 rounded border border-status-error/20">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <AlertTriangle className="w-5 h-5 text-status-warning flex-shrink-0" />
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-status-warning">Quarantined</p>
-                              <p className="text-xs text-muted font-mono">
-                                SHA256: {file.input_sha256.slice(0, 16)}... • {file.quarantine_reason || 'Unknown reason'}
-                              </p>
+                {/* Quarantined Files Tab */}
+                {activeTab === 'quarantined' && (
+                  <div role="tabpanel">
+                    {quarantinedFiles.length === 0 ? (
+                      <p className="text-muted text-center py-8">No quarantined files</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {quarantinedFiles.map((file, index) => (
+                          <div key={`${file.input_sha256}-${index}`} className="flex items-center justify-between p-3 bg-status-error/5 rounded border border-status-error/20">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <AlertTriangle className="w-5 h-5 text-status-warning flex-shrink-0" />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-status-warning">Quarantined</p>
+                                <p className="text-xs text-muted font-mono">
+                                  SHA256: {file.input_sha256.slice(0, 16)}... • {file.quarantine_reason || 'Unknown reason'}
+                                </p>
+                              </div>
                             </div>
+                            <span className="text-xs text-muted">{file.quarantine_reason}</span>
                           </div>
-                          <span className="text-xs text-muted">{file.quarantine_reason}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                {/* Report Summary */}
-                <div role="tabpanel" hidden>
-                  {report ? (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="p-3 bg-tertiary rounded">
-                          <p className="text-xs text-muted">Total Files</p>
-                          <p className="text-2xl font-bold text-primary">{report.counts.files_total}</p>
+                {/* Report Summary Tab */}
+                {activeTab === 'report' && (
+                  <div role="tabpanel">
+                    {report ? (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="p-3 bg-tertiary rounded">
+                            <p className="text-xs text-muted">Total Files</p>
+                            <p className="text-2xl font-bold text-primary">{report.counts.files_total}</p>
+                          </div>
+                          <div className="p-3 bg-tertiary rounded">
+                            <p className="text-xs text-muted">Sanitized</p>
+                            <p className="text-2xl font-bold text-status-success">{report.counts.files_sanitized}</p>
+                          </div>
+                          <div className="p-3 bg-tertiary rounded">
+                            <p className="text-xs text-muted">Quarantined</p>
+                            <p className="text-2xl font-bold text-status-warning">{report.counts.files_quarantined}</p>
+                          </div>
+                          <div className="p-3 bg-tertiary rounded">
+                            <p className="text-xs text-muted">Peak Memory</p>
+                            <p className="text-2xl font-bold text-secondary">{report.resources.peak_rss_mb.toFixed(1)} MB</p>
+                          </div>
                         </div>
-                        <div className="p-3 bg-tertiary rounded">
-                          <p className="text-xs text-muted">Sanitized</p>
-                          <p className="text-2xl font-bold text-status-success">{report.counts.files_sanitized}</p>
-                        </div>
-                        <div className="p-3 bg-tertiary rounded">
-                          <p className="text-xs text-muted">Quarantined</p>
-                          <p className="text-2xl font-bold text-status-warning">{report.counts.files_quarantined}</p>
-                        </div>
-                        <div className="p-3 bg-tertiary rounded">
-                          <p className="text-xs text-muted">Peak Memory</p>
-                          <p className="text-2xl font-bold text-secondary">{report.resources.peak_rss_mb.toFixed(1)} MB</p>
+                        
+                        <div className="border-t border-primary pt-4">
+                          <h4 className="font-medium text-primary mb-3">PII Detection by Type</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {Object.entries(report.entities || {}).map(([type, count]) => (
+                              <span key={type} className="px-3 py-1 bg-tertiary border border-primary rounded text-sm">
+                                {type}: <span className="font-medium text-accent-primary">{count}</span>
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                      
-                      <div className="border-t border-primary pt-4">
-                        <h4 className="font-medium text-primary mb-3">PII Detection by Type</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {Object.entries(report.entities || {}).map(([type, count]) => (
-                            <span key={type} className="px-3 py-1 bg-tertiary border border-primary rounded text-sm">
-                              {type}: <span className="font-medium text-accent-primary">{count}</span>
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-muted text-center py-8">Report not available</p>
-                  )}
-                </div>
+                    ) : (
+                      <p className="text-muted text-center py-8">Report not available</p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </>

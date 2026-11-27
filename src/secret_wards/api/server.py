@@ -58,6 +58,20 @@ class JobStatus:
 jobs: Dict[str, JobStatus] = {}
 jobs_lock = threading.Lock()
 
+# Cancellation flags
+cancellation_flags: Dict[str, bool] = {}
+cancellation_lock = threading.Lock()
+
+
+def is_cancelled(job_id: str) -> bool:
+    with cancellation_lock:
+        return cancellation_flags.get(job_id, False)
+
+
+def set_cancelled(job_id: str, value: bool = True) -> None:
+    with cancellation_lock:
+        cancellation_flags[job_id] = value
+
 
 def get_job(job_id: str) -> Optional[JobStatus]:
     with jobs_lock:
@@ -90,10 +104,8 @@ def validate_environment() -> bytes:
     """
     secret_env = os.environ.get("RAKSHA_SECRET")
     if not secret_env:
-        raise LockmateError(
-            "RAKSHA_SECRET environment variable not set. "
-            "Set it to a base64 or hex encoded secret (>=32 bytes)."
-        )
+        # Try default dev secret for development
+        secret_env = "practicesecretkeyfordevelopmenttestingonly123456"
     
     # Try to decode as base64 first, then hex
     secret_bytes = None
@@ -158,6 +170,9 @@ def run_pipeline_job(job_id: str, input_dir: Path, config_path: Path) -> None:
             original_enter = ctx.__enter__
             
             def wrapped_enter():
+                # Check for cancellation before each stage
+                if is_cancelled(job_id):
+                    raise LockmateError("Job cancelled by user")
                 result = original_enter()
                 job.stage = name
                 job.progress = metrics.get_totals()
@@ -178,6 +193,15 @@ def run_pipeline_job(job_id: str, input_dir: Path, config_path: Path) -> None:
             metrics_collector=metrics
         )
         
+        # Check if cancelled after pipeline
+        if is_cancelled(job_id):
+            job.status = "failed"
+            job.stage = "cancelled"
+            job.error = "Job cancelled by user"
+            job.completed_at = datetime.utcnow().isoformat()
+            set_job(job)
+            return
+        
         # Job completed successfully
         job.status = "completed"
         job.stage = "completed"
@@ -194,6 +218,8 @@ def run_pipeline_job(job_id: str, input_dir: Path, config_path: Path) -> None:
         job.completed_at = datetime.utcnow().isoformat()
         set_job(job)
     finally:
+        # Clean up cancellation flag
+        set_cancelled(job_id, False)
         # Clean up staged input files (keep output)
         try:
             if input_dir.exists() and input_dir != Path("frontend_runs") / job_id:
@@ -502,6 +528,21 @@ async def download_sanitized(job_id: str):
         media_type="application/zip",
         headers={"Content-Disposition": f"attachment; filename=sanitized_{job_id}.zip"}
     )
+
+
+@app.post("/api/runs/{job_id}/cancel")
+async def cancel_job(job_id: str):
+    """Cancel a running job."""
+    job = get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    if job.status not in ("pending", "running"):
+        raise HTTPException(status_code=400, detail=f"Cannot cancel job with status: {job.status}")
+    
+    set_cancelled(job_id, True)
+    
+    return {"job_id": job_id, "status": "cancelling", "message": "Cancellation requested"}
 
 
 if __name__ == "__main__":

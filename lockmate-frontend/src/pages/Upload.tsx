@@ -17,6 +17,7 @@ export function Upload() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [currentJob, setCurrentJob] = useState<Job | null>(null);
   const [polling, setPolling] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const addFiles = useCallback((files: File[]) => {
     setSelectedFiles(prev => [...prev, ...files]);
@@ -26,15 +27,44 @@ export function Upload() {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   }, []);
 
+  // Simulate upload progress since we can't easily track FormData progress with fetch
+  const simulateUploadProgress = useCallback(() => {
+    setUploadProgress(0);
+    const interval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(interval);
+          return 90;
+        }
+        return prev + Math.random() * 10;
+      });
+    }, 200);
+    return () => clearInterval(interval);
+  }, []);
+
   const processMutation = useMutation({
-    mutationFn: (files: File[]) => api.process(files),
+    mutationFn: async (files: File[]) => {
+      // Start progress simulation
+      const cleanup = simulateUploadProgress();
+      try {
+        const response = await api.process(files);
+        cleanup();
+        setUploadProgress(100);
+        return response;
+      } catch (error) {
+        cleanup();
+        setUploadProgress(0);
+        throw error;
+      }
+    },
     onSuccess: (response: ProcessResponse) => {
-      setCurrentJob(null); // Will be fetched by polling
+      setUploadProgress(0);
+      setCurrentJob(null);
       setPolling(true);
-      // Start polling for job status
       pollJobStatus(response.job_id);
     },
     onError: (error: Error) => {
+      setUploadProgress(0);
       console.error('Processing failed:', error);
       alert(`Failed to start processing: ${error.message}`);
     },
@@ -46,12 +76,10 @@ export function Upload() {
       setCurrentJob(job);
       
       if (job.status === 'running' || job.status === 'pending') {
-        // Continue polling
         setTimeout(() => pollJobStatus(jobId), 2000);
       } else if (job.status === 'completed') {
         setPolling(false);
         queryClient.invalidateQueries({ queryKey: ['runs'] });
-        // Navigate to results
         navigate(`/results/${jobId}`);
       } else if (job.status === 'failed') {
         setPolling(false);
@@ -91,6 +119,7 @@ export function Upload() {
           isProcessing={processMutation.isPending || polling}
           onStartProcessing={handleStartProcessing}
           canProcess={canProcess}
+          uploadProgress={uploadProgress}
         />
 
         {/* Processing Status */}
